@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class PresensiController extends Controller
@@ -20,8 +21,11 @@ class PresensiController extends Controller
         $nik = Auth::guard('karyawan')->user()->nik;
         $tgl_presensi = date("Y-m-d");
         $jam = date("H:i:s");
-        $latitudekantor = -6.560860441826146;
-        $longitudekantor = 106.8253235101249;
+        // Kantor
+        $latitudekantor = -6.260402568678399;
+        $longitudekantor = 106.63072475118881;
+        // $latitudekantor = -6.560860441826146;
+        // $longitudekantor = 106.8253235101249;
         $lokasi = $request->lokasi;
         $lokasiuser = explode(",", $lokasi);
         $latitudeuser = $lokasiuser[0];
@@ -93,5 +97,18 @@ class PresensiController extends Controller
          $kilometers = $miles * 1.609344;
          $meters = $kilometers * 1000;
          return compact('meters');
+     }
+
+     public function editprofile(){
+
+        $nik = Auth::guard('karyawan')->user()->nik;
+        $karyawan = DB::table('karyawan')->where('nik', $nik)->first();
+        return view('presensi.editprofile', compact('karyawan'));
+     }
+
+     public function updateprofile(Request $request){
+        $nik = Auth::guard('karyawan')->user()->nik;
+        $nama_lengkap = $request->nama_lengkap;
+        $no_hp = $request->no_hp;
      }
 }
