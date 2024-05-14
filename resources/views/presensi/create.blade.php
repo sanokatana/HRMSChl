@@ -141,7 +141,7 @@
                     text: status[1],
                     icon: 'success',
                     })
-                    setTimeout("location.href='/dashboard'", 2000);
+                    setTimeout("location.href='/dashboard'", 3000);
                 }else {
                     if(status[2] == "radius"){
                         radius_sound.play();

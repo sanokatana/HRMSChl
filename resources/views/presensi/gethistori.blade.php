@@ -6,18 +6,6 @@
 @foreach ($histori as $d)
 <ul class="listview image-listview">
     <li>
-        <!-- <div class="item">
-            @php
-                $path = Storage::url('uploads/absensi/'.$d->foto_in);
-            @endphp
-            <img src="{{ url($path) }}" alt="image" class="image">
-            <div class="in">
-                <div>
-                <b>{{ date("F j, Y", strtotime($d->tgl_presensi)) }}</b><br>
-                </div>
-                <span class="badge {{ $d->jam_in < "08:00" ? "bg-success" : "bg-danger"}}">{{ $d != null ? $d->jam_in : 'Belum Absen'}}</span>
-            </div>
-        </div> -->
         <div class="item">
             @php
                 $path = Storage::url('uploads/absensi/'.$d->foto_in);
@@ -30,6 +18,6 @@
                 </div>
             </div>
         </div>
-</li>
+    </li>
 </ul>
 @endforeach

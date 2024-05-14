@@ -165,4 +165,38 @@ class PresensiController extends Controller
 
         return view('presensi.gethistori', compact('histori'));
     }
+
+    public function izin(){
+
+        $nik = Auth::guard('karyawan')->user()->nik;
+        $dataizin = DB::table('pengajuan_izin')->where('nik', $nik)->get();
+        return view('presensi.izin', compact('dataizin'));
+    }
+
+    public function buatizin(){
+        return view('presensi.buatizin');
+    }
+
+    public function storeizin(Request $request){
+
+        $nik = Auth::guard('karyawan')->user()->nik;
+        $tgl_izin = $request->tgl_izin;
+        $status = $request->status;
+        $keterangan = $request->keterangan;
+
+        $data =[
+            'nik' => $nik,
+            'tgl_izin' => $tgl_izin,
+            'status' => $status,
+            'keterangan' => $keterangan
+        ];
+
+        $simpan = DB::table('pengajuan_izin')->insert( $data );
+
+        if($simpan){
+            return redirect('/presensi/izin')->with(['success'=>'Data Berhasil Di Simpan']);
+        } else{
+            return redirect('/presensi/izin')->with(['error'=> 'Data Gagal Di Simpan']);
+        }
+    }
 }
