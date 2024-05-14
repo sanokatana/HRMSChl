@@ -150,4 +150,19 @@ class PresensiController extends Controller
         $namabulan = ["","Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
         return view('presensi.histori', compact('namabulan'));
      }
+
+    public function gethistori(Request $request){
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+        $nik = Auth::guard('karyawan')->user()->nik;
+
+        $histori = DB::table('presensi')
+        ->whereRaw('MONTH(tgl_presensi)="'. $bulan . '"')
+        ->whereRaw('YEAR(tgl_presensi)="'. $tahun . '"')
+        ->where('nik', $nik)
+        ->orderBy('tgl_presensi')
+        ->get();
+
+        return view('presensi.gethistori', compact('histori'));
+    }
 }
