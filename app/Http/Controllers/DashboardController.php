@@ -27,7 +27,7 @@ class DashboardController extends Controller
         $rekappresensi = DB::table('presensi')
         ->selectRaw('COUNT(nik) as jmlhadir, SUM(IF(jam_in > "08:00",1,0)) as jmlterlambat')
         ->where('nik',$nik)
-        ->where('nik',$nik)->whereRaw('MONTH(tgl_presensi)="'.$bulanini.'"')
+        ->whereRaw('MONTH(tgl_presensi)="'.$bulanini.'"')
         ->whereRaw('YEAR(tgl_presensi)="'.$tahunini.'"')
         ->first();
 
@@ -38,7 +38,18 @@ class DashboardController extends Controller
         ->orderBy('jam_in')
         ->get();
 
+        $rekapizin = DB::table('pengajuan_izin')
+        ->selectRaw('SUM(IF(status="i",1,0)) as jmlizin, SUM(IF(status="s",1,0)) as jmlsakit')
+        ->where('nik', $nik)
+        ->whereRaw('MONTH(tgl_izin)="'.$bulanini.'"')
+        ->whereRaw('YEAR(tgl_izin)="'.$tahunini.'"')
+        ->first();
+
         $namabulan = ["","Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-        return view('dashboard.dashboard', compact('presensihariini','historibulanini', 'namabulan', 'bulanini', 'tahunini', 'namaUser', 'rekappresensi','leaderboard'));
+        return view('dashboard.dashboard', compact('presensihariini','historibulanini', 'namabulan', 'bulanini', 'tahunini', 'namaUser', 'rekappresensi','leaderboard', 'rekapizin'));
+    }
+
+    public function dashboardadmin(){
+        return view('dashboard.dashboardadmin');
     }
 }
