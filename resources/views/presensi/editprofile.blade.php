@@ -67,7 +67,7 @@
                     <ion-icon name="refresh-outline"></ion-icon>
                     Update
                 </button>
-                <button type="submit" class="btn btn-info btn-block" onclick="location.href='/proseslogout';" value="Go to Google">Logout</button>
+                <button type="button" class="btn btn-info btn-block" onclick="location.href='/proseslogout';" value="Go to Google">Logout</button>
             </div>
         </div>
     </div>

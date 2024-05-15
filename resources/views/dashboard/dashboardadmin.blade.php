@@ -11,6 +11,7 @@
                 <h2 class="page-title">
                     Dashboard
                 </h2>
+                <br>
             </div>
         </div>
     </div>
@@ -18,6 +19,9 @@
 <div class="page-body">
     <div class="container-xl">
         <div class="row row-cards">
+            <h2 class="page-title" style="font-weight: normal;">
+                Hari Ini
+            </h2>
             <div class="col-md-6 col-xl-3">
                 <div class="card card-sm">
                     <div class="card-body">
@@ -51,7 +55,7 @@
                             </div>
                             <div class="col">
                                 <div class="font-weight-medium">
-                                    132 Karyawan
+                                {{ $rekapizin->jmlizin != null ? $rekapizin->jmlizin : 0}}
                                 </div>
                                 <div class="text-secondary">
                                     Total Karyawan Izin
@@ -72,7 +76,7 @@
                             </div>
                             <div class="col">
                                 <div class="font-weight-medium">
-                                    132 Karyawan
+                                    {{ $rekapizin->jmlsakit != null ? $rekapizin->jmlsakit : 0}}
                                 </div>
                                 <div class="text-secondary">
                                     Total Karyawan Sakit
@@ -93,7 +97,7 @@
                             </div>
                             <div class="col">
                                 <div class="font-weight-medium">
-                                    132 Karyawan
+                                {{ $rekappresensi->jmlterlambat}}
                                 </div>
                                 <div class="text-secondary">
                                     Total Karyawan Telat
