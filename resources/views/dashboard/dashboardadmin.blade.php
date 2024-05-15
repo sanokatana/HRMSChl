@@ -30,7 +30,7 @@
                             </div>
                             <div class="col">
                                 <div class="font-weight-medium">
-                                    132 Karyawan Hadir
+                                    {{ $rekappresensi->jmlhadir}}
                                 </div>
                                 <div class="text-secondary">
                                     Total Hadir
