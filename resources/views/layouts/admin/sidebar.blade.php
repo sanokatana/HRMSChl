@@ -159,14 +159,14 @@
                             </svg>
                         </span>
                         <span class="nav-link-title">
-                            Interface
+                            Data Master
                         </span>
                     </a>
                     <div class="dropdown-menu">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="./blank.html">
-                                    Blank page
+                                <a class="dropdown-item" href="/karyawan">
+                                    Data Karyawan
                                 </a>
                             </div>
                         </div>

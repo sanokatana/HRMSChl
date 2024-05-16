@@ -97,7 +97,7 @@
                             </div>
                             <div class="col">
                                 <div class="font-weight-medium">
-                                {{ $rekappresensi->jmlterlambat}}
+                                {{ $rekappresensi->jmlterlambat != null ? $rekappresensi->jmlterlambat : 0}}
                                 </div>
                                 <div class="text-secondary">
                                     Total Karyawan Telat
