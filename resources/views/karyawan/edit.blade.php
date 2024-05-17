@@ -1,4 +1,4 @@
-<form action="/karyawan/store" method="POST" id="formKaryawan" enctype="multipart/form-data">
+<form action="/karyawan/{{ $karyawan->nik }}/update" method="POST" id="formKaryawan" enctype="multipart/form-data">
     @csrf
     <div class="row">
         <div class="col-12">
