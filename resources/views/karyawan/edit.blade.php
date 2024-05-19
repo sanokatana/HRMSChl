@@ -69,6 +69,7 @@
             <div class="mb-3">
                 <div class="form-label">Foto Karyawan</div>
                 <input type="file" class="form-control" name="foto" id="foto" accept=".png, .jpg, .jpeg">
+                <input type="hidden" name="old_foto" value="{{ $karyawan->foto}}">
             </div>
         </div>
     </div>

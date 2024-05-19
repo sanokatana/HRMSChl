@@ -9,7 +9,7 @@
                     Master Data
                 </div>
                 <h2 class="page-title">
-                    Karyawan
+                    Department
                 </h2>
                 <br>
             </div>
@@ -47,7 +47,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
-                                <a href="#" class="btn btn-primary" id="btnTambahKaryawan">
+                                <a href="#" class="btn btn-primary" id="btnTambahDepartment">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <path d="M12 5l0 14" />
@@ -59,21 +59,11 @@
                         </div>
                         <div class="row mt-2">
                             <div class="col-12">
-                                <form action="/karyawan" method="GET">
+                                <form action="/department" method="GET">
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-10">
                                             <div class="form-group">
-                                                <input type="text" name="nama_karyawan" id="nama_karyawan" class="form-control" placeholder="Nama Karyawan" value="{{ Request('nama_karyawan')}}">
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="form-group mb-3">
-                                                <select name="kode_dept" id="kode_dept" class="form-select">
-                                                    <option value="">Department</option>
-                                                    @foreach ($department as $d)
-                                                    <option {{ Request('kode_dept')==$d->kode_dept ? 'selected' : ''}} value="{{$d->kode_dept}}">{{$d->nama_dept}}</option>
-                                                    @endforeach
-                                                </select>
+                                                <input type="text" name="nama_dept" id="nama_dept" class="form-control" placeholder="Nama Department" value="{{ Request('nama_dept')}}">
                                             </div>
                                         </div>
                                         <div class="col-2">
@@ -98,37 +88,20 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>NIK</th>
-                                            <th>Nama</th>
-                                            <th>Jabatan</th>
-                                            <th>No. Hp</th>
-                                            <th>Foto</th>
-                                            <th>Department</th>
+                                            <th>Kode Department</th>
+                                            <th>Nama Department</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($karyawan as $d)
-                                        @php
-                                        $path = Storage::url('uploads/karyawan/'.$d->foto)
-                                        @endphp
+                                        @foreach ($department as $d)
                                         <tr>
-                                            <td>{{ $loop->iteration + $karyawan->firstItem() -1 }}</td>
-                                            <td>{{ $d->nik}}</td>
-                                            <td>{{ $d->nama_lengkap}}</td>
-                                            <td>{{ $d->jabatan}}</td>
-                                            <td>{{ $d->no_hp}}</td>
-                                            <td>
-                                                @if (empty($d->foto))
-                                                <img src="{{ asset('assets/img/nophoto.jpg')}}" class="avatar" alt="">
-                                                @else
-                                                <img src="{{ url($path )}}" class="avatar" alt="">
-                                                @endif
-                                            </td>
+                                            <td>{{ $loop->iteration}}</td>
+                                            <td>{{ $d->kode_dept}}</td>
                                             <td>{{ $d->nama_dept}}</td>
                                             <td>
                                                 <div class="form-group">
-                                                    <a href="#" class="edit btn btn-info btn-sm" nik="{{ $d->nik }}">
+                                                    <a href="#" class="edit btn btn-info btn-sm" kode_dept="{{ $d->kode_dept }}">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
                                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                             <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
@@ -136,7 +109,7 @@
                                                             <path d="M16 5l3 3" />
                                                         </svg>
                                                     </a>
-                                                    <form action="/karyawan/{{$d->nik}}/delete" method="POST">
+                                                    <form action="/department/{{$d->kode_dept}}/delete" method="POST">
                                                         @csrf
                                                         <a class="btn btn-danger btn-sm delete-confirm" >
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash">
@@ -151,10 +124,11 @@
                                                     </form>
                                                 </div>
                                             </td>
+                                        </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-                                {{ $karyawan->links('vendor.pagination.bootstrap-5')}}
+
                             </div>
                         </div>
                     </div>
@@ -163,19 +137,19 @@
         </div>
     </div>
 </div>
-<div class="modal modal-blur fade" id="modal-inputkaryawan" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal modal-blur fade" id="modal-inputdepartment" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Data Karyawan</h5>
+                <h5 class="modal-title">Tambah Data Department</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/karyawan/store" method="POST" id="formKaryawan" enctype="multipart/form-data">
+                <form action="/department/store" method="POST" id="formDepartment">
                     @csrf
                     <div class="row">
                         <div class="col-12">
-                            <div class="form-label">NIK</div>
+                            <div class="form-label">Kode Department</div>
                             <div class="input-icon mb-3">
                                 <span class="input-icon-addon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-id">
@@ -187,13 +161,13 @@
                                         <path d="M7 16l10 0" />
                                     </svg>
                                 </span>
-                                <input type="text" value="" class="form-control" name="nik" id="nik" placeholder="10101">
+                                <input type="text" value="" class="form-control" name="kode_dept" id="kode_dept" placeholder="IT/MKT">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <div class="form-label">Nama Karyawan</div>
+                            <div class="form-label">Nama Department</div>
                             <div class="input-icon mb-3">
                                 <span class="input-icon-addon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user">
@@ -202,58 +176,8 @@
                                         <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
                                     </svg>
                                 </span>
-                                <input type="text" value="" class="form-control" name="nama_lengkap" id="nama_lengkap" placeholder="John Doe">
+                                <input type="text" value="" class="form-control" name="nama_dept" id="nama_dept" placeholder="Information Technology">
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="form-label">Jabatan</div>
-                            <div class="input-icon mb-3">
-                                <span class="input-icon-addon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
-                                        <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                                        <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
-                                    </svg>
-                                </span>
-                                <input type="text" value="" class="form-control" name="jabatan" id="jabatan" placeholder="IT Manager">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="form-label">Nomer HP</div>
-                            <div class="input-icon mb-3">
-                                <span class="input-icon-addon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-phone">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                </span>
-                                <input type="text" value="" class="form-control" name="no_hp" id="no_hp" placeholder="No HP">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="mb-3">
-                                <div class="form-label">Foto Karyawan</div>
-                                <input type="file" class="form-control" name="foto" id="foto" accept=".png, .jpg, .jpeg">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-label">Department</div>
-                        <div class="col-12">
-                            <select name="kode_dept" id="kode_dept" class="form-select">
-                                <option value="">Pilih</option>
-                                @foreach ($department as $d)
-                                <option {{ Request('kode_dept')==$d->kode_dept ? 'selected' : ''}} value="{{$d->kode_dept}}">{{$d->nama_dept}}</option>
-                                @endforeach
-                            </select>
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -278,11 +202,11 @@
     </div>
 </div>
 <!-- Modal Edit -->
-<div class="modal modal-blur fade" id="modal-editkaryawan" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal modal-blur fade" id="modal-editdepartment" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Data Karyawan</h5>
+                <h5 class="modal-title">Edit Data Department</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="loadeditform">
@@ -296,25 +220,25 @@
 @push('myscript')
 <script>
     $(function() {
-        $('#btnTambahKaryawan').click(function() {
-            $('#modal-inputkaryawan').modal("show");
+        $('#btnTambahDepartment').click(function() {
+            $('#modal-inputdepartment').modal("show");
         });
 
         $('.edit').click(function() {
-            var nik = $(this).attr('nik');
+            var kode_dept = $(this).attr('kode_dept');
             $.ajax({
                 type: 'POST',
-                url: '/karyawan/edit',
+                url: '/department/edit',
                 cache: false,
                 data: {
                     _token: "{{ csrf_token();}}",
-                    nik: nik
+                    kode_dept: kode_dept
                 },
                 success: function(respond) {
                     $('#loadeditform').html(respond);
                 }
             });
-            $('#modal-editkaryawan').modal("show");
+            $('#modal-editdepartment').modal("show");
         });
 
         $(".delete-confirm").click(function(e){
@@ -322,7 +246,7 @@
             e.preventDefault();
             Swal.fire({
             title: "Apakah Yakin?",
-            text: "Data Karyawan Akan Ke Delete!",
+            text: "Data Department Akan Ke Delete!",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
