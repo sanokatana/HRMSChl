@@ -15,16 +15,19 @@ class PresensiController extends Controller
         $hariini = date("Y-m-d");
         $nik = Auth::guard('karyawan')->user()->nik;
         $cek = DB::table('presensi')->where('tgl_presensi',$hariini)->where('nik',$nik)->count();
-        return view('presensi.create', compact('cek'));
+        $lok_kantor = DB::table('konfigurasi_lokasi')->where('id',1)->first();
+        return view('presensi.create', compact('cek', 'lok_kantor'));
     }
 
     public function store(Request $request){
         $nik = Auth::guard('karyawan')->user()->nik;
         $tgl_presensi = date("Y-m-d");
         $jam = date("H:i:s");
+        $lok_kantor = DB::table('konfigurasi_lokasi')->where('id',1)->first();
+        $lok = explode(',',$lok_kantor);
         // Kantor
-        $latitudekantor = -6.260402568678399;
-        $longitudekantor = 106.63072475118881;
+        $latitudekantor = $lok[0];
+        $longitudekantor = $lok[1];
         // $latitudekantor = -6.560860441826146;
         // $longitudekantor = 106.8253235101249;
         $lokasi = $request->lokasi;
@@ -50,7 +53,7 @@ class PresensiController extends Controller
         $fileName = $formatName . ".png";
         $file = $folderPath . $fileName;
 
-        if($radius > 10){
+        if($radius > $lok_kantor->radius){
             echo "error|Maaf Anda Berada Diluar Radius, Jarak Anda".$radius." meter dari kantor|radius";
         } else {
             if($cek > 0){
@@ -198,5 +201,27 @@ class PresensiController extends Controller
         } else{
             return redirect('/presensi/izin')->with(['error'=> 'Data Gagal Di Simpan']);
         }
+    }
+
+    public function monitoring(){
+        return view('presensi.monitoring');
+    }
+
+    public function getpresensi(Request $request){
+        $tanggal = $request->tanggal;
+        $presensi = DB::table('presensi')
+        ->select('presensi.*','nama_lengkap','nama_dept')
+        ->join('karyawan','presensi.nik','=','karyawan.nik')
+        ->join('department','karyawan.kode_dept','=','department.kode_dept')
+        ->where('tgl_presensi', $tanggal)
+        ->get();
+
+        return view('presensi.getpresensi', compact('presensi'));
+    }
+
+    public function tampilkanpeta(Request $request){
+        $id = $request->id;
+        $presensi = DB::table('presensi')->where('id', $id)->first();
+        return view('presensi.showmap', compact('presensi'));
     }
 }

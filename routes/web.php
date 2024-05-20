@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\KaryawanController;
+use App\Http\Controllers\KonfigurasiController;
 use App\Http\Controllers\PresensiController;
 use Illuminate\Support\Facades\Route;
 
@@ -72,4 +73,16 @@ Route::middleware(['auth:user'])->group(function (){
     Route::post('/department/edit', [DepartmentController::class,'edit']);
     Route::post('/department/{kode_dept}/update', [DepartmentController::class,'update']);
     Route::post('/department/{kode_dept}/delete', [DepartmentController::class,'delete']);
+
+    //Presensi
+    Route::get('/presensi/monitoring', [PresensiController::class,'monitoring']);
+    Route::post('/getpresensi', [PresensiController::class,'getpresensi']);
+    Route::post('/tampilkanpeta', [PresensiController::class,'tampilkanpeta']);
+
+    //Konfigurasi
+    Route::get('/konfigurasi/lokasikantor', [KonfigurasiController::class,'index']);
+    Route::post('/konfigurasi/lokasikantor/store', [KonfigurasiController::class,'store']);
+    Route::post('/konfigurasi/lokasikantor/edit', [KonfigurasiController::class,'edit']);
+    Route::post('/konfigurasi/lokasikantor/{nama_kantor}/update', [KonfigurasiController::class,'update']);
+    Route::post('/konfigurasi/lokasikantor/{nama_kantor}/delete', [KonfigurasiController::class,'delete']);
 });

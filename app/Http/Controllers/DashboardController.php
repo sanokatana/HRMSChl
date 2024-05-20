@@ -61,6 +61,10 @@ class DashboardController extends Controller
         ->where('tgl_izin',$hariini)
         ->where('status_approved', 1)
         ->first();
-        return view('dashboard.dashboardadmin', compact('rekapizin', 'rekappresensi'));
+
+        $rekapkaryawan = DB::table('karyawan')
+        ->selectRaw('COUNT(nik) as jmlkar')
+        ->first();
+        return view('dashboard.dashboardadmin', compact('rekapizin', 'rekappresensi', 'rekapkaryawan'));
     }
 }

@@ -98,16 +98,19 @@
     function successCallback(position){
         lokasi.value = position.coords.latitude+ "," + position.coords.longitude;
         var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 16);
+        var lokasi_kantor = "{{ $lok_kantor->lokasi_kantor }}";
+        var radius = "{{ $lok_kantor->radius }}";
+        var lok = lokasi_kantor.split(",");
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
         var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
-        var circle = L.circle([-6.260402568678399, 106.63072475118881], {
+        var circle = L.circle([lok[0], lok[1]], {
             color: 'red',
             fillColor: '#f03',
             fillOpacity: 0.5,
-            radius: 50
+            radius: radius
         }).addTo(map);
     }
 
