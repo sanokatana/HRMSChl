@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pengajuanizin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -237,17 +238,34 @@ class PresensiController extends Controller
         return view('presensi.showmap', compact('presensi'));
     }
 
-    public function izinapproval()
-    {
-        $izinapproval = DB::table('pengajuan_izin')
-            ->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik')
-            ->join('department', 'karyawan.kode_dept', '=', 'department.kode_dept')
-            ->select('pengajuan_izin.*', 'karyawan.nama_lengkap', 'karyawan.jabatan', 'department.nama_dept')
-            ->orderBy('tgl_izin','asc')
-            ->get();
+    public function izinapproval(Request $request)
+{
+    $query = Pengajuanizin::query();
+    $query->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik');
+    $query->join('department', 'karyawan.kode_dept', '=', 'department.kode_dept');
+    $query->select('pengajuan_izin.*', 'karyawan.nama_lengkap', 'karyawan.jabatan', 'department.nama_dept');
 
-        return view('presensi.izinapproval', compact('izinapproval'));
+    if (!empty($request->dari) && !empty($request->sampai)) {
+        $query->whereBetween('tgl_izin', [$request->dari, $request->sampai]);
     }
+
+    if (!empty($request->nik)) {
+        $query->where('pengajuan_izin.nik', $request->nik);
+    }
+
+    if (!empty($request->nama_lengkap)) {
+        $query->where('nama_lengkap', 'like', '%' . $request->nama_lengkap . '%');
+    }
+
+    if ($request->status_approved === '0' || $request->status_approved === '1' || $request->status_approved === '2') {
+        $query->where('status_approved', $request->status_approved);
+    }
+
+    $izinapproval = $query->paginate(10);
+    $izinapproval->appends($request->all());
+
+    return view('presensi.izinapproval', compact('izinapproval'));
+}
 
     public function approveizin(Request $request)
     {
