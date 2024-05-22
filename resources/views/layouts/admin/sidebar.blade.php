@@ -4,7 +4,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <h1 class="navbar-brand navbar-brand-autodark">
-            <a href=".">
+            <a href="/">
                 <img src="{{ asset('assets/img/login/logo-pic.png')}}" width="70" height="60" alt="Tabler" class="">
             </a>
         </h1>
@@ -198,8 +198,8 @@
                     <div class="dropdown-menu">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="/konfigurasi/lokasikantor">
-                                    Izin / Sakit Approval
+                                <a class="dropdown-item" href="/presensi/izinapproval">
+                                    Approval Izin
                                 </a>
                             </div>
                         </div>
