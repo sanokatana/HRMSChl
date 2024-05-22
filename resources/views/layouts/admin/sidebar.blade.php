@@ -1,4 +1,9 @@
 <aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
+    @php
+    $user = Auth::guard('user')->user();
+    $karyawan = \App\Models\Karyawan::where('nik', $user->nik)->first();
+    $userLevel = $karyawan ? $karyawan->level : null;
+    @endphp
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -146,6 +151,7 @@
                         </span>
                     </a>
                 </li>
+                @if($userLevel !== 'Manager' && $userLevel !== 'Officer')
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
                         <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
@@ -182,6 +188,7 @@
                         </div>
                     </div>
                 </li>
+                @endif
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
                         <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
@@ -223,6 +230,7 @@
                         </span>
                     </a>
                 </li>
+                @if($userLevel !== 'Manager' && $userLevel !== 'Officer')
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
                         <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
@@ -263,6 +271,8 @@
                         </div>
                     </div>
                 </li>
+                @endif
+                @if($userLevel !== 'Manager' && $userLevel !== 'Officer')
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
                         <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
@@ -286,7 +296,9 @@
                         </div>
                     </div>
                 </li>
+                @endif
             </ul>
         </div>
     </div>
 </aside>
+
