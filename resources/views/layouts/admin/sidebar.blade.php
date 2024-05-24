@@ -178,7 +178,7 @@
                                 <a class="dropdown-item" href="#">
                                     User
                                 </a>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="/cabang">
                                     Kantor Cabang
                                 </a>
                                 <a class="dropdown-item" href="#">

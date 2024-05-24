@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CabangController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\KaryawanController;
@@ -91,4 +92,7 @@ Route::middleware(['auth:user'])->group(function (){
     Route::post('/konfigurasi/lokasikantor/edit', [KonfigurasiController::class,'edit']);
     Route::post('/konfigurasi/lokasikantor/{nama_kantor}/update', [KonfigurasiController::class,'update']);
     Route::post('/konfigurasi/lokasikantor/{nama_kantor}/delete', [KonfigurasiController::class,'delete']);
+
+    //Cabang
+    Route::get('/cabang', [CabangController::class,'index']);
 });
