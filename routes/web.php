@@ -95,4 +95,8 @@ Route::middleware(['auth:user'])->group(function (){
 
     //Cabang
     Route::get('/cabang', [CabangController::class,'index']);
+    Route::post('/cabang/store', [CabangController::class,'store']);
+    Route::post('/cabang/edit', [CabangController::class,'edit']);
+    Route::post('/cabang/update', [CabangController::class,'update']);
+    Route::post('/cabang/{kode_cabang}/delete', [CabangController::class,'delete']);
 });

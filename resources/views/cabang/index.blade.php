@@ -47,7 +47,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
-                                <a href="#" class="btn btn-primary" id="btnTambahDepartment">
+                                <a href="#" class="btn btn-primary" id="btnTambahCabang">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <path d="M12 5l0 14" />
@@ -62,13 +62,13 @@
                                 <form action="/cabang" method="GET">
                                     <div class="row">
                                         <div class="col-10">
-                                            <select name="kode_cabang" class="form-select" id="kode_cabang">
+                                            <select name="filter_cabang" class="form-select" id="filter_cabang">
                                                 <option value="">Semua Cabang</option>
                                             </select>
                                         </div>
                                         <div class="col-2">
                                             <div class="form-group">
-                                                <button class="btn btn-primary">
+                                                <button class="btn btn-primary w-100">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-search">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                         <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
@@ -88,20 +88,24 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Kode Department</th>
-                                            <th>Nama Department</th>
+                                            <th>Kode Cabang</th>
+                                            <th>Nama Cabang</th>
+                                            <th>Lokasi</th>
+                                            <th>Radius</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($department as $d)
+                                        @foreach($cabang as $d)
                                         <tr>
                                             <td>{{ $loop->iteration}}</td>
-                                            <td>{{ $d->kode_dept}}</td>
-                                            <td>{{ $d->nama_dept}}</td>
+                                            <td>{{ $d->kode_cabang}}</td>
+                                            <td>{{ $d->nama_cabang}}</td>
+                                            <td>{{ $d->lokasi_cabang}}</td>
+                                            <td>{{ $d->radius}}</td>
                                             <td>
                                                 <div class="form-group">
-                                                    <a href="#" class="edit btn btn-info btn-sm" kode_dept="{{ $d->kode_dept }}">
+                                                    <a href="#" class="edit btn btn-info btn-sm" kode_cabang="{{ $d->kode_cabang }}">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
                                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                             <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
@@ -109,9 +113,9 @@
                                                             <path d="M16 5l3 3" />
                                                         </svg>
                                                     </a>
-                                                    <form action="/department/{{$d->kode_dept}}/delete" method="POST">
+                                                    <form action="/cabang/{{$d->kode_cabang}}/delete" method="POST">
                                                         @csrf
-                                                        <a class="btn btn-danger btn-sm delete-confirm">
+                                                        <a class="btn btn-danger btn-sm delete-confirm" >
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash">
                                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                                 <path d="M4 7l16 0" />
@@ -136,19 +140,19 @@
         </div>
     </div>
 </div>
-<div class="modal modal-blur fade" id="modal-inputdepartment" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal modal-blur fade" id="modal-inputcabang" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Data Department</h5>
+                <h5 class="modal-title">Tambah Data Cabang</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/department/store" method="POST" id="formDepartment">
+                <form action="/cabang/store" method="POST" id="formCabang">
                     @csrf
                     <div class="row">
                         <div class="col-12">
-                            <div class="form-label">Kode Department</div>
+                            <div class="form-label">Kode Cabang</div>
                             <div class="input-icon mb-3">
                                 <span class="input-icon-addon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-id">
@@ -160,13 +164,13 @@
                                         <path d="M7 16l10 0" />
                                     </svg>
                                 </span>
-                                <input type="text" value="" class="form-control" name="kode_dept" id="kode_dept" placeholder="IT/MKT">
+                                <input type="text" value="" class="form-control" name="kode_cabang" id="kode_cabang" placeholder="SOR">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <div class="form-label">Nama Department</div>
+                            <div class="form-label">Nama Cabang</div>
                             <div class="input-icon mb-3">
                                 <span class="input-icon-addon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user">
@@ -175,7 +179,48 @@
                                         <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
                                     </svg>
                                 </span>
-                                <input type="text" value="" class="form-control" name="nama_dept" id="nama_dept" placeholder="Information Technology">
+                                <input type="text" value="" class="form-control" name="nama_cabang" id="nama_cabang" placeholder="Sorrento">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-label">Lokasi</div>
+                            <div class="input-icon mb-3">
+                                <span class="input-icon-addon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-map">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M3 7l6 -3l6 3l6 -3v13l-6 3l-6 -3l-6 3v-13" />
+                                        <path d="M9 4v13" />
+                                        <path d="M15 7v13" />
+                                    </svg>
+                                </span>
+                                <input type="text" value="" class="form-control" name="lokasi_cabang" id="lokasi_cabang" placeholder="Lokasi">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-label">Radius</div>
+                            <div class="input-icon mb-3">
+                                <span class="input-icon-addon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-circle-dotted">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M7.5 4.21l0 .01" />
+                                        <path d="M4.21 7.5l0 .01" />
+                                        <path d="M3 12l0 .01" />
+                                        <path d="M4.21 16.5l0 .01" />
+                                        <path d="M7.5 19.79l0 .01" />
+                                        <path d="M12 21l0 .01" />
+                                        <path d="M16.5 19.79l0 .01" />
+                                        <path d="M19.79 16.5l0 .01" />
+                                        <path d="M21 12l0 .01" />
+                                        <path d="M19.79 7.5l0 .01" />
+                                        <path d="M16.5 4.21l0 .01" />
+                                        <path d="M12 3l0 .01" />
+                                    </svg>
+                                </span>
+                                <input type="text" value="" class="form-control" name="radius" id="radius" placeholder="50">
                             </div>
                         </div>
                     </div>
@@ -201,11 +246,11 @@
     </div>
 </div>
 <!-- Modal Edit -->
-<div class="modal modal-blur fade" id="modal-editdepartment" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal modal-blur fade" id="modal-editcabang" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Data Department</h5>
+                <h5 class="modal-title">Edit Data Cabang</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="loadeditform">
@@ -219,25 +264,25 @@
 @push('myscript')
 <script>
     $(function() {
-        $('#btnTambahDepartment').click(function() {
-            $('#modal-inputdepartment').modal("show");
+        $('#btnTambahCabang').click(function() {
+            $('#modal-inputcabang').modal("show");
         });
 
         $('.edit').click(function() {
-            var kode_dept = $(this).attr('kode_dept');
+            var kode_cabang = $(this).attr('kode_cabang');
             $.ajax({
                 type: 'POST',
-                url: '/department/edit',
+                url: '/cabang/edit',
                 cache: false,
                 data: {
                     _token: "{{ csrf_token();}}",
-                    kode_dept: kode_dept
+                    kode_cabang: kode_cabang
                 },
                 success: function(respond) {
                     $('#loadeditform').html(respond);
                 }
             });
-            $('#modal-editdepartment').modal("show");
+            $('#modal-editcabang').modal("show");
         });
 
         $(".delete-confirm").click(function(e) {
@@ -245,7 +290,7 @@
             e.preventDefault();
             Swal.fire({
                 title: "Apakah Yakin?",
-                text: "Data Department Akan Ke Delete!",
+                text: "Data Cabang Akan Ke Delete!",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
@@ -258,53 +303,45 @@
             });
         });
 
-        $('#formKaryawan').submit(function() {
-            var nik = $('#nik').val();
-            var nama_lengkap = $('#nama_lengkap').val();
-            var jabatan = $('#jabatan').val();
-            var no_hp = $('#no_Hp').val();
-            var kode_dept = $("formKaryawan").find('#kode_dept').val();
-            if (nik == "") {
+        $('#formCabang').submit(function(event) {
+            function showWarning(message, selector) {
                 Swal.fire({
                     title: 'Warning!',
-                    text: 'NIK Harus Diisi',
+                    text: message,
                     icon: 'warning',
                     confirmButtonText: 'Ok'
                 }).then(() => {
-                    $('#nik').focus();
+                    $(selector).focus();
                 });
-                return false;
-            } else if (nama_lengkap == "") {
-                Swal.fire({
-                    title: 'Warning!',
-                    text: 'Nama Lengkap Harus Diisi',
-                    icon: 'warning',
-                    confirmButtonText: 'Ok'
-                }).then(() => {
-                    $('#nama_lengkap').focus();
-                });
-                return false;
-            } else if (jabatan == "") {
-                Swal.fire({
-                    title: 'Warning!',
-                    text: 'Jabatan Harus Diisi',
-                    icon: 'warning',
-                    confirmButtonText: 'Ok'
-                }).then(() => {
-                    $('#jabatan').focus();
-                });
-                return false;
-            } else if (no_hp == "") {
-                Swal.fire({
-                    title: 'Warning!',
-                    text: 'Nomer HP Harus Diisi',
-                    icon: 'warning',
-                    confirmButtonText: 'Ok'
-                }).then(() => {
-                    $('#no_hp').focus();
-                });
-                return false;
             }
+
+            var fields = [{
+                    selector: '#kode_cabang',
+                    message: 'Kode Cabang Harus Diisi'
+                },
+                {
+                    selector: '#nama_cabang',
+                    message: 'Nama Cabang Harus Diisi'
+                },
+                {
+                    selector: '#lokasi_cabang',
+                    message: 'Lokasi Cabang Harus Diisi'
+                },
+                {
+                    selector: '#radius',
+                    message: 'Radius Cabang Harus Diisi'
+                }
+            ];
+
+            for (var i = 0; i < fields.length; i++) {
+                if ($(fields[i].selector).val() === "") {
+                    showWarning(fields[i].message, fields[i].selector);
+                    return false;
+                }
+            }
+
+            // No need to call event.preventDefault() or this.submit() here
+            // because if the form is valid, it will submit naturally
         });
     });
 </script>
