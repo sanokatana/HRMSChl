@@ -167,12 +167,13 @@
                     <ul class="nav nav-tabs style1" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#home" role="tab">
-                                Bulan Ini
+                                Hadir
                             </a>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#profile" role="tab">
-                                Karyawan Hari Ini
+                                Form
                             </a>
                         </li>
                     </ul>
