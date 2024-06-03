@@ -53,6 +53,7 @@ Route::middleware(['auth:karyawan'])->group(function(){
 
     //Izin
     Route::get('/presensi/izin', [PresensiController::class,'izin']);
+    Route::post('/presensi/getizin', [PresensiController::class,'getizin']);
     Route::get('/presensi/buatizin', [PresensiController::class,'buatizin']);
     Route::post('/presensi/storeizin', [PresensiController::class,'storeizin']);
 });

@@ -16,26 +16,46 @@ $delayHours = floor($delayInSeconds / 3600);
 $delayMinutes = floor(($delayInSeconds % 3600) / 60);
 }
 @endphp
-<tr style="text-align: center;">
-    <td>{{ $loop->iteration }}</td>
-    <td>{{ $d->nik }}</td>
-    <td>{{ $d->nama_lengkap }}</td>
-    <td>{{ $d->nama_dept }}</td>
-    <td>{{ $d->jam_in }}</td>
-    <td>
+<tr style="text-align: center; ">
+    <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
+    <td style="vertical-align: middle;">{{ $d->nik }}</td>
+    <td style="vertical-align: middle;">{{ $d->nama_lengkap }}</td>
+    <td style="vertical-align: middle;">{{ $d->nama_dept }}</td>
+    <td style="vertical-align: middle;">{{ $d->jam_in }}</td>
+    <td style="vertical-align: middle;">
+        @if ($d->foto_in != null)
         <img src="{{ url($foto_in) }}" class="avatar" alt="">
-    </td>
-    <td>
-        {!! $d->jam_out != null ? $d->jam_out : '<span class="badge bg-danger" style="color: white;">Belum Absen</span>' !!}
-    </td>
-    <td>
-        @if ($d->jam_out != null)
-        <img src="{{ url($foto_out) }}" class="avatar" alt="">
         @else
-        <img src="{{ asset('assets/img/ban.png') }}" class="avatar" alt="">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-fingerprint">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M18.9 7a8 8 0 0 1 1.1 5v1a6 6 0 0 0 .8 3" />
+            <path d="M8 11a4 4 0 0 1 8 0v1a10 10 0 0 0 2 6" />
+            <path d="M12 11v2a14 14 0 0 0 2.5 8" />
+            <path d="M8 15a18 18 0 0 0 1.8 6" />
+            <path d="M4.9 19a22 22 0 0 1 -.9 -7v-1a8 8 0 0 1 12 -6.95" />
+        </svg>
         @endif
     </td>
-    <td>
+    <td style="vertical-align: middle;">
+        {!! $d->jam_out != null ? $d->jam_out : '<span class="badge bg-danger" style="color: white;">Belum Absen</span>' !!}
+    </td>
+    <td style="vertical-align: middle;">
+        @if ($d->jam_out == null)
+        <img src="{{ asset('assets/img/ban.png') }}" class="avatar" alt="">
+        @elseif ($d->foto_out != null)
+        <img src="{{ url($foto_out) }}" class="avatar" alt="">
+        @else
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-fingerprint">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M18.9 7a8 8 0 0 1 1.1 5v1a6 6 0 0 0 .8 3" />
+            <path d="M8 11a4 4 0 0 1 8 0v1a10 10 0 0 0 2 6" />
+            <path d="M12 11v2a14 14 0 0 0 2.5 8" />
+            <path d="M8 15a18 18 0 0 0 1.8 6" />
+            <path d="M4.9 19a22 22 0 0 1 -.9 -7v-1a8 8 0 0 1 12 -6.95" />
+        </svg>
+        @endif
+    </td>
+    <td style="vertical-align: middle;">
         @if ($jamInTime > $startTime)
         <div class="row">
             <span class="badge bg-yellow text-yellow-fg" style="color: white;">Terlambat</span>
@@ -52,7 +72,7 @@ $delayMinutes = floor(($delayInSeconds % 3600) / 60);
         </div>
         @endif
     </td>
-    <td>
+    <td style="vertical-align: middle;">
         <a href="#" class="btn btn-pill btn-primary tampilkanpeta" id="{{ $d->id }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-map" style="margin:0;">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -66,18 +86,18 @@ $delayMinutes = floor(($delayInSeconds % 3600) / 60);
 @endforeach
 
 <script>
-    $(function(){
-        $(".tampilkanpeta").click(function(e){
+    $(function() {
+        $(".tampilkanpeta").click(function(e) {
             var id = $(this).attr("id");
             $.ajax({
-                type:'POST',
-                url:'/tampilkanpeta',
-                data:{
-                    _token:"{{ csrf_token() }}",
-                    id:id
+                type: 'POST',
+                url: '/tampilkanpeta',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id
                 },
-                cache:false,
-                success:function(respond){
+                cache: false,
+                success: function(respond) {
                     $("#loadmap").html(respond);
                 }
             })

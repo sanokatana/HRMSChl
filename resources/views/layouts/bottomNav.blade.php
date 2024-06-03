@@ -13,13 +13,13 @@
             <strong>History</strong>
         </div>
     </a>
-    <!-- <a href="/presensi/create" class="item ">
+    <a href="/presensi/create" class="item ">
         <div class="col">
             <div class="action-button large">
                 <ion-icon name="camera" role="img" class="md hydrated" aria-label="add outline"></ion-icon>
             </div>
         </div>
-    </a> -->
+    </a>
     <a href="/presensi/izin" class="item {{ request()->is('presensi/izin') ? 'active' : ''}}">
         <div class="col">
             <ion-icon name="calendar-outline"></ion-icon>

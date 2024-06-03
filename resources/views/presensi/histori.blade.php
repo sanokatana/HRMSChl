@@ -10,6 +10,24 @@
     <div class="pageTitle">Histori Presensi</div>
     <div class="right"></div>
 </div>
+<style>
+    .rounded-custom {
+        border-radius: 15px; /* Customize the radius as needed */
+    }
+    .jam-row {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .jam-in {
+        width: 100%;
+        /* Make each badge occupy full width */
+    }
+    .jam-out {
+        width: 100%;
+        /* Make each badge occupy full width */
+    }
+</style>
 <!-- * App Header -->
 @endsection
 @section('content')
@@ -18,7 +36,7 @@
         <div class="row">
             <div class="col-6">
                 <div class="form-group">
-                    <select name="bulan" id="bulan" class="form-control">
+                    <select name="bulan" id="bulan" class="form-control" style="text-align:center">
                         <option value="">Bulan</option>
                         @for ($i=1; $i<=12; $i++) <option value="{{ $i }}" {{ date("m") == $i ? 'selected' : ''}}>{{ $namabulan[$i]}}</option>
                         @endfor
@@ -27,7 +45,7 @@
             </div>
             <div class="col-6">
                 <div class="form-group">
-                    <select name="tahun" id="tahun" class="form-control">
+                    <select name="tahun" id="tahun" class="form-control" style="text-align:center">
                         <option value="">Tahun</option>
                         @php
                         $tahunmulai = 2015;
@@ -52,12 +70,11 @@
     </div>
 </div>
 <div class="row">
-    <div class="col" id="showHistori">
-
+    <div class="col" id="showHistori" style="max-height: 65vh; overflow-y: auto;">
+        <!-- Content will be loaded here via AJAX -->
     </div>
 </div>
 @endsection
-
 
 @push('myscript')
 <script>
@@ -66,15 +83,15 @@
             var bulan = $("#bulan").val();
             var tahun = $("#tahun").val();
             $.ajax({
-                type:'POST',
-                url:'/gethistori',
-                data:{
-                    _token:"{{ csrf_token() }}",
-                    bulan :bulan,
-                    tahun :tahun
+                type: 'POST',
+                url: '/gethistori',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    bulan: bulan,
+                    tahun: tahun
                 },
-                cache:false,
-                success:function(respond){
+                cache: false,
+                success: function(respond){
                     $("#showHistori").html(respond);
                 }
             });

@@ -17,8 +17,8 @@
 <div class="row" style="margin-top: 4rem;">
     <div class="col">
         @php
-            $messagesuccess = Session::get('success');
-            $messageerror = Session::get('error');
+        $messagesuccess = Session::get('success');
+        $messageerror = Session::get('error');
         @endphp
         @if (Session::get('success'))
         <div class="alert alert-success">
@@ -32,7 +32,7 @@
         @endif
     </div>
 </div>
-<form action="/presensi/{{ $karyawan->nik}}/updateprofile" method="POST" enctype="multipart/form-data" >
+<form action="/presensi/{{ $karyawan->nik}}/updateprofile" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="col">
         <div class="form-group boxed">
@@ -67,7 +67,14 @@
                     <ion-icon name="refresh-outline"></ion-icon>
                     Update
                 </button>
-                <button type="button" class="btn btn-info btn-block" onclick="location.href='/proseslogout';" value="Go to Google">Logout</button>
+                <button type="button" class="btn btn-warning btn-block" onclick="location.href='/proseslogout';" value="Go to Google">
+                    <ion-icon name="calendar-number-outline"></ion-icon>
+                    Cek Sisa Cuti
+                </button>
+                <button type="button" class="btn btn-danger btn-block" onclick="location.href='/proseslogout';" value="Go to Google">
+                    <ion-icon name="log-out-outline"></ion-icon>
+                    Logout
+                </button>
             </div>
         </div>
     </div>

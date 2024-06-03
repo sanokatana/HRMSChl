@@ -26,13 +26,16 @@ class PresensiController extends Controller
         $nik = Auth::guard('karyawan')->user()->nik;
         $tgl_presensi = date("Y-m-d");
         $jam = date("H:i:s");
+
+        // Fetch the office location configuration
         $lok_kantor = DB::table('konfigurasi_lokasi')->where('id', 1)->first();
-        $lok = explode(',', $lok_kantor);
-        // Kantor
+
+        // Access the correct property 'lokasi_kantor'
+        $lok = explode(',', $lok_kantor->lokasi_kantor);
+
         $latitudekantor = $lok[0];
         $longitudekantor = $lok[1];
-        // $latitudekantor = -6.560860441826146;
-        // $longitudekantor = 106.8253235101249;
+
         $lokasi = $request->lokasi;
         $lokasiuser = explode(",", $lokasi);
         $latitudeuser = $lokasiuser[0];
@@ -48,6 +51,7 @@ class PresensiController extends Controller
         } else {
             $ket = "in";
         }
+
         $image = $request->image;
         $folderPath = "public/uploads/absensi/";
         $formatName = $nik . "-" . $tgl_presensi . "-" . $ket;
@@ -90,6 +94,7 @@ class PresensiController extends Controller
             }
         }
     }
+
 
     //Menghitung Jarak
     function distance($lat1, $lon1, $lat2, $lon2)
@@ -178,10 +183,26 @@ class PresensiController extends Controller
 
     public function izin()
     {
-
+        $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         $nik = Auth::guard('karyawan')->user()->nik;
         $dataizin = DB::table('pengajuan_izin')->where('nik', $nik)->get();
-        return view('presensi.izin', compact('dataizin'));
+        return view('presensi.izin', compact('dataizin', 'namabulan'));
+    }
+
+    public function getizin(Request $request)
+    {
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+        $nik = Auth::guard('karyawan')->user()->nik;
+
+        $historiizin = DB::table('pengajuan_izin')
+            ->whereRaw('MONTH(tgl_izin)="' . $bulan . '"')
+            ->whereRaw('YEAR(tgl_izin)="' . $tahun . '"')
+            ->where('nik', $nik)
+            ->orderBy('tgl_izin')
+            ->get();
+
+        return view('presensi.getizin', compact('historiizin'));
     }
 
     public function buatizin()
@@ -239,33 +260,33 @@ class PresensiController extends Controller
     }
 
     public function izinapproval(Request $request)
-{
-    $query = Pengajuanizin::query();
-    $query->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik');
-    $query->join('department', 'karyawan.kode_dept', '=', 'department.kode_dept');
-    $query->select('pengajuan_izin.*', 'karyawan.nama_lengkap', 'karyawan.jabatan', 'department.nama_dept');
+    {
+        $query = Pengajuanizin::query();
+        $query->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik');
+        $query->join('department', 'karyawan.kode_dept', '=', 'department.kode_dept');
+        $query->select('pengajuan_izin.*', 'karyawan.nama_lengkap', 'karyawan.jabatan', 'department.nama_dept');
 
-    if (!empty($request->dari) && !empty($request->sampai)) {
-        $query->whereBetween('tgl_izin', [$request->dari, $request->sampai]);
+        if (!empty($request->dari) && !empty($request->sampai)) {
+            $query->whereBetween('tgl_izin', [$request->dari, $request->sampai]);
+        }
+
+        if (!empty($request->nik)) {
+            $query->where('pengajuan_izin.nik', $request->nik);
+        }
+
+        if (!empty($request->nama_lengkap)) {
+            $query->where('nama_lengkap', 'like', '%' . $request->nama_lengkap . '%');
+        }
+
+        if ($request->status_approved === '0' || $request->status_approved === '1' || $request->status_approved === '2') {
+            $query->where('status_approved', $request->status_approved);
+        }
+
+        $izinapproval = $query->paginate(10);
+        $izinapproval->appends($request->all());
+
+        return view('presensi.izinapproval', compact('izinapproval'));
     }
-
-    if (!empty($request->nik)) {
-        $query->where('pengajuan_izin.nik', $request->nik);
-    }
-
-    if (!empty($request->nama_lengkap)) {
-        $query->where('nama_lengkap', 'like', '%' . $request->nama_lengkap . '%');
-    }
-
-    if ($request->status_approved === '0' || $request->status_approved === '1' || $request->status_approved === '2') {
-        $query->where('status_approved', $request->status_approved);
-    }
-
-    $izinapproval = $query->paginate(10);
-    $izinapproval->appends($request->all());
-
-    return view('presensi.izinapproval', compact('izinapproval'));
-}
 
     public function approveizin(Request $request)
     {

@@ -7,47 +7,132 @@
             <ion-icon name="chevron-back-outline"></ion-icon>
         </a>
     </div>
-    <div class="pageTitle">Data Izin / Sakit</div>
+    <div class="pageTitle">Data Izin / Sakit / Cuti</div>
     <div class="right"></div>
 </div>
 <style>
     .rounded-custom {
-        border-radius: 15px; /* Customize the radius as needed */
+        border-radius: 15px;
+        /* Customize the radius as needed */
+    }
+
+    .scrollable-container {
+        max-height: 60vh;
+        /* Adjust the max-height as needed */
+        overflow-y: auto;
     }
 </style>
 <!-- * App Header -->
 @endsection
 @section('content')
-<div class="row" style="margin-top: 60px">
+<div class="row" style="margin-top:70px">
     <div class="col">
-    @foreach ($dataizin as $d)
-    <ul class="listview image-listview rounded-custom">
-        <li>
-            <div class="item">
-                <div class="in">
-                    <div>
-                    <b>{{ date("F j, Y", strtotime($d->tgl_izin))}}</b><br>
-                    <small>{{ $d->status=="s" ? "Sakit" : "Izin"}}</small> -
-                    <small class="text-muted">{{ $d->keterangan}}</small>
-                    </div>
-                    @if ($d->status_approved==0)
-                        <span class="badge bg-warning">Waiting Approval</span>
-                    @elseif($d->status_approved==1)
-                        <span class="badge bg-success">Approved</span>
-                    @else
-                        <span class="badge bg-danger">Declined</span>
-                    @endif
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <select name="bulan" id="bulan" class="form-control" style="text-align:center">
+                        <option value="">Bulan</option>
+                        @for ($i=1; $i<=12; $i++) <option value="{{ $i }}" {{ date("m") == $i ? 'selected' : ''}}>{{ $namabulan[$i]}}</option>
+                            @endfor
+                    </select>
                 </div>
             </div>
-        </li>
-    </ul>
-    @endforeach
+            <div class="col-6">
+                <div class="form-group">
+                    <select name="tahun" id="tahun" class="form-control" style="text-align:center">
+                        <option value="">Tahun</option>
+                        @php
+                        $tahunmulai = 2015;
+                        $tahunskrng = date("Y");
+                        @endphp
+                        @for ($tahun=$tahunmulai; $tahun<= $tahunskrng; $tahun++) <option value="{{ $tahun }}" {{ date("Y") == $tahun ? 'selected' : ''}}>{{ $tahun }}</option>
+                            @endfor
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <button class="btn btn-primary btn-block" id="getData">
+                        <ion-icon name="search-outline"></ion-icon>Search
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<div class="fab-button bottom-right" style="margin-bottom: 60px;">
-    <a href="/presensi/buatizin" class="fab">
-    <ion-icon name="add-outline"></ion-icon>
+
+<div class="row">
+    <div class="col container" id="showIzin" class="scrollable-container" style="max-height: 60vh; overflow-y: auto;">
+    </div>
+</div>
+
+<div class="fab-button animate bottom-right dropdown draggable" style="margin-top: 20px;">
+    <a href="#" class="fab bg-primary" data-toggle="dropdown">
+        <ion-icon name="add-outline" role="img" class="md hydrated" aria-label="add outline"></ion-icon>
     </a>
+    <div class="dropdown-menu">
+        <a href="/presensi/buatizin" class="dropdown-item bg-primary">
+            <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
+            <p style="margin-bottom: 0px;">Izin Absen</p>
+        </a>
+
+        <a href="/presensi/buatizin" class="dropdown-item bg-primary">
+            <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
+            <p style="margin-bottom: 0px;">Izin Sakit</p>
+        </a>
+
+        <a href="/presensi/buatizin" class="dropdown-item bg-primary">
+            <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
+            <p style="margin-bottom: 0px;">Izin Cuti</p>
+        </a>
+    </div>
 </div>
 @endsection
+@push('myscript')
+<script>
+    $(function() {
+        var isDragging = false;
 
+        $(".draggable").draggable({
+            containment: "window", // Restricts dragging to the body element
+            zIndex: 9999, // Set a high zIndex value to ensure it stays above other elements
+            scroll: false, // Disable scrolling while dragging
+            start: function() {
+                isDragging = true;
+            },
+            stop: function() {
+                setTimeout(function() { isDragging = false; }, 100);
+            }
+        });
+
+        $(".fab").click(function(e) {
+            if (isDragging) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+            }
+        });
+
+        $("#getData").click(function(e) {
+            var bulan = $("#bulan").val();
+            var tahun = $("#tahun").val();
+            $.ajax({
+                type: 'POST',
+                url: '/presensi/getizin',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    bulan: bulan,
+                    tahun: tahun
+                },
+                cache: false,
+                success: function(respond) {
+                    $("#showIzin").html(respond);
+                }
+            });
+        });
+    });
+
+</script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+@endpush
