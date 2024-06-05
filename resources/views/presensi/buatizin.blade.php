@@ -36,13 +36,23 @@
                 <label for="tipe" class="col-form-label">Tipe Absen</label>
                 <select name="status" id="status" class="form-control">
                     <option disabled selected value> -- Pilih -- </option>
-                    <option value="i">Izin</option>
-                    <option value="s">Sakit</option>
+                    <option value="I">Izin</option>
+                    <option value="S">Sakit</option>
+                    <option value="Tmk">Tidak Masuk Kerja</option>
+                    <option value="Dt">Datang Terlambat</option>
+                    <option value="Pa">Pulang Awal</option>
+                    <option value="Tam">Tidak Absen Masuk</option>
+                    <option value="Tap">Tidak Absen Pulang</option>
+                    <option value="Tjo">Tukar Jadwal Off</option>
                 </select>
+            </div>
+            <div class="form-group" id="pukulContainer" style="display: none;">
+                <label for="tipe" class="col-form-label">Pukul</label>
+                <input type="time" name="pukul" id="pukul" class="form-control" placeholder="Pukul Datang Terlambat">
             </div>
             <div class="form-group">
                 <label for="tipe" class="col-form-label">Keterangan</label>
-                <textarea name="keterangan" id="keterangan" rows="10" class="form-control"></textarea>
+                <textarea name="keterangan" id="keterangan" rows="4" class="form-control"></textarea>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary btn-block">Submit</button>
@@ -61,11 +71,23 @@
             format: "yyyy-mm-dd"
         });
 
+        $("#status").change(function() {
+            var selectedStatus = $(this).val();
+            if (selectedStatus === "Dt") {
+                $("#pukulContainer").show();
+            } else if (selectedStatus === "Pa") {
+                $("#pukulContainer").show();
+            } else {
+                $("#pukulContainer").hide();
+            }
+        });
+
         $("#formizin").submit(function(event){
             event.preventDefault(); // Prevent default form submission
             var tgl_izin = $("#tgl_izin").val();
             var status = $("#status").val();
             var keterangan = $("#keterangan").val();
+            var pukul = $("#pukul").val();
 
             if (tgl_izin == "") {
                 Swal.fire({
@@ -104,7 +126,8 @@
                                 _token: '{{ csrf_token() }}',
                                 tgl_izin: tgl_izin,
                                 status: status,
-                                keterangan: keterangan
+                                keterangan: keterangan,
+                                pukul: pukul,
                             },
                             success: function(response) {
                                 Swal.fire({

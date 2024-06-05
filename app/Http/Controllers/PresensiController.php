@@ -217,11 +217,13 @@ class PresensiController extends Controller
         $tgl_izin = $request->tgl_izin;
         $status = $request->status;
         $keterangan = $request->keterangan;
+        $pukul = $request->pukul;
 
         $data = [
             'nik' => $nik,
             'tgl_izin' => $tgl_izin,
             'status' => $status,
+            'pukul' => $pukul,
             'keterangan' => $keterangan
         ];
 

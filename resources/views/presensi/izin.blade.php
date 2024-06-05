@@ -64,7 +64,7 @@
 </div>
 
 <div class="row">
-    <div class="col container" id="showIzin" class="scrollable-container" style="max-height: 60vh; overflow-y: auto;">
+    <div class="col container" id="showIzin" class="scrollable-container" style="max-height: 65vh; overflow-y: auto;">
     </div>
 </div>
 

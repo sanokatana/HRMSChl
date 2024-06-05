@@ -249,7 +249,7 @@ use App\Helpers\DateHelper;
                                         {{ $status }}
                                     </div>
                                     <div class="lateness {{ $status == 'Terlambat' ? 'text-warning' : 'text-success' }}">
-                                    ({{ $lateness }})
+                                        ({{ $lateness }})
                                     </div>
                                 </div>
                                 <div class="jam-row">
@@ -279,12 +279,12 @@ use App\Helpers\DateHelper;
                             <div class="in">
                                 <div>
                                     <b>{{ $izinFormattedDate }}</b><br>
-                                    <b style="color: red;">{{ $d->status == "s" ? "Sakit" : "Izin" }}</b><br>
+                                    <b style="color: red;">{{ DateHelper::getStatusText($d->status) }}</b><br>
                                     <small class="text-muted">{{ $d->keterangan }}</small>
                                 </div>
-                                @if ($d->status_approved==0)
+                                @if ($d->status_approved == 0)
                                 <span class="badge bg-warning">Waiting Approval</span>
-                                @elseif($d->status_approved==1)
+                                @elseif ($d->status_approved == 1)
                                 <span class="badge bg-success">Form Approved</span>
                                 @else
                                 <span class="badge bg-danger">Form Declined</span>
@@ -294,8 +294,9 @@ use App\Helpers\DateHelper;
                     </li>
                 </ul>
                 @endforeach
-                </ul>
             </div>
+
+
 
         </div>
     </div>

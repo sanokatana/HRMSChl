@@ -1,5 +1,8 @@
 @extends('layouts.admin.tabler')
 @section('content')
+@php
+use App\Helpers\DateHelper;
+@endphp
 <div class="page-header d-print-none">
     <div class="container-xl">
         <div class="row g-2 align-items-center">
@@ -156,6 +159,7 @@
                                             <th>Tanggal Izin</th>
                                             <th>Tipe Izin</th>
                                             <th>Keterangan</th>
+                                            <th>Pukul</th>
                                             <th>Status Manager</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -168,9 +172,14 @@
                                             <td>{{ $d->nama_lengkap }}</td>
                                             <td>{{ $d->jabatan }}</td>
                                             <td>{{ $d->nama_dept }}</td> <!-- Display department name -->
-                                            <td>{{ date('d-M-Y', strtotime($d->tgl_izin)) }} </td>
-                                            <td>{{ $d->status == "i" ? "Izin" : "Sakit"}} </td>
+                                            <td>{{ DateHelper::formatIndonesianDate($d->tgl_izin) }} </td>
+                                            <td>{{ DateHelper::getStatusText($d->status) }}</td>
                                             <td>{{ $d->keterangan}} </td>
+                                            <td>
+                                                @if ($d->pukul)
+                                                    {{ DateHelper::formatTimeToPM($d->pukul) }}
+                                                @endif
+                                            </td>
                                             <td>
                                                 @if ($d->status_approved == 1)
                                                 <span class="badge bg-success" style="color: white; width:90px">Approved</span>
