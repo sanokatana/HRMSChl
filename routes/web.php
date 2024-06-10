@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\DashboardController;
@@ -80,12 +81,15 @@ Route::middleware(['auth:user'])->group(function (){
     Route::get('/presensi/monitoring', [PresensiController::class,'monitoring']);
     Route::post('/getpresensi', [PresensiController::class,'getpresensi']);
     Route::post('/tampilkanpeta', [PresensiController::class,'tampilkanpeta']);
-    Route::get('/presensi/izinapproval', [PresensiController::class,'izinapproval']);
-    // Route::post('/presensi/approveizin', [PresensiController::class,'approveizin']);
-    // Route::get('/presensi/{id}/batalapprove', [PresensiController::class,'batalapprove']);
-    Route::post('/presensi/approveizin', [PresensiController::class, 'approveizin']);
-    Route::post('/presensi/batalapprove/{id}', [PresensiController::class, 'batalapprove']);
 
+    //Approval
+
+    Route::get('/approval/izinapproval', [PresensiController::class,'izinapproval']);
+    Route::post('/approval/approveizin', [PresensiController::class, 'approveizin']);
+    Route::post('/approval/batalapprove/{id}', [PresensiController::class, 'batalapprove']);
+    Route::get('/approval/izinapprovalhrd', [ApprovalController::class,'izinapprovalhrd']);
+    Route::post('/approval/approveizinhrd', [ApprovalController::class, 'approveizinhrd']);
+    Route::post('/approval/batalapprovehrd/{id}', [ApprovalController::class, 'batalapprovehrd']);
 
     //Konfigurasi
     Route::get('/konfigurasi/lokasikantor', [KonfigurasiController::class,'index']);

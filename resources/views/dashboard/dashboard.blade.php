@@ -15,6 +15,12 @@ use App\Helpers\DateHelper;
         flex-direction: column;
     }
 
+    .status-row {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+    }
+
     .jam-in {
         width: 100%;
         /* Make each badge occupy full width */
@@ -282,13 +288,26 @@ use App\Helpers\DateHelper;
                                     <b style="color: red;">{{ DateHelper::getStatusText($d->status) }}</b><br>
                                     <small class="text-muted">{{ $d->keterangan }}</small>
                                 </div>
-                                @if ($d->status_approved == 0)
-                                <span class="badge bg-warning">Waiting Approval</span>
-                                @elseif ($d->status_approved == 1)
-                                <span class="badge bg-success">Form Approved</span>
-                                @else
-                                <span class="badge bg-danger">Form Declined</span>
-                                @endif
+                                <div class="status-row">
+                                    <div class="mb-1">
+                                        @if ($d->status_approved == 0)
+                                        <span class="badge bg-warning">Waiting Approval</span>
+                                        @elseif ($d->status_approved == 1)
+                                        <span class="badge bg-success">Form Approved</span>
+                                        @else
+                                        <span class="badge bg-danger">Form Declined</span>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        @if ($d->status_approved_hrd == 0)
+                                        <span class="badge bg-warning">Waiting Approval</span>
+                                        @elseif ($d->status_approved_hrd == 1)
+                                        <span class="badge bg-success">Form Approved</span>
+                                        @else
+                                        <span class="badge bg-danger">Form Declined</span>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </li>

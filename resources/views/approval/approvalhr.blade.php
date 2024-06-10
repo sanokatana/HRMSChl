@@ -50,7 +50,7 @@ use App\Helpers\DateHelper;
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
-                                <form action="/approval/izinapproval" method="GET" autocomplete="off">
+                                <form action="/approval/izinapprovalhrd" method="GET" autocomplete="off">
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="input-icon mb-3">
@@ -123,14 +123,24 @@ use App\Helpers\DateHelper;
                                         <div class="col-3">
                                             <div class="form-group">
                                                 <select name="status_approved" id="status_approved" class="form-select">
-                                                    <option value="">Pilih Status</option>
-                                                    <option value="0" {{ Request('status_approved') === '0' ? 'selected' : ''}}>Pending</option>
-                                                    <option value="1" {{ Request('status_approved') == 1 ? 'selected' : ''}}>Approved</option>
-                                                    <option value="2" {{ Request('status_approved') == 2 ? 'selected' : ''}}>Rejected</option>
+                                                    <option value="pilih" {{ request('status_approved') === 'pilih' ? 'selected' : '' }}>Pilih Status Manager</option>
+                                                    <option value="0" {{ request('status_approved') === '0' ? 'selected' : '' }}>Pending</option>
+                                                    <option value="1" {{ request('status_approved') === '1' ? 'selected' : '' }}>Approved</option>
+                                                    <option value="2" {{ request('status_approved') === '2' ? 'selected' : '' }}>Rejected</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-3">
+                                            <div class="form-group">
+                                                <select name="status_approved_hrd" id="status_approved_hrd" class="form-select">
+                                                    <option value="pilih" {{ request('status_approved_hrd') === 'pilih' ? 'selected' : '' }}>Pilih Status HRD</option>
+                                                    <option value="0" {{ request('status_approved_hrd') === '0' ? 'selected' : '' }}>Pending</option>
+                                                    <option value="1" {{ request('status_approved_hrd') === '1' ? 'selected' : '' }}>Approved</option>
+                                                    <option value="2" {{ request('status_approved_hrd') === '2' ? 'selected' : '' }}>Rejected</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mb-2">
                                             <div class="form-group">
                                                 <button class="btn btn-primary w-100" type="submit">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-search">
@@ -178,7 +188,7 @@ use App\Helpers\DateHelper;
                                             <td>{{ $d->keterangan}} </td>
                                             <td>
                                                 @if ($d->pukul)
-                                                    {{ DateHelper::formatTimeToPM($d->pukul) }}
+                                                {{ DateHelper::formatTimeToPM($d->pukul) }}
                                                 @endif
                                             </td>
                                             <td>
@@ -200,7 +210,7 @@ use App\Helpers\DateHelper;
                                                 @endif
                                             </td>
                                             <td>
-                                                @if ($d->status_approved == 0)
+                                                @if ($d->status_approved_hrd == 0)
                                                 <a href="#" class="badge bg-primary btnApprove" style="width:100px; justify-content:space-between" data-id="{{ $d->id }}">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="margin:0;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-checkbox">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -241,13 +251,13 @@ use App\Helpers\DateHelper;
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/approval/approveizin" method="POST">
+                <form action="/approval/approveizinhrd" method="POST">
                     @csrf
                     <input type="hidden" id="id_izin_form" name="id_izin_form">
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
-                                <select name="status_approved" id="status_approved" class="form-select">
+                                <select name="status_approved_hrd" id="status_approved_hrd" class="form-select">
                                     <option value="1">Disetujui</option>
                                     <option value="2">Ditolak</option>
                                 </select>
@@ -312,7 +322,7 @@ use App\Helpers\DateHelper;
                 if (result.isConfirmed) {
                     // Submit the form when confirmed
                     $('#modal-izinapproval form').submit();
-                }else{
+                } else {
                     $('#modal-izinapproval').modal("show");
                 }
             });
@@ -333,14 +343,14 @@ use App\Helpers\DateHelper;
                 if (result.isConfirmed) {
                     $.ajax({
                         type: 'POST',
-                        url: '/approval/batalapprove/' + id,
+                        url: '/approval/batalapprovehrd/' + id,
                         data: {
                             _token: "{{ csrf_token() }}",
                         },
                         success: function(response) {
                             if (response.success) {
                                 Swal.fire(
-                                    'Deleted!',
+                                    'Cancelled!',
                                     'Approval has been cancelled.',
                                     'success'
                                 ).then(() => {

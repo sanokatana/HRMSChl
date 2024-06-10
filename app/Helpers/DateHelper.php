@@ -39,6 +39,31 @@ class DateHelper
         $year = date('Y', $timestamp);
         return "$dayName $day $monthName $year";
     }
+
+    public static function formatIndonesiaDate($date)
+    {
+
+        $months = [
+            'January' => 'Januari',
+            'February' => 'Februari',
+            'March' => 'Maret',
+            'April' => 'April',
+            'May' => 'Mei',
+            'June' => 'Juni',
+            'July' => 'Juli',
+            'August' => 'Agustus',
+            'September' => 'September',
+            'October' => 'Oktober',
+            'November' => 'November',
+            'December' => 'Desember'
+        ];
+
+        $timestamp = strtotime($date);
+        $day = date('j', $timestamp);
+        $monthName = $months[date('F', $timestamp)];
+        $year = date('Y', $timestamp);
+        return "$day $monthName $year";
+    }
     public static function getStatusText($status)
     {
         switch ($status) {

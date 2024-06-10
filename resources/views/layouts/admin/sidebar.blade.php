@@ -205,8 +205,17 @@
                     <div class="dropdown-menu">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="/presensi/izinapproval">
+                                <a class="dropdown-item" href="/approval/izinapproval">
                                     Approval Izin
+                                </a>
+                                <a class="dropdown-item" href="/approval/izinapproval">
+                                    Approval Cuti
+                                </a>
+                                <a class="dropdown-item" href="/approval/izinapprovalhrd">
+                                    Approval Izin HR
+                                </a>
+                                <a class="dropdown-item" href="/approval/izinapproval">
+                                    Approval Cuti HR
                                 </a>
                             </div>
                         </div>

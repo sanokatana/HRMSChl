@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Karyawan;
 use App\Models\Pengajuanizin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -263,32 +264,46 @@ class PresensiController extends Controller
 
     public function izinapproval(Request $request)
     {
-        $query = Pengajuanizin::query();
-        $query->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik');
-        $query->join('department', 'karyawan.kode_dept', '=', 'department.kode_dept');
-        $query->select('pengajuan_izin.*', 'karyawan.nama_lengkap', 'karyawan.jabatan', 'department.nama_dept');
+        $nik = Auth::guard('user')->user()->nik;
 
+        // Get the list of employee NIKs whose supervisor is the current user
+        $employeeNiks = Karyawan::where('nik_atasan', $nik)->pluck('nik');
+
+        // Begin query on pengajuan_izin table
+        $query = Pengajuanizin::query();
+        $query->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik')
+            ->join('department', 'karyawan.kode_dept', '=', 'department.kode_dept')
+            ->select('pengajuan_izin.*', 'karyawan.nama_lengkap', 'karyawan.jabatan', 'department.nama_dept')
+            ->whereIn('pengajuan_izin.nik', $employeeNiks); // Filter to only include employees supervised by the current user
+
+        // Apply date filter if provided
         if (!empty($request->dari) && !empty($request->sampai)) {
             $query->whereBetween('tgl_izin', [$request->dari, $request->sampai]);
         }
 
+        // Apply NIK filter if provided
         if (!empty($request->nik)) {
             $query->where('pengajuan_izin.nik', $request->nik);
         }
 
+        // Apply name filter if provided
         if (!empty($request->nama_lengkap)) {
             $query->where('nama_lengkap', 'like', '%' . $request->nama_lengkap . '%');
         }
 
+        // Apply approval status filter if provided
         if ($request->status_approved === '0' || $request->status_approved === '1' || $request->status_approved === '2') {
             $query->where('status_approved', $request->status_approved);
         }
 
+        // Paginate the results
         $izinapproval = $query->paginate(10);
         $izinapproval->appends($request->all());
 
+        // Return the view with the filtered results
         return view('presensi.izinapproval', compact('izinapproval'));
     }
+
 
     public function approveizin(Request $request)
     {
@@ -299,9 +314,9 @@ class PresensiController extends Controller
             ->update(['status_approved' => $status_approved]);
 
         if ($update) {
-            return redirect('/presensi/izinapproval')->with(['success' => 'Data Berhasil Di Update']);
+            return redirect('/approval/izinapproval')->with(['success' => 'Data Berhasil Di Update']);
         } else {
-            return redirect('/presensi/izinapproval')->with(['error' => 'Data Gagal Di Update']);
+            return redirect('/approval/izinapproval')->with(['error' => 'Data Gagal Di Update']);
         }
     }
 

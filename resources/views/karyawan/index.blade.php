@@ -16,6 +16,9 @@
         </div>
     </div>
 </div>
+@php
+use App\Helpers\DateHelper;
+@endphp
 @if(session('success'))
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -96,14 +99,19 @@
                             <div class="col-12">
                                 <table class="table table-vcenter card-table table-striped">
                                     <thead>
-                                        <tr>
+                                        <tr style="text-align: center;">
                                             <th>No</th>
                                             <th>NIK</th>
                                             <th>Nama</th>
+                                            <th>Email</th>
                                             <th>Jabatan</th>
                                             <th>No. Hp</th>
+                                            <th>Tanggal Masuk</th>
+                                            <th>Tanggal Resign</th>
                                             <th>Foto</th>
                                             <th>Department</th>
+                                            <th>Level</th>
+                                            <th>Atasan</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -112,12 +120,19 @@
                                         @php
                                         $path = Storage::url('uploads/karyawan/'.$d->foto)
                                         @endphp
-                                        <tr>
+                                        <tr style="text-align: center;">
                                             <td>{{ $loop->iteration + $karyawan->firstItem() -1 }}</td>
                                             <td>{{ $d->nik}}</td>
                                             <td>{{ $d->nama_lengkap}}</td>
+                                            <td>{{ $d->email}}</td>
                                             <td>{{ $d->jabatan}}</td>
                                             <td>{{ $d->no_hp}}</td>
+                                            <td>
+                                                @if ($d->tgl_masuk)
+                                                {{ DateHelper::formatIndonesiaDate($d->tgl_masuk) }}
+                                                @endif
+                                            </td>
+                                            <td>{{ $d->tgl_resign}}</td>
                                             <td>
                                                 @if (empty($d->foto))
                                                 <img src="{{ asset('assets/img/nophoto.jpg')}}" class="avatar" alt="">
@@ -126,6 +141,8 @@
                                                 @endif
                                             </td>
                                             <td>{{ $d->nama_dept}}</td>
+                                            <td>{{ $d->level }}</td>
+                                            <td>{{ $d->nama_atasan}}</td>
                                             <td>
                                                 <div class="form-group">
                                                     <a href="#" class="edit btn btn-info btn-sm" nik="{{ $d->nik }}">
@@ -138,7 +155,7 @@
                                                     </a>
                                                     <form action="/karyawan/{{$d->nik}}/delete" method="POST">
                                                         @csrf
-                                                        <a class="btn btn-danger btn-sm delete-confirm" >
+                                                        <a class="btn btn-danger btn-sm delete-confirm">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash">
                                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                                 <path d="M4 7l16 0" />
@@ -151,7 +168,7 @@
                                                     </form>
                                                 </div>
                                             </td>
-                                        @endforeach
+                                            @endforeach
                                     </tbody>
                                 </table>
                                 {{ $karyawan->links('vendor.pagination.bootstrap-5')}}
@@ -164,7 +181,7 @@
     </div>
 </div>
 <div class="modal modal-blur fade" id="modal-inputkaryawan" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Tambah Data Karyawan</h5>
@@ -174,7 +191,7 @@
                 <form action="/karyawan/store" method="POST" id="formKaryawan" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-6">
                             <div class="form-label">NIK</div>
                             <div class="input-icon mb-3">
                                 <span class="input-icon-addon">
@@ -190,9 +207,7 @@
                                 <input type="text" value="" class="form-control" name="nik" id="nik" placeholder="10101">
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
+                        <div class="col-6">
                             <div class="form-label">Nama Karyawan</div>
                             <div class="input-icon mb-3">
                                 <span class="input-icon-addon">
@@ -207,7 +222,20 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-6">
+                            <div class="form-label">Email</div>
+                            <div class="input-icon mb-3">
+                                <span class="input-icon-addon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-mail">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
+                                        <path d="M3 7l9 6l9 -6" />
+                                    </svg>
+                                </span>
+                                <input type="text" value="" class="form-control" name="email" id="email" placeholder="@ciptaharmoni.com">
+                            </div>
+                        </div>
+                        <div class="col-6">
                             <div class="form-label">Jabatan</div>
                             <div class="input-icon mb-3">
                                 <span class="input-icon-addon">
@@ -224,7 +252,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-6">
                             <div class="form-label">Nomer HP</div>
                             <div class="input-icon mb-3">
                                 <span class="input-icon-addon">
@@ -234,6 +262,22 @@
                                     </svg>
                                 </span>
                                 <input type="text" value="" class="form-control" name="no_hp" id="no_hp" placeholder="No HP">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-label">Tanggal Masuk</div>
+                            <div class="input-icon mb-3">
+                                <span class="input-icon-addon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-event">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                                        <path d="M16 3l0 4" />
+                                        <path d="M8 3l0 4" />
+                                        <path d="M4 11l16 0" />
+                                        <path d="M8 15h2v2h-2z" />
+                                    </svg>
+                                </span>
+                                <input type="date" value="" class="form-control" name="tgl_masuk" id="tgl_masuk" placeholder="No HP">
                             </div>
                         </div>
                     </div>
@@ -246,12 +290,33 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-label">Department</div>
                         <div class="col-12">
+                            <div class="form-label">Department</div>
                             <select name="kode_dept" id="kode_dept" class="form-select">
                                 <option value="">Pilih</option>
                                 @foreach ($department as $d)
-                                <option {{ Request('kode_dept')==$d->kode_dept ? 'selected' : ''}} value="{{$d->kode_dept}}">{{$d->nama_dept}}</option>
+                                <option {{ Request('kode_dept') == $d->kode_dept ? 'selected' : '' }} value="{{ $d->kode_dept }}">{{ $d->nama_dept }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                    <div class="col-6">
+                            <div class="form-label">Level</div>
+                            <select name="level" id="level" class="form-select">
+                                <option value="">Pilih</option>
+                                <option {{ Request('level') == 'Officer' ? 'selected' : '' }} value="Officer">Officer</option>
+                                <option {{ Request('level') == 'Manager' ? 'selected' : '' }} value="Manager">Manager</option>
+                                <option {{ Request('level') == 'HRD' ? 'selected' : '' }} value="HRD">HRD</option>
+                                <option {{ Request('level') == 'Management' ? 'selected' : '' }} value="Management">Management</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-label">Atasan</div>
+                            <select name="nik_atasan" id="nik_atasan" class="form-select">
+                                <option value="">Pilih</option>
+                                @foreach ($atasan as $d)
+                                <option {{ Request('nik_atasan') == $d->nik ? 'selected' : '' }} value="{{ $d->nik }}">{{ $d->nama_lengkap }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -279,7 +344,7 @@
 </div>
 <!-- Modal Edit -->
 <div class="modal modal-blur fade" id="modal-editkaryawan" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Edit Data Karyawan</h5>
@@ -317,21 +382,21 @@
             $('#modal-editkaryawan').modal("show");
         });
 
-        $(".delete-confirm").click(function(e){
+        $(".delete-confirm").click(function(e) {
             var form = $(this).closest('form');
             e.preventDefault();
             Swal.fire({
-            title: "Apakah Yakin?",
-            text: "Data Karyawan Akan Ke Delete!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Delete"
+                title: "Apakah Yakin?",
+                text: "Data Karyawan Akan Ke Delete!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Delete"
             }).then((result) => {
-            if (result.isConfirmed) {
-                form.submit();
-            }
+                if (result.isConfirmed) {
+                    form.submit();
+                }
             });
         });
 

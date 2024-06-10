@@ -1,7 +1,7 @@
 <form action="/karyawan/{{ $karyawan->nik }}/update" method="POST" id="formKaryawan" enctype="multipart/form-data">
     @csrf
     <div class="row">
-        <div class="col-12">
+        <div class="col-6">
             <div class="form-label">NIK</div>
             <div class="input-icon mb-3">
                 <span class="input-icon-addon">
@@ -17,9 +17,7 @@
                 <input type="text" value="{{$karyawan->nik}}" class="form-control" name="nik" id="nik" placeholder="10101" disabled>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
+        <div class="col-6">
             <div class="form-label">Nama Karyawan</div>
             <div class="input-icon mb-3">
                 <span class="input-icon-addon">
@@ -34,7 +32,20 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-12">
+        <div class="col-6">
+            <div class="form-label">Email</div>
+            <div class="input-icon mb-3">
+                <span class="input-icon-addon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-mail">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
+                        <path d="M3 7l9 6l9 -6" />
+                    </svg>
+                </span>
+                <input type="text" value="{{$karyawan->email}}" class="form-control" name="email" id="email" placeholder="@ciptaharmoni.com">
+            </div>
+        </div>
+        <div class="col-6">
             <div class="form-label">Jabatan</div>
             <div class="input-icon mb-3">
                 <span class="input-icon-addon">
@@ -51,7 +62,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-12">
+        <div class="col-6">
             <div class="form-label">Nomer HP</div>
             <div class="input-icon mb-3">
                 <span class="input-icon-addon">
@@ -63,9 +74,7 @@
                 <input type="text" value="{{$karyawan->no_hp}}" class="form-control" name="no_hp" id="no_hp" placeholder="No HP">
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
+        <div class="col-6">
             <div class="mb-3">
                 <div class="form-label">Foto Karyawan</div>
                 <input type="file" class="form-control" name="foto" id="foto" accept=".png, .jpg, .jpeg">
@@ -74,12 +83,67 @@
         </div>
     </div>
     <div class="row">
-        <div class="form-label">Department</div>
+        <div class="col-6">
+            <div class="form-label">Tanggal Masuk</div>
+            <div class="input-icon mb-3">
+                <span class="input-icon-addon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-event">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                        <path d="M16 3l0 4" />
+                        <path d="M8 3l0 4" />
+                        <path d="M4 11l16 0" />
+                        <path d="M8 15h2v2h-2z" />
+                    </svg>
+                </span>
+                <input type="date" value="{{$karyawan->tgl_masuk}}" class="form-control" name="tgl_masuk" id="tgl_masuk" placeholder="">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-label">Tanggal Resign</div>
+            <div class="input-icon mb-3">
+                <span class="input-icon-addon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-event">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                        <path d="M16 3l0 4" />
+                        <path d="M8 3l0 4" />
+                        <path d="M4 11l16 0" />
+                        <path d="M8 15h2v2h-2z" />
+                    </svg>
+                </span>
+                <input type="date" value="{{$karyawan->tgl_resign}}" class="form-control" name="tgl_resign" id="tgl_resign" placeholder="">
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-12">
+            <div class="form-label">Department</div>
             <select name="kode_dept" id="kode_dept" class="form-select">
                 <option value="">Pilih</option>
                 @foreach ($department as $d)
-                <option {{ $karyawan->kode_dept ==$d->kode_dept ? 'selected' : ''}} value="{{$d->kode_dept}}">{{$d->nama_dept}}</option>
+                <option {{ $karyawan->kode_dept == $d->kode_dept ? 'selected' : '' }} value="{{ $d->kode_dept }}">{{ $d->nama_dept }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-6">
+            <div class="form-label">Level</div>
+            <select name="level" id="level" class="form-select">
+                <option value="">Pilih</option>
+                <option {{ $karyawan->level == 'Officer' ? 'selected' : '' }} value="Officer">Officer</option>
+                <option {{ $karyawan->level == 'Manager' ? 'selected' : '' }} value="Manager">Manager</option>
+                <option {{ $karyawan->level == 'HRD' ? 'selected' : '' }} value="HRD">HRD</option>
+                <option {{ $karyawan->level == 'Management' ? 'selected' : '' }} value="Management">Management</option>
+            </select>
+        </div>
+        <div class="col-6">
+            <div class="form-label">Atasan</div>
+            <select name="nik_atasan" id="nik_atasan" class="form-select">
+                <option value="">Pilih</option>
+                @foreach ($atasan as $a)
+                <option {{ $karyawan->nik_atasan == $a->nik ? 'selected' : '' }} value="{{ $a->nik }}">{{ $a->nama_lengkap }}</option>
                 @endforeach
             </select>
         </div>
