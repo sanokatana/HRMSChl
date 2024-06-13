@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabangController;
+use App\Http\Controllers\CutiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\KaryawanController;
@@ -77,6 +78,13 @@ Route::middleware(['auth:user'])->group(function (){
     Route::post('/data/user/edit', [UserController::class,'edit']);
     Route::post('/data/user/{nik}/update', [UserController::class,'update']);
     Route::post('/data/user/{nik}/delete', [UserController::class,'delete']);
+
+    //Cuti
+    Route::get('/cuti', [CutiController::class,'index']);
+    Route::post('/cuti/store', [CutiController::class,'store']);
+    Route::get('/cuti/{id}/edit', [CutiController::class, 'edit']);
+    Route::post('/cuti/{id}/update', [CutiController::class,'update']);
+    Route::post('/cuti/{id}/delete', [CutiController::class,'delete']);
 
     //Department
     Route::get('/department', [DepartmentController::class,'index']);

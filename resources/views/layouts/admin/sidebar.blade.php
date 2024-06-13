@@ -181,7 +181,7 @@
                                 <a class="dropdown-item" href="/cabang">
                                     Kantor Cabang
                                 </a>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="/cuti">
                                     Cuti
                                 </a>
                             </div>

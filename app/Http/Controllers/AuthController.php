@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     public function proseslogin(Request $request){
-        if(Auth::guard('karyawan')->attempt(['email'=> $request->email, 'password'=>$request->password])){
+        if(Auth::guard('karyawan')->attempt(['email'=> $request->email, 'password'=>$request->password], $request->has('remember'))){
             return redirect('/dashboard');
         } else {
             return redirect('/')->with(['warning'=>'Email / Password Anda Salah']);
@@ -23,6 +23,7 @@ class AuthController extends Controller
             return redirect('/');
         }
     }
+
     public function proseslogoutadmin(){
         if(Auth::guard('user')->check()){
             Auth::guard('user')->logout();
@@ -31,11 +32,14 @@ class AuthController extends Controller
     }
 
     public function prosesloginadmin(Request $request){
-        if(Auth::guard('user')->attempt(['email'=> $request->email, 'password'=>$request->password])){
+        $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember');
+
+        if(Auth::guard('user')->attempt($credentials, $remember)){
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false, 'message' => 'Email / Password Anda Salah']);
         }
     }
-
 }
+

@@ -82,7 +82,7 @@
                                     </div>
                                     <div class="mb-2">
                                         <label class="form-check">
-                                            <input type="checkbox" class="form-check-input" />
+                                            <input type="checkbox" name="remember" class="form-check-input" />
                                             <span class="form-check-label">Remember me on this device</span>
                                         </label>
                                     </div>
@@ -121,12 +121,10 @@
 
             var form = event.target;
 
-            // Create a promise that resolves after 5 seconds
             const timerPromise = new Promise(resolve => {
                 setTimeout(resolve, 1500);
             });
 
-            // Fetch request to the server
             const fetchPromise = fetch(form.action, {
                 method: form.method,
                 body: new FormData(form),
@@ -136,7 +134,6 @@
                 }
             }).then(response => response.json());
 
-            // Wait for both the timer and the fetch promise to resolve
             Promise.all([timerPromise, fetchPromise])
                 .then(([_, data]) => {
                     if (data.success) {
