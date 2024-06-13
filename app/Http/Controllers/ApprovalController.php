@@ -63,13 +63,17 @@ class ApprovalController extends Controller
     {
         $id = $request->id_izin_form;
         $status_approved_hrd = $request->status_approved_hrd;
+        $keputusan = $request->keputusan;
+        $tgl_jadwal_off = $request->tgl_jadwal_off;
         $currentDate = Carbon::now();
 
         $update = DB::table('pengajuan_izin')
             ->where('id', $id)
             ->update([
                 'status_approved_hrd' => $status_approved_hrd,
-                'tgl_status_approved_hrd' => $currentDate
+                'tgl_status_approved_hrd' => $currentDate,
+                'keputusan' => $keputusan,
+                'tgl_jadwal_off' => $tgl_jadwal_off,
         ]);
 
         if ($update) {

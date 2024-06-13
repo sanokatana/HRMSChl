@@ -172,6 +172,7 @@ use App\Helpers\DateHelper;
                                             <th>Pukul</th>
                                             <th>Status Manager</th>
                                             <th>Status HRD</th>
+                                            <th>Keputusan</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -209,6 +210,7 @@ use App\Helpers\DateHelper;
                                                 <span class="badge bg-red" style="color: white; width:90px">Rejected</span>
                                                 @endif
                                             </td>
+                                            <td>{{ $d->keputusan}}</td>
                                             <td>
                                                 @if ($d->status_approved_hrd == 0)
                                                 <a href="#" class="badge bg-primary btnApprove" style="width:100px; justify-content:space-between" data-id="{{ $d->id }}">
@@ -264,6 +266,30 @@ use App\Helpers\DateHelper;
                             </div>
                         </div>
                     </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <select name="keputusan" id="keputusan" class="form-select">
+                                    <option value="Terlambat">Terlambat</option>
+                                    <option value="Mangkir">Mangkir</option>
+                                    <option value="Tugas Luar">Tugas Luar</option>
+                                    <option value="Pulang Awal">Pulang Awal</option>
+                                    <option value="Sakit">Sakit</option>
+                                    <option value="Potong Cuti">Potong Cuti</option>
+                                    <option value="Ijin">Ijin</option>
+                                    <option value="Lain-lain">Lain-lain</option>
+                                    <option value="Tukar Jadwal Off">Tukar Jadwal Off</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <div class="form-group" id="jadwalContainer" style="display: none;">
+                                <input placeholder="Jadwal Off Yang Di Ambil" class="form-control" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="tgl_jadwal_off" name="tgl_jadwal_off"/>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row mt-4">
                         <div class="col-12">
                             <div class="form-group">
@@ -292,6 +318,16 @@ use App\Helpers\DateHelper;
             todayHighlight: true,
             format: 'yyyy-mm-dd'
         });
+
+        $("#keputusan").change(function() {
+            var selectedStatus = $(this).val();
+            if (selectedStatus === "Tukar Jadwal Off") {
+                $("#jadwalContainer").show();
+            } else {
+                $("#jadwalContainer").hide();
+            }
+        });
+
         $("#sampai").datepicker({
             autoclose: true,
             todayHighlight: true,
