@@ -9,16 +9,13 @@
                     Master Data
                 </div>
                 <h2 class="page-title">
-                    Karyawan
+                    User
                 </h2>
                 <br>
             </div>
         </div>
     </div>
 </div>
-@php
-use App\Helpers\DateHelper;
-@endphp
 @if(session('success'))
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -50,7 +47,7 @@ use App\Helpers\DateHelper;
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
-                                <a href="#" class="btn btn-primary" id="btnTambahKaryawan">
+                                <a href="#" class="btn btn-primary" id="btnTambahUser">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <path d="M12 5l0 14" />
@@ -62,21 +59,11 @@ use App\Helpers\DateHelper;
                         </div>
                         <div class="row mt-2">
                             <div class="col-12">
-                                <form action="/karyawan" method="GET">
+                                <form action="/data/user" method="GET">
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-10">
                                             <div class="form-group">
-                                                <input type="text" name="nama_karyawan" id="nama_karyawan" class="form-control" placeholder="Nama Karyawan" value="{{ Request('nama_karyawan')}}">
-                                            </div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="form-group mb-3">
-                                                <select name="kode_dept" id="kode_dept" class="form-select">
-                                                    <option value="">Department</option>
-                                                    @foreach ($department as $d)
-                                                    <option {{ Request('kode_dept')==$d->kode_dept ? 'selected' : ''}} value="{{$d->kode_dept}}">{{$d->nama_dept}}</option>
-                                                    @endforeach
-                                                </select>
+                                                <input type="text" name="nama" id="nama" class="form-control" placeholder="Nama User" value="{{ Request('nama')}}">
                                             </div>
                                         </div>
                                         <div class="col-2">
@@ -104,53 +91,16 @@ use App\Helpers\DateHelper;
                                             <th>NIK</th>
                                             <th>Nama</th>
                                             <th>Email</th>
-                                            <th>Jabatan</th>
-                                            <th>No. Hp</th>
-                                            <th>Tanggal Masuk</th>
-                                            <th>Tanggal Resign</th>
-                                            <th>DOB</th>
-                                            <th>Foto</th>
-                                            <th>Department</th>
-                                            <th>Level</th>
-                                            <th>Atasan</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($karyawan as $d)
-                                        @php
-                                        $path = Storage::url('uploads/karyawan/'.$d->foto)
-                                        @endphp
+                                        @foreach ($user as $d)
                                         <tr style="text-align: center;">
-                                            <td>{{ $loop->iteration + $karyawan->firstItem() -1 }}</td>
+                                            <td>{{ $loop->iteration + $user->firstItem() -1 }}</td>
                                             <td>{{ $d->nik}}</td>
-                                            <td>{{ $d->nama_lengkap}}</td>
+                                            <td>{{ $d->name}}</td>
                                             <td>{{ $d->email}}</td>
-                                            <td>{{ $d->jabatan}}</td>
-                                            <td>{{ $d->no_hp}}</td>
-                                            <td>
-                                                @if ($d->tgl_masuk)
-                                                {{ DateHelper::formatIndonesiaDate($d->tgl_masuk) }}
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($d->tgl_resign)
-                                                {{ DateHelper::formatIndonesiaDate($d->tgl_resign) }}
-                                                @endif
-                                            </td>
-                                            <td>@if ($d->DOB)
-                                                {{ DateHelper::formatIndonesiaDate($d->DOB) }}
-                                                @endif</td>
-                                            <td>
-                                                @if (empty($d->foto))
-                                                <img src="{{ asset('assets/img/nophoto.jpg')}}" class="avatar" alt="">
-                                                @else
-                                                <img src="{{ url($path )}}" class="avatar" alt="">
-                                                @endif
-                                            </td>
-                                            <td>{{ $d->nama_dept}}</td>
-                                            <td>{{ $d->level }}</td>
-                                            <td>{{ $d->nama_atasan}}</td>
                                             <td>
                                                 <div class="form-group">
                                                     <a href="#" class="edit btn btn-info btn-sm" nik="{{ $d->nik }}">
@@ -161,7 +111,7 @@ use App\Helpers\DateHelper;
                                                             <path d="M16 5l3 3" />
                                                         </svg>
                                                     </a>
-                                                    <form action="/karyawan/{{$d->nik}}/delete" method="POST">
+                                                    <form action="/data/user/{{$d->nik}}/delete" method="POST">
                                                         @csrf
                                                         <a class="btn btn-danger btn-sm delete-confirm">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash">
@@ -179,7 +129,7 @@ use App\Helpers\DateHelper;
                                             @endforeach
                                     </tbody>
                                 </table>
-                                {{ $karyawan->links('vendor.pagination.bootstrap-5')}}
+                                {{ $user->links('vendor.pagination.bootstrap-5')}}
                             </div>
                         </div>
                     </div>
@@ -188,18 +138,18 @@ use App\Helpers\DateHelper;
         </div>
     </div>
 </div>
-<div class="modal modal-blur fade" id="modal-inputkaryawan" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal modal-blur fade" id="modal-inputuser" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Data Karyawan</h5>
+                <h5 class="modal-title">Tambah Data User</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/karyawan/store" method="POST" id="formKaryawan" enctype="multipart/form-data">
+                <form action="/data/user/store" method="POST" id="formUser" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-12">
                             <div class="form-label">NIK</div>
                             <div class="input-icon mb-3">
                                 <span class="input-icon-addon">
@@ -215,8 +165,8 @@ use App\Helpers\DateHelper;
                                 <input type="text" value="" class="form-control" name="nik" id="nik" placeholder="10101">
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="form-label">Nama Karyawan</div>
+                        <div class="col-12">
+                            <div class="form-label">Nama User</div>
                             <div class="input-icon mb-3">
                                 <span class="input-icon-addon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user">
@@ -225,12 +175,12 @@ use App\Helpers\DateHelper;
                                         <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
                                     </svg>
                                 </span>
-                                <input type="text" value="" class="form-control" name="nama_lengkap" id="nama_lengkap" placeholder="John Doe">
+                                <input type="text" value="" class="form-control" name="nama" id="nama" placeholder="John Doe">
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-12">
                             <div class="form-label">Email</div>
                             <div class="input-icon mb-3">
                                 <span class="input-icon-addon">
@@ -243,106 +193,16 @@ use App\Helpers\DateHelper;
                                 <input type="text" value="" class="form-control" name="email" id="email" placeholder="@ciptaharmoni.com">
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="form-label">Jabatan</div>
-                            <div class="input-icon mb-3">
-                                <span class="input-icon-addon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
-                                        <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                                        <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
-                                    </svg>
-                                </span>
-                                <input type="text" value="" class="form-control" name="jabatan" id="jabatan" placeholder="IT Manager">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-label">Nomer HP</div>
-                            <div class="input-icon mb-3">
-                                <span class="input-icon-addon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-phone">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                </span>
-                                <input type="text" value="" class="form-control" name="no_hp" id="no_hp" placeholder="No HP">
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-label">Tanggal Masuk</div>
-                            <div class="input-icon mb-3">
-                                <span class="input-icon-addon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-event">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
-                                        <path d="M16 3l0 4" />
-                                        <path d="M8 3l0 4" />
-                                        <path d="M4 11l16 0" />
-                                        <path d="M8 15h2v2h-2z" />
-                                    </svg>
-                                </span>
-                                <input type="date" value="" class="form-control" name="tgl_masuk" id="tgl_masuk" placeholder="No HP">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-label">Date Of Birth</div>
-                            <div class="input-icon mb-3">
-                                <span class="input-icon-addon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-event">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
-                                        <path d="M16 3l0 4" />
-                                        <path d="M8 3l0 4" />
-                                        <path d="M4 11l16 0" />
-                                        <path d="M8 15h2v2h-2z" />
-                                    </svg>
-                                </span>
-                                <input type="date" value="" class="form-control" name="DOB" id="DOB" placeholder="">
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <div class="form-label">Foto Karyawan</div>
-                                <input type="file" class="form-control" name="foto" id="foto" accept=".png, .jpg, .jpeg">
-                            </div>
-                        </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <div class="form-label">Department</div>
-                            <select name="kode_dept" id="kode_dept" class="form-select">
-                                <option value="">Pilih</option>
-                                @foreach ($department as $d)
-                                <option {{ Request('kode_dept') == $d->kode_dept ? 'selected' : '' }} value="{{ $d->kode_dept }}">{{ $d->nama_dept }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                    <div class="col-6">
-                            <div class="form-label">Level</div>
-                            <select name="level" id="level" class="form-select">
-                                <option value="">Pilih</option>
-                                <option {{ Request('level') == 'Officer' ? 'selected' : '' }} value="Officer">Officer</option>
-                                <option {{ Request('level') == 'Manager' ? 'selected' : '' }} value="Manager">Manager</option>
-                                <option {{ Request('level') == 'HRD' ? 'selected' : '' }} value="HRD">HRD</option>
-                                <option {{ Request('level') == 'Management' ? 'selected' : '' }} value="Management">Management</option>
-                            </select>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-label">Atasan</div>
-                            <select name="nik_atasan" id="nik_atasan" class="form-select">
-                                <option value="">Pilih</option>
-                                @foreach ($atasan as $d)
-                                <option {{ Request('nik_atasan') == $d->nik ? 'selected' : '' }} value="{{ $d->nik }}">{{ $d->nama_lengkap }}</option>
-                                @endforeach
-                            </select>
+                            <label class="form-label">Password</label>
+                            <div class="input-group input-group-flat">
+                                <input type="password" class="form-control" value="" name="password" id="password" autocomplete="off">
+                                <span class="input-group-text">
+                                    <a href="#" class="input-group-link" id="togglePassword" >Show password</a>
+                                </span>
+                            </div>
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -367,11 +227,11 @@ use App\Helpers\DateHelper;
     </div>
 </div>
 <!-- Modal Edit -->
-<div class="modal modal-blur fade" id="modal-editkaryawan" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal modal-blur fade" id="modal-edituser" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Data Karyawan</h5>
+                <h5 class="modal-title">Edit Data User</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="loadeditform">
@@ -385,15 +245,15 @@ use App\Helpers\DateHelper;
 @push('myscript')
 <script>
     $(function() {
-        $('#btnTambahKaryawan').click(function() {
-            $('#modal-inputkaryawan').modal("show");
+        $('#btnTambahUser').click(function() {
+            $('#modal-inputuser').modal("show");
         });
 
         $('.edit').click(function() {
             var nik = $(this).attr('nik');
             $.ajax({
                 type: 'POST',
-                url: '/karyawan/edit',
+                url: '/data/user/edit',
                 cache: false,
                 data: {
                     _token: "{{ csrf_token();}}",
@@ -403,7 +263,20 @@ use App\Helpers\DateHelper;
                     $('#loadeditform').html(respond);
                 }
             });
-            $('#modal-editkaryawan').modal("show");
+            $('#modal-edituser').modal("show");
+        });
+
+        $("#togglePassword").click(function(e) {
+            e.preventDefault();
+            var passwordField = $("#password");
+            var passwordFieldType = passwordField.attr("type");
+            if (passwordFieldType == "password") {
+                passwordField.attr("type", "text");
+                $(this).text("Hide password");
+            } else {
+                passwordField.attr("type", "password");
+                $(this).text("Show password");
+            }
         });
 
         $(".delete-confirm").click(function(e) {
@@ -411,7 +284,7 @@ use App\Helpers\DateHelper;
             e.preventDefault();
             Swal.fire({
                 title: "Apakah Yakin?",
-                text: "Data Karyawan Akan Ke Delete!",
+                text: "Data User Akan Ke Delete!",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
@@ -424,12 +297,10 @@ use App\Helpers\DateHelper;
             });
         });
 
-        $('#formKaryawan').submit(function() {
+        $('#formUser').submit(function() {
             var nik = $('#nik').val();
-            var nama_lengkap = $('#nama_lengkap').val();
-            var jabatan = $('#jabatan').val();
-            var no_hp = $('#no_Hp').val();
-            var kode_dept = $("formKaryawan").find('#kode_dept').val();
+            var nama = $('#nama').val();
+            var email = $('#email').val();
             if (nik == "") {
                 Swal.fire({
                     title: 'Warning!',
@@ -440,34 +311,24 @@ use App\Helpers\DateHelper;
                     $('#nik').focus();
                 });
                 return false;
-            } else if (nama_lengkap == "") {
+            } else if (nama == "") {
                 Swal.fire({
                     title: 'Warning!',
-                    text: 'Nama Lengkap Harus Diisi',
+                    text: 'Nama Harus Diisi',
                     icon: 'warning',
                     confirmButtonText: 'Ok'
                 }).then(() => {
-                    $('#nama_lengkap').focus();
+                    $('#nama').focus();
                 });
                 return false;
-            } else if (jabatan == "") {
+            } else if (email == "") {
                 Swal.fire({
                     title: 'Warning!',
-                    text: 'Jabatan Harus Diisi',
+                    text: 'Email Harus Diisi',
                     icon: 'warning',
                     confirmButtonText: 'Ok'
                 }).then(() => {
-                    $('#jabatan').focus();
-                });
-                return false;
-            } else if (no_hp == "") {
-                Swal.fire({
-                    title: 'Warning!',
-                    text: 'Nomer HP Harus Diisi',
-                    icon: 'warning',
-                    confirmButtonText: 'Ok'
-                }).then(() => {
-                    $('#no_hp').focus();
+                    $('#email').focus();
                 });
                 return false;
             }

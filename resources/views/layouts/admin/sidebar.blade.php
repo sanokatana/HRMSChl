@@ -172,11 +172,11 @@
                                 <a class="dropdown-item" href="/karyawan">
                                     Karyawan
                                 </a>
+                                <a class="dropdown-item" href="/data/user">
+                                    User
+                                </a>
                                 <a class="dropdown-item" href="/department">
                                     Department
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    User
                                 </a>
                                 <a class="dropdown-item" href="/cabang">
                                     Kantor Cabang

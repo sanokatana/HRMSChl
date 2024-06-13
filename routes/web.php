@@ -8,6 +8,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KonfigurasiController;
 use App\Http\Controllers\PresensiController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -70,6 +71,13 @@ Route::middleware(['auth:user'])->group(function (){
     Route::post('/karyawan/{nik}/update', [KaryawanController::class,'update']);
     Route::post('/karyawan/{nik}/delete', [KaryawanController::class,'delete']);
 
+    //User
+    Route::get('/data/user', [UserController::class,'index']);
+    Route::post('/data/user/store', [UserController::class,'store']);
+    Route::post('/data/user/edit', [UserController::class,'edit']);
+    Route::post('/data/user/{nik}/update', [UserController::class,'update']);
+    Route::post('/data/user/{nik}/delete', [UserController::class,'delete']);
+
     //Department
     Route::get('/department', [DepartmentController::class,'index']);
     Route::post('/department/store', [DepartmentController::class,'store']);
@@ -84,9 +92,9 @@ Route::middleware(['auth:user'])->group(function (){
 
     //Approval
 
-    Route::get('/approval/izinapproval', [PresensiController::class,'izinapproval']);
-    Route::post('/approval/approveizin', [PresensiController::class, 'approveizin']);
-    Route::post('/approval/batalapprove/{id}', [PresensiController::class, 'batalapprove']);
+    Route::get('/approval/izinapproval', [ApprovalController::class,'izinapproval']);
+    Route::post('/approval/approveizin', [ApprovalController::class, 'approveizin']);
+    Route::post('/approval/batalapprove/{id}', [ApprovalController::class, 'batalapprove']);
     Route::get('/approval/izinapprovalhrd', [ApprovalController::class,'izinapprovalhrd']);
     Route::post('/approval/approveizinhrd', [ApprovalController::class, 'approveizinhrd']);
     Route::post('/approval/batalapprovehrd/{id}', [ApprovalController::class, 'batalapprovehrd']);

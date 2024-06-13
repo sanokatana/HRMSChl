@@ -123,10 +123,10 @@ use App\Helpers\DateHelper;
                                         <div class="col-3">
                                             <div class="form-group">
                                                 <select name="status_approved" id="status_approved" class="form-select">
-                                                    <option value="">Pilih Status</option>
-                                                    <option value="0" {{ Request('status_approved') === '0' ? 'selected' : ''}}>Pending</option>
-                                                    <option value="1" {{ Request('status_approved') == 1 ? 'selected' : ''}}>Approved</option>
-                                                    <option value="2" {{ Request('status_approved') == 2 ? 'selected' : ''}}>Rejected</option>
+                                                    <option value="pilih" {{ request('status_approved') === 'pilih' ? 'selected' : '' }}>Pilih Status Manager</option>
+                                                    <option value="0" {{ request('status_approved') === '0' ? 'selected' : '' }}>Pending</option>
+                                                    <option value="1" {{ request('status_approved') === '1' ? 'selected' : '' }}>Approved</option>
+                                                    <option value="2" {{ request('status_approved') === '2' ? 'selected' : '' }}>Rejected</option>
                                                 </select>
                                             </div>
                                         </div>

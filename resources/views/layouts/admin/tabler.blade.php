@@ -35,7 +35,7 @@
     </style>
 </head>
 
-<body>
+<body class="layout-fluid">
     <script src="{{ asset('tabler/dist/js/demo-theme.min.js?1692870487')}}"></script>
     <div class="page">
         <!-- Sidebar -->

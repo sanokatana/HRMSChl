@@ -54,6 +54,7 @@ class KaryawanController extends Controller
         $no_hp = $request->no_hp;
         $email = $request->email;
         $level = $request->level;
+        $DOB = $request->DOB;
         $tgl_masuk = $request->tgl_masuk;
         $nik_atasan = $request->nik_atasan;
         $password = Hash::make('chl12345');
@@ -72,6 +73,7 @@ class KaryawanController extends Controller
                 'no_hp' => $no_hp,
                 'tgl_masuk' => $tgl_masuk,
                 'email' => $email,
+                'DOB' => $DOB,
                 'kode_dept' => $kode_dept,
                 'foto' => $foto,
                 'password' => $password,
@@ -112,6 +114,7 @@ class KaryawanController extends Controller
         $kode_dept = $request->kode_dept;
         $old_foto = $request->old_foto;
         $email = $request->email;
+        $DOB = $request->DOB;
         $level = $request->level;
         $tgl_masuk = $request->tgl_masuk;
         $tgl_resign = $request->tgl_resign;
@@ -129,6 +132,7 @@ class KaryawanController extends Controller
                 'no_hp' => $no_hp,
                 'kode_dept' => $kode_dept,
                 'foto' => $foto,
+                'DOB' => $DOB,
                 'email' => $email,
                 'level' => $level,
                 'tgl_masuk' => $tgl_masuk,
