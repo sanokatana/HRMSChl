@@ -96,7 +96,7 @@ use App\Helpers\DateHelper;
                             </div>
                         </div>
                         <div class="row mt-2">
-                            <div class="col-12">
+                            <div class="col-12 table-responsive">
                                 <table class="table table-vcenter card-table table-striped">
                                     <thead>
                                         <tr style="text-align: center;">
@@ -107,8 +107,6 @@ use App\Helpers\DateHelper;
                                             <th>Jabatan</th>
                                             <th>No. Hp</th>
                                             <th>Tanggal Masuk</th>
-                                            <th>Tanggal Resign</th>
-                                            <th>DOB</th>
                                             <th>Foto</th>
                                             <th>Department</th>
                                             <th>Level</th>
@@ -133,14 +131,6 @@ use App\Helpers\DateHelper;
                                                 {{ DateHelper::formatIndonesiaDate($d->tgl_masuk) }}
                                                 @endif
                                             </td>
-                                            <td>
-                                                @if ($d->tgl_resign)
-                                                {{ DateHelper::formatIndonesiaDate($d->tgl_resign) }}
-                                                @endif
-                                            </td>
-                                            <td>@if ($d->DOB)
-                                                {{ DateHelper::formatIndonesiaDate($d->DOB) }}
-                                                @endif</td>
                                             <td>
                                                 @if (empty($d->foto))
                                                 <img src="{{ asset('assets/img/nophoto.jpg')}}" class="avatar" alt="">

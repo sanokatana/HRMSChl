@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Karyawan;
+use App\Models\Pengajuancuti;
 use App\Models\Pengajuanizin;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -133,6 +134,7 @@ class PresensiController extends Controller
         } else {
             $foto = $karyawan->foto;
         }
+
         if (empty($request->password)) {
             $data = [
                 'nama_lengkap' => $nama_lengkap,
@@ -188,7 +190,7 @@ class PresensiController extends Controller
         $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
         $nik = Auth::guard('karyawan')->user()->nik;
         $dataizin = DB::table('pengajuan_izin')->where('nik', $nik)->get();
-        return view('presensi.izin', compact('dataizin', 'namabulan'));
+        return view('izin.izin', compact('dataizin', 'namabulan'));
     }
 
     public function getizin(Request $request)
@@ -204,34 +206,81 @@ class PresensiController extends Controller
             ->orderBy('tgl_izin')
             ->get();
 
-        return view('presensi.getizin', compact('historiizin'));
+        return view('izin.getizin', compact('historiizin'));
     }
 
     public function buatizin()
     {
-        return view('presensi.buatizin');
+        return view('izin.buatizin');
     }
 
     public function storeizin(Request $request)
     {
-
         $nik = Auth::guard('karyawan')->user()->nik;
         $tgl_izin = $request->tgl_izin;
+        $tgl_izin_akhir = $request->tgl_izin_akhir;
+        $jml_hari = $request->jml_hari;
         $status = $request->status;
         $keterangan = $request->keterangan;
         $pukul = $request->pukul;
         $currentDate = Carbon::now();
 
+        if ($request->hasFile('foto')) {
+            $extension = $request->file('foto')->getClientOriginalExtension();
+            $foto = "Surat_" . $nik . "_" . $currentDate->format('d_m_Y') . "." . $extension;
+        } else {
+            $foto = "No_Document";
+        }
+
         $data = [
             'nik' => $nik,
             'tgl_izin' => $tgl_izin,
+            'tgl_izin_akhir' => $tgl_izin_akhir,
+            'jml_hari' => $jml_hari,
             'status' => $status,
             'pukul' => $pukul,
             'keterangan' => $keterangan,
-            'tgl_create' => $currentDate
+            'tgl_create' => $currentDate,
+            'foto' => $foto
         ];
 
-        $simpan = DB::table('pengajuan_izin')->insert($data);
+        $simpan = Pengajuanizin::create($data);
+
+        if ($simpan) {
+            if ($request->hasFile('foto')) {
+                $folderPath = "public/uploads/pengajuan_izin/";
+                $request->file('foto')->storeAs($folderPath, $foto);
+                return redirect('/presensi/izin')->with(['success' => 'Data Berhasil Di Simpan']);
+            }
+        } else {
+            return redirect('/presensi/izin')->with(['error' => 'Data Gagal Di Simpan']);
+        }
+    }
+
+    public function buatcuti()
+    {
+        return view('izin.buatcuti');
+    }
+
+    public function storecuti(Request $request)
+    {
+        $nik = Auth::guard('karyawan')->user()->nik;
+        $tgl_cuti = $request->tgl_cuti;
+        $tgl_cuti_sampai = $request->tgl_cuti_sampai;
+        $jml_hari = $request->jml_hari;
+        $kar_ganti = $request->kar_ganti;
+        $note = $request->note;
+
+        $data = [
+            'nik' => $nik,
+            'tgl_cuti' => $tgl_cuti,
+            'tgl_cuti_sampai' => $tgl_cuti_sampai,
+            'jml_hari' => $jml_hari,
+            'kar_ganti' => $kar_ganti,
+            'note' => $note,
+        ];
+
+        $simpan = Pengajuancuti::create($data);
 
         if ($simpan) {
             return redirect('/presensi/izin')->with(['success' => 'Data Berhasil Di Simpan']);
@@ -239,7 +288,6 @@ class PresensiController extends Controller
             return redirect('/presensi/izin')->with(['error' => 'Data Gagal Di Simpan']);
         }
     }
-
     public function monitoring()
     {
         return view('presensi.monitoring');

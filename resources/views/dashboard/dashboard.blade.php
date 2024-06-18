@@ -165,6 +165,16 @@ use App\Helpers\DateHelper;
             <div class="col-3">
                 <div class="card">
                     <div class="card-body text-center" style="padding: 12px 12px !important; line-height:0.8rem">
+                        <span class="badge bg-danger" style="position:absolute; top:3px; right:5px; font-size:0.6rem; z-index:999">{{ $rekappresensi->jmlterlambat}}</span>
+                        <ion-icon name="hourglass-outline" style="font-size: 1.6rem;" class="text-danger mb-1"></ion-icon>
+                        <br>
+                        <span style="font-size:0.8rem; font-weight:500">Telat</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-body text-center" style="padding: 12px 12px !important; line-height:0.8rem">
                         <span class="badge bg-danger" style="position:absolute; top:3px; right:5px; font-size:0.6rem; z-index:999">{{ $rekapizin->jmlizin}}</span>
                         <ion-icon name="newspaper-outline" style="font-size: 1.6rem;" class="text-success mb-1"></ion-icon>
                         <br>
@@ -176,19 +186,9 @@ use App\Helpers\DateHelper;
                 <div class="card">
                     <div class="card-body text-center" style="padding: 12px 12px !important; line-height:0.8rem">
                         <span class="badge bg-danger" style="position:absolute; top:3px; right:5px; font-size:0.6rem; z-index:999">{{ $rekapizin->jmlsakit}}</span>
-                        <ion-icon name="medkit-outline" style="font-size: 1.6rem;" class="text-warning mb-1"></ion-icon>
+                        <ion-icon name="document-attach-outline" style="font-size: 1.6rem;" class="text-warning mb-1"></ion-icon>
                         <br>
-                        <span style="font-size:0.8rem; font-weight:500">Sakit</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card">
-                    <div class="card-body text-center" style="padding: 12px 12px !important; line-height:0.8rem">
-                        <span class="badge bg-danger" style="position:absolute; top:3px; right:5px; font-size:0.6rem; z-index:999">{{ $rekappresensi->jmlterlambat}}</span>
-                        <ion-icon name="hourglass-outline" style="font-size: 1.6rem;" class="text-danger mb-1"></ion-icon>
-                        <br>
-                        <span style="font-size:0.8rem; font-weight:500">Telat</span>
+                        <span style="font-size:0.8rem; font-weight:500">Cuti</span>
                     </div>
                 </div>
             </div>
@@ -278,6 +278,7 @@ use App\Helpers\DateHelper;
                 @php
                 // Format the date for each izin entry
                 $izinFormattedDate = DateHelper::formatIndonesianDate($d->tgl_izin);
+                $izinFormattedDateAkhir = DateHelper::formatIndonesianDate($d->tgl_izin_akhir);
                 @endphp
                 <ul class="listview image-listview rounded-custom">
                     <li>
@@ -285,6 +286,9 @@ use App\Helpers\DateHelper;
                             <div class="in">
                                 <div>
                                     <b>{{ $izinFormattedDate }}</b><br>
+                                    @if ($d->tgl_izin_akhir)
+                                    <b>- {{ $izinFormattedDateAkhir }}</b><br>
+                                    @endif
                                     <b style="color: red;">{{ DateHelper::getStatusText($d->status) }}</b><br>
                                     <small class="text-muted">{{ $d->keterangan }}</small>
                                 </div>

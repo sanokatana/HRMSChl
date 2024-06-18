@@ -28,7 +28,7 @@
 <div class="row" style="margin-top:70px">
     <div class="col">
         <div class="row">
-            <div class="col-6">
+            <div class="col-4">
                 <div class="form-group">
                     <select name="bulan" id="bulan" class="form-control" style="text-align:center">
                         <option value="">Bulan</option>
@@ -37,7 +37,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-4">
                 <div class="form-group">
                     <select name="tahun" id="tahun" class="form-control" style="text-align:center">
                         <option value="">Tahun</option>
@@ -47,6 +47,15 @@
                         @endphp
                         @for ($tahun=$tahunmulai; $tahun<= $tahunskrng; $tahun++) <option value="{{ $tahun }}" {{ date("Y") == $tahun ? 'selected' : ''}}>{{ $tahun }}</option>
                             @endfor
+                    </select>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <select name="tipe" id="tipe" class="form-control" style="text-align:center">
+                        <option value="">Tipe</option>
+                        <option value="">Izin</option>
+                        <option value="">Cuti</option>
                     </select>
                 </div>
             </div>
@@ -77,13 +86,7 @@
             <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
             <p style="margin-bottom: 0px;">Izin Absen</p>
         </a>
-
-        <a href="/presensi/buatizin" class="dropdown-item bg-primary">
-            <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
-            <p style="margin-bottom: 0px;">Izin Sakit</p>
-        </a>
-
-        <a href="/presensi/buatizin" class="dropdown-item bg-primary">
+        <a href="/presensi/buatcuti" class="dropdown-item bg-primary">
             <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
             <p style="margin-bottom: 0px;">Izin Cuti</p>
         </a>

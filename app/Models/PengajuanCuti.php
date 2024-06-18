@@ -5,23 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pengajuanizin extends Model
+class Pengajuancuti extends Model
 {
     use HasFactory;
 
-    protected $table = 'pengajuan_izin';
+    protected $table = 'pengajuan_cuti';
 
     // Define fillable attributes
     protected $fillable = [
         'nik',
-        'tgl_izin',
-        'tgl_izin_akhir',
+        'periode',
+        'sisa_cuti',
+        'tgl_cuti',
+        'tgl_cuti_sampai',
         'jml_hari',
-        'status',
-        'pukul',
-        'keterangan',
-        'tgl_create',
-        'foto',
+        'sisa_cuti_setelah',
+        'kar_ganti',
+        'note',
     ];
 
     // Disable timestamps

@@ -18,7 +18,8 @@ class ApprovalController extends Controller
         $query = Pengajuanizin::query();
         $query->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik');
         $query->join('department', 'karyawan.kode_dept', '=', 'department.kode_dept');
-        $query->select('pengajuan_izin.*', 'karyawan.nama_lengkap', 'karyawan.jabatan', 'department.nama_dept');
+        $query->select('pengajuan_izin.*', 'karyawan.nama_lengkap', 'karyawan.jabatan', 'department.nama_dept')
+          ->where('pengajuan_izin.status', '!=', 'Cuti');
 
         if (!empty($request->dari) && !empty($request->sampai)) {
             $query->whereBetween('tgl_izin', [$request->dari, $request->sampai]);
@@ -108,7 +109,8 @@ class ApprovalController extends Controller
         $query->join('karyawan', 'pengajuan_izin.nik', '=', 'karyawan.nik')
             ->join('department', 'karyawan.kode_dept', '=', 'department.kode_dept')
             ->select('pengajuan_izin.*', 'karyawan.nama_lengkap', 'karyawan.jabatan', 'department.nama_dept')
-            ->whereIn('pengajuan_izin.nik', $employeeNiks); // Filter to only include employees supervised by the current user
+            ->whereIn('pengajuan_izin.nik', $employeeNiks)// Filter to only include employees supervised by the current user
+            ->where('pengajuan_izin.status', '!=', 'Cuti');
 
         // Apply date filter if provided
         if (!empty($request->dari) && !empty($request->sampai)) {

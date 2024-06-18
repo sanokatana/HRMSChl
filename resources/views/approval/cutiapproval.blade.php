@@ -12,7 +12,7 @@ use App\Helpers\DateHelper;
                     Approval
                 </div>
                 <h2 class="page-title">
-                    Approval Izin
+                    Approval Izin Cuti
                 </h2>
                 <br>
             </div>
@@ -50,7 +50,7 @@ use App\Helpers\DateHelper;
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
-                                <form action="/approval/izinapproval" method="GET" autocomplete="off">
+                                <form action="/approval/izinapprovalcuti" method="GET" autocomplete="off">
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="input-icon mb-3">
@@ -155,6 +155,9 @@ use App\Helpers\DateHelper;
                                             <th>NIK.</th>
                                             <th>Nama Karyawan</th>
                                             <th>Jabatan</th>
+                                            <th>Mulai Kerja</th>
+                                            <th>Periode Hak Cuti</th>
+                                            <th>Sisa Hak Cuti</th>
                                             <th>Tanggal Izin</th>
                                             <th>Sampai Tanggal</th>
                                             <th>Jumlah Hari</th>

@@ -167,9 +167,12 @@ use App\Helpers\DateHelper;
                                             <th>Jabatan</th>
                                             <th>Department</th>
                                             <th>Tanggal Izin</th>
+                                            <th>Sampai Tanggal</th>
+                                            <th>Jumlah Hari</th>
                                             <th>Tipe Izin</th>
                                             <th>Keterangan</th>
                                             <th>Pukul</th>
+                                            <th>Document</th>
                                             <th>Status Manager</th>
                                             <th>Status HRD</th>
                                             <th>Keputusan</th>
@@ -185,11 +188,37 @@ use App\Helpers\DateHelper;
                                             <td>{{ $d->jabatan }}</td>
                                             <td>{{ $d->nama_dept }}</td> <!-- Display department name -->
                                             <td>{{ DateHelper::formatIndonesianDate($d->tgl_izin) }} </td>
+                                            <td>@if ($d->tgl_izin_akhir)
+                                                {{ DateHelper::formatIndonesianDate($d->tgl_izin_akhir) }}
+                                                @endif
+                                            </td>
+                                            <td>{{ $d->jml_hari }} </td>
                                             <td>{{ DateHelper::getStatusText($d->status) }}</td>
                                             <td>{{ $d->keterangan}} </td>
                                             <td>
                                                 @if ($d->pukul)
                                                 {{ DateHelper::formatTimeToPM($d->pukul) }}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($d->foto === "No_Document")
+                                                <a href="#" class="badge bg-info btnNoDoc" style="width:100px; display:flex; align-items:center; justify-content:center">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" style="margin-right: 5px;" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-off">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                        <path d="M3 3l18 18" />
+                                                        <path d="M7 3h7l5 5v7m0 4a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-14" />
+                                                    </svg>
+                                                    No File
+                                                </a>
+                                                @else
+                                                <a href="#" class="badge bg-info btnDocument" style="width:100px; display:flex; align-items:center; justify-content:center" data-id="{{ $d->id }}" data-photo-url="{{ Storage::url('uploads/pengajuan_izin/'.$d->foto) }}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" style="margin-right: 5px;" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file">
+                                                        <path stroke="none" d="M0 0h24V24H0z" fill="none" />
+                                                        <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                                        <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h9l5 5v11a2 2 0 0 1 -2 2z" />
+                                                    </svg>
+                                                    Check
+                                                </a>
                                                 @endif
                                             </td>
                                             <td>
@@ -309,6 +338,19 @@ use App\Helpers\DateHelper;
         </div>
     </div>
 </div>
+<div class="modal modal-blur fade" id="modal-document" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Photo Document</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img style="width: 80%;">
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @push('myscript')
 <script>
@@ -326,6 +368,23 @@ use App\Helpers\DateHelper;
             } else {
                 $("#jadwalContainer").hide();
             }
+        });
+
+        $(document).on('click', '.btnDocument', function(e) {
+            e.preventDefault();
+            var photoUrl = $(this).data("photo-url");
+            $('#modal-document img').attr('src', photoUrl);
+            $('#modal-document').modal("show");
+        });
+
+
+        $(document).on('click', '.btnNoDoc', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: "No File",
+                text: "No Document Found",
+                icon: "error"
+            });
         });
 
         $("#sampai").datepicker({
