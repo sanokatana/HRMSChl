@@ -18,11 +18,12 @@ $izinFormattedDateAkhir = DateHelper::formatIndonesianDate($d->tgl_izin_akhir);
             <div class="in">
                 <div>
                     <b>{{ $izinFormattedDate }}</b><br>
+                    <b class="text-muted">Sampai</b><br>
                     @if ($d->tgl_izin_akhir)
-                    <b>- {{ $izinFormattedDateAkhir }}</b><br>
+                    <b>{{ $izinFormattedDateAkhir }}</b><br>
                     @endif
                     <b style="color: red;">{{ DateHelper::getStatusText($d->status) }}</b><br>
-                    <small class="text-muted">{{ $d->keterangan }}</small>
+                    <b class="text-info">{{ $d->keterangan }}</b>
                 </div>
                 <div class="status-row">
                     <div class="mb-1">

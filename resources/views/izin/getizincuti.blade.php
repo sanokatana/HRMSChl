@@ -1,7 +1,12 @@
 @if ($historicuti->isEmpty())
-<div id="alert-div" class="alert alert-warning">
-    <p style="text-align: center; height: 10px">Data Belum Ada</p>
-</div>
+<script>
+    Swal.fire({
+        title: 'Gagal!',
+        text: "Tidak Ada Data",
+        icon: 'error',
+        confirmButtonText: 'Ok'
+    });
+</script>
 @endif
 @php
 use App\Helpers\DateHelper;
@@ -18,11 +23,12 @@ $izinFormattedDateAkhir = DateHelper::formatIndonesianDate($d->tgl_cuti_sampai);
             <div class="in">
                 <div>
                     <b>{{ $izinFormattedDate }}</b><br>
+                    <b class="text-muted">Sampai</b><br>
                     @if ($d->tgl_cuti_sampai)
-                    <b>- {{ $izinFormattedDateAkhir }}</b><br>
+                    <b>{{ $izinFormattedDateAkhir }}</b><br>
                     @endif
                     <b style="color: red;">Cuti</b><br>
-                    <small class="text-muted">{{ $d->note }}</small>
+                    <b class="text-info">{{ $d->note }}</b>
                 </div>
                 <div class="status-row">
                     <div class="mb-1">

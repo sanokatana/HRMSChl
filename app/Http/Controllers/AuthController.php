@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     public function proseslogin(Request $request){
-        if(Auth::guard('karyawan')->attempt(['email'=> $request->email, 'password'=>$request->password], $request->has('remember'))){
+        $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember');
+        if(Auth::guard('karyawan')->attempt($credentials, $remember)){
             return redirect('/dashboard');
         } else {
             return redirect('/')->with(['warning'=>'Email / Password Anda Salah']);

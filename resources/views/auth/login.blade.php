@@ -65,8 +65,11 @@
                             </i>
                         </div>
                     </div>
-
-                    <div class="form-links mt-2">
+                    <div class="form-group boxed mt-2">
+                        <input type="checkbox" name="remember" class="form-check-input"/>
+                        <span class="form-check-label">Remember me on this device</span>
+                    </div>
+                    <div class="form-group boxed mt-2">
                         <div><a href="page-forgot-password.html" class="text-muted">Forgot Password?</a></div>
                     </div>
 

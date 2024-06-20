@@ -237,7 +237,7 @@ class PresensiController extends Controller
             ->orderBy('tgl_izin')
             ->get();
 
-        return view('izin.getizin', compact('historiizin'));
+        return view('izin.getizin', compact('historiizin', 'tahun', 'bulan'));
     }
     public function getizincuti(Request $request)
     {
@@ -252,7 +252,7 @@ class PresensiController extends Controller
             ->orderBy('tgl_cuti')
             ->get();
 
-        return view('izin.getizincuti', compact('historicuti'));
+        return view('izin.getizincuti', compact('historicuti' , 'tahun', 'bulan'));
     }
 
     public function buatizin()
