@@ -9,7 +9,7 @@
                     Master Data
                 </div>
                 <h2 class="page-title">
-                    Kantor Cabang / Site
+                    Site
                 </h2>
                 <br>
             </div>

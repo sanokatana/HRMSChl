@@ -185,7 +185,7 @@ use App\Helpers\DateHelper;
             <div class="col-3">
                 <div class="card">
                     <div class="card-body text-center" style="padding: 12px 12px !important; line-height:0.8rem">
-                        <span class="badge bg-danger" style="position:absolute; top:3px; right:5px; font-size:0.6rem; z-index:999">{{ $rekapizin->jmlsakit}}</span>
+                        <span class="badge bg-danger" style="position:absolute; top:3px; right:5px; font-size:0.6rem; z-index:999">{{ $rekapcuti->jmlcuti }}</span>
                         <ion-icon name="document-attach-outline" style="font-size: 1.6rem;" class="text-warning mb-1"></ion-icon>
                         <br>
                         <span style="font-size:0.8rem; font-weight:500">Cuti</span>
@@ -318,9 +318,51 @@ use App\Helpers\DateHelper;
                 </ul>
                 @endforeach
             </div>
-
-
-
+            <div class="tab-pane fade" id="cutiView" role="tabpanel">
+                @foreach ($historicuti as $d)
+                @php
+                // Format the date for each izin entry
+                $izinFormattedDate = DateHelper::formatIndonesianDate($d->tgl_cuti);
+                $izinFormattedDateAkhir = DateHelper::formatIndonesianDate($d->tgl_cuti_sampai);
+                @endphp
+                <ul class="listview image-listview rounded-custom">
+                    <li>
+                        <div class="item">
+                            <div class="in">
+                                <div>
+                                    <b>{{ $izinFormattedDate }}</b><br>
+                                    @if ($d->tgl_cuti_sampai)
+                                    <b>- {{ $izinFormattedDateAkhir }}</b><br>
+                                    @endif
+                                    <b style="color: red;">Cuti</b><br>
+                                    <small class="text-muted">{{ $d->note }}</small>
+                                </div>
+                                <div class="status-row">
+                                    <div class="mb-1">
+                                        @if ($d->status_approved == 0)
+                                        <span class="badge bg-warning">Waiting Approval</span>
+                                        @elseif ($d->status_approved == 1)
+                                        <span class="badge bg-success">Form Approved</span>
+                                        @else
+                                        <span class="badge bg-danger">Form Declined</span>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        @if ($d->status_approved_hrd == 0)
+                                        <span class="badge bg-warning">Waiting Approval</span>
+                                        @elseif ($d->status_approved_hrd == 1)
+                                        <span class="badge bg-success">Form Approved</span>
+                                        @else
+                                        <span class="badge bg-danger">Form Declined</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                @endforeach
+            </div>
         </div>
     </div>
 </div>

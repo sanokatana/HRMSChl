@@ -112,7 +112,7 @@
                                             <th>Nama</th>
                                             <th>Department</th>
                                             <th>Tanggal Masuk</th>
-                                            <th>Tahun Cuti</th>
+                                            <th>Periode Cuti</th>
                                             <th>Sisa Cuti</th>
                                             <th>Aksi</th>
                                         </tr>

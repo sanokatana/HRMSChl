@@ -67,11 +67,11 @@
                     <ion-icon name="refresh-outline"></ion-icon>
                     Update
                 </button>
-                <button type="button" class="btn btn-warning btn-block" onclick="location.href='/proseslogout';" value="Go to Google">
+                <button type="button" class="btn btn-warning btn-block" id="sisaButton">
                     <ion-icon name="calendar-number-outline"></ion-icon>
                     Cek Sisa Cuti
                 </button>
-                <button type="button" class="btn btn-danger btn-block" onclick="location.href='/proseslogout';" value="Go to Google">
+                <button type="button" class="btn btn-danger btn-block" onclick="location.href='/proseslogout';" value="Go to Logout">
                     <ion-icon name="log-out-outline"></ion-icon>
                     Logout
                 </button>
@@ -80,3 +80,36 @@
     </div>
 </form>
 @endsection
+
+@push('myscript')
+<script>
+    $(document).ready(function() {
+        var currYear = (new Date()).getFullYear();
+
+        $("#sisaButton").click(function() {
+            $.ajax({
+                url: '/presensi/cek-sisa-cuti-profile',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    currYear: currYear
+                },
+                success: function(response) {
+                    Swal.fire({
+                        title: 'Sisa Cuti',
+                        text: 'Sisa cuti Anda: ' + response.sisa_cuti + ' hari untuk periode ' + response.cutiYear,
+                        icon: 'info',
+                    });
+                },
+                error: function() {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Gagal mengambil sisa cuti',
+                        icon: 'error',
+                    });
+                }
+            });
+        });
+    });
+</script>
+@endpush

@@ -49,6 +49,7 @@ Route::middleware(['auth:karyawan'])->group(function(){
     //Edit Profile
     Route::get('/editprofile', [PresensiController::class,'editprofile']);
     Route::post('/presensi/{nik}/updateprofile', [PresensiController::class,'updateprofile']);
+    Route::post('/presensi/cek-sisa-cuti-profile', [PresensiController::class,'getSisaCutiProfile']);
 
     //Histori
     Route::get('/presensi/histori', [PresensiController::class, 'histori']);
@@ -57,12 +58,14 @@ Route::middleware(['auth:karyawan'])->group(function(){
     //Izin
     Route::get('/presensi/izin', [PresensiController::class,'izin']);
     Route::post('/presensi/getizin', [PresensiController::class,'getizin']);
+    Route::post('/presensi/getizincuti', [PresensiController::class,'getizincuti']);
     Route::get('/presensi/buatizin', [PresensiController::class,'buatizin']);
     Route::post('/presensi/storeizin', [PresensiController::class,'storeizin']);
 
     //Cuti
     Route::get('/presensi/buatcuti', [PresensiController::class,'buatcuti']);
     Route::post('/presensi/storecuti', [PresensiController::class,'storecuti']);
+    Route::post('/presensi/cek-sisa-cuti', [PresensiController::class,'getSisaCuti']);
 });
 
 Route::middleware(['auth:user'])->group(function (){
@@ -107,9 +110,21 @@ Route::middleware(['auth:user'])->group(function (){
     Route::get('/approval/izinapproval', [ApprovalController::class,'izinapproval']);
     Route::post('/approval/approveizin', [ApprovalController::class, 'approveizin']);
     Route::post('/approval/batalapprove/{id}', [ApprovalController::class, 'batalapprove']);
+
+    //Approval HRD
     Route::get('/approval/izinapprovalhrd', [ApprovalController::class,'izinapprovalhrd']);
     Route::post('/approval/approveizinhrd', [ApprovalController::class, 'approveizinhrd']);
     Route::post('/approval/batalapprovehrd/{id}', [ApprovalController::class, 'batalapprovehrd']);
+
+    //Approval Cuti
+    Route::get('/approval/cutiapproval', [ApprovalController::class,'cutiapproval']);
+    Route::post('/approval/approvecuti', [ApprovalController::class, 'approvecuti']);
+    Route::post('/approval/batalapprovecuti/{id}', [ApprovalController::class, 'batalapprovecuti']);
+
+    //Approval Cuti HRD
+    Route::get('/approval/cutiapprovalhrd', [ApprovalController::class,'cutiapprovalhrd']);
+    Route::post('/approval/approvecutihrd', [ApprovalController::class, 'approvecutihrd']);
+    Route::post('/approval/batalapprovecutihrd/{id}', [ApprovalController::class, 'batalapprovecutihrd']);
 
     //Konfigurasi
     Route::get('/konfigurasi/lokasikantor', [KonfigurasiController::class,'index']);

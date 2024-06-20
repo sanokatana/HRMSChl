@@ -1,4 +1,4 @@
-@if ($historiizin->isEmpty())
+@if ($historicuti->isEmpty())
 <div id="alert-div" class="alert alert-warning">
     <p style="text-align: center; height: 10px">Data Belum Ada</p>
 </div>
@@ -6,11 +6,11 @@
 @php
 use App\Helpers\DateHelper;
 @endphp
-@foreach ($historiizin as $d)
+@foreach ($historicuti as $d)
 @php
 // Format the date for each izin entry
-$izinFormattedDate = DateHelper::formatIndonesianDate($d->tgl_izin);
-$izinFormattedDateAkhir = DateHelper::formatIndonesianDate($d->tgl_izin_akhir);
+$izinFormattedDate = DateHelper::formatIndonesianDate($d->tgl_cuti);
+$izinFormattedDateAkhir = DateHelper::formatIndonesianDate($d->tgl_cuti_sampai);
 @endphp
 <ul class="listview image-listview rounded-custom">
     <li>
@@ -18,11 +18,11 @@ $izinFormattedDateAkhir = DateHelper::formatIndonesianDate($d->tgl_izin_akhir);
             <div class="in">
                 <div>
                     <b>{{ $izinFormattedDate }}</b><br>
-                    @if ($d->tgl_izin_akhir)
+                    @if ($d->tgl_cuti_sampai)
                     <b>- {{ $izinFormattedDateAkhir }}</b><br>
                     @endif
-                    <b style="color: red;">{{ DateHelper::getStatusText($d->status) }}</b><br>
-                    <small class="text-muted">{{ $d->keterangan }}</small>
+                    <b style="color: red;">Cuti</b><br>
+                    <small class="text-muted">{{ $d->note }}</small>
                 </div>
                 <div class="status-row">
                     <div class="mb-1">

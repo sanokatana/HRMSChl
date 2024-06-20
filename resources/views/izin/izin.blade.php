@@ -25,6 +25,29 @@
 <!-- * App Header -->
 @endsection
 @section('content')
+@if(session('success'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            title: 'Berhasil!',
+            text: "{{ session('success') }}",
+            icon: 'success',
+            confirmButtonText: 'Ok'
+        });
+    });
+</script>
+@elseif(session('danger'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            title: 'Danger!',
+            text: "{{ session('danger') }}",
+            icon: 'danger',
+            confirmButtonText: 'Ok'
+        });
+    });
+</script>
+@endif
 <div class="row" style="margin-top:70px">
     <div class="col">
         <div class="row">
@@ -54,8 +77,8 @@
                 <div class="form-group">
                     <select name="tipe" id="tipe" class="form-control" style="text-align:center">
                         <option value="">Tipe</option>
-                        <option value="">Izin</option>
-                        <option value="">Cuti</option>
+                        <option value="Izin">Izin</option>
+                        <option value="Cuti">Cuti</option>
                     </select>
                 </div>
             </div>
@@ -106,7 +129,9 @@
                 isDragging = true;
             },
             stop: function() {
-                setTimeout(function() { isDragging = false; }, 100);
+                setTimeout(function() {
+                    isDragging = false;
+                }, 100);
             }
         });
 
@@ -120,22 +145,46 @@
         $("#getData").click(function(e) {
             var bulan = $("#bulan").val();
             var tahun = $("#tahun").val();
-            $.ajax({
-                type: 'POST',
-                url: '/presensi/getizin',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    bulan: bulan,
-                    tahun: tahun
-                },
-                cache: false,
-                success: function(respond) {
-                    $("#showIzin").html(respond);
-                }
-            });
+            var tipe = $("#tipe").val();
+            if (tipe == "Izin") {
+                $.ajax({
+                    type: 'POST',
+                    url: '/presensi/getizin',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        bulan: bulan,
+                        tahun: tahun
+                    },
+                    cache: false,
+                    success: function(respond) {
+                        $("#showIzin").html(respond);
+                    }
+                });
+            }else if (tipe == "Cuti"){
+                $.ajax({
+                    type: 'POST',
+                    url: '/presensi/getizincuti',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        bulan: bulan,
+                        tahun: tahun
+                    },
+                    cache: false,
+                    success: function(respond) {
+                        $("#showIzin").html(respond);
+                    }
+                });
+            }else{
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: "Mohon Pilih Tipe",
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                });
+            }
+
         });
     });
-
 </script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 @endpush

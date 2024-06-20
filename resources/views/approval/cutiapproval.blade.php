@@ -12,7 +12,7 @@ use App\Helpers\DateHelper;
                     Approval
                 </div>
                 <h2 class="page-title">
-                    Approval Izin Cuti
+                    Approval Pengajuan Cuti
                 </h2>
                 <br>
             </div>
@@ -50,7 +50,7 @@ use App\Helpers\DateHelper;
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
-                                <form action="/approval/izinapprovalcuti" method="GET" autocomplete="off">
+                                <form action="/approval/cutiapproval" method="GET" autocomplete="off">
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="input-icon mb-3">
@@ -156,64 +156,36 @@ use App\Helpers\DateHelper;
                                             <th>Nama Karyawan</th>
                                             <th>Jabatan</th>
                                             <th>Mulai Kerja</th>
-                                            <th>Periode Hak Cuti</th>
-                                            <th>Sisa Hak Cuti</th>
+                                            <th>Periode</th>
                                             <th>Tanggal Izin</th>
                                             <th>Sampai Tanggal</th>
                                             <th>Jumlah Hari</th>
-                                            <th>Tipe Izin</th>
-                                            <th>Keterangan</th>
-                                            <th>Pukul</th>
-                                            <th>Document</th>
-                                            <th>Status Manager</th>
-                                            <th>Status HRD</th>
+                                            <th>Kar Pengganti</th>
+                                            <th>Note</th>
+                                            <th>Status Manager <br> Status HRD </th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($izinapproval as $d)
+                                        @foreach ($cutiapproval as $d)
                                         <tr style="text-align: center;">
-                                            <td>{{ $loop->iteration + $izinapproval->firstItem() -1}} </td>
+                                            <td>{{ $loop->iteration + $cutiapproval->firstItem() -1}} </td>
                                             <td>{{ $d->nik }} </td>
                                             <td>{{ $d->nama_lengkap }}</td>
                                             <td>{{ $d->jabatan }}</td>
-                                            <td>@if ($d->tgl_izin)
-                                                {{ DateHelper::formatIndonesianDate($d->tgl_izin) }}
+                                            <td>{{ DateHelper::formatIndonesianDate($d->tgl_masuk) }}</td>
+                                            <td>{{ $d->periode }}</td>
+                                            <td>@if ($d->tgl_cuti)
+                                                {{ DateHelper::formatIndonesianDate($d->tgl_cuti) }}
                                                 @endif
                                             </td>
-                                            <td>@if ($d->tgl_izin_akhir)
-                                                {{ DateHelper::formatIndonesianDate($d->tgl_izin_akhir) }}
+                                            <td>@if ($d->tgl_cuti_sampai)
+                                                {{ DateHelper::formatIndonesianDate($d->tgl_cuti_sampai) }}
                                                 @endif
                                             </td>
                                             <td>{{ $d->jml_hari }} </td>
-                                            <td>{{ DateHelper::getStatusText($d->status) }}</td>
-                                            <td>{{ $d->keterangan}} </td>
-                                            <td>
-                                                @if ($d->pukul)
-                                                {{ DateHelper::formatTimeToPM($d->pukul) }}
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($d->foto === "No_Document")
-                                                <a href="#" class="badge bg-info btnNoDoc" style="width:100px; display:flex; align-items:center; justify-content:center">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" style="margin-right: 5px;" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-off">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                        <path d="M3 3l18 18" />
-                                                        <path d="M7 3h7l5 5v7m0 4a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-14" />
-                                                    </svg>
-                                                    No File
-                                                </a>
-                                                @else
-                                                <a href="#" class="badge bg-info btnDocument" style="width:100px; display:flex; align-items:center; justify-content:center" data-id="{{ $d->id }}" data-photo-url="{{ Storage::url('uploads/pengajuan_izin/'.$d->foto) }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" style="margin-right: 5px;" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file">
-                                                        <path stroke="none" d="M0 0h24V24H0z" fill="none" />
-                                                        <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-                                                        <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h9l5 5v11a2 2 0 0 1 -2 2z" />
-                                                    </svg>
-                                                    Check
-                                                </a>
-                                                @endif
-                                            </td>
+                                            <td>{{ $d->kar_ganti}} </td>
+                                            <td>{{ $d->note }}</td>
                                             <td>
                                                 @if ($d->status_approved == 1)
                                                 <span class="badge bg-success" style="color: white; width:90px">Approved</span>
@@ -222,19 +194,18 @@ use App\Helpers\DateHelper;
                                                 @else
                                                 <span class="badge bg-red" style="color: white; width:90px">Rejected</span>
                                                 @endif
-                                            </td>
-                                            <td>
+                                                <br>
                                                 @if ($d->status_approved_hrd == 1)
-                                                <span class="badge bg-success" style="color: white; width:90px">Approved</span>
+                                                <span class="badge bg-success mt-1" style="color: white; width:90px">Approved</span>
                                                 @elseif ($d->status_approved_hrd == 0)
-                                                <span class="badge bg-yellow" style="color: white; width:90px">Pending</span>
+                                                <span class="badge bg-yellow mt-1" style="color: white; width:90px">Pending</span>
                                                 @else
-                                                <span class="badge bg-red" style="color: white; width:90px">Rejected</span>
+                                                <span class="badge bg-red mt-1" style="color: white; width:90px">Rejected</span>
                                                 @endif
                                             </td>
                                             <td>
                                                 @if ($d->status_approved == 0)
-                                                <a href="#" class="badge bg-primary btnApprove" style="width:100px; justify-content:space-between" data-id="{{ $d->id }}">
+                                                <a href="#" class="badge bg-primary btnApprove" style="width:100px; justify-content:space-between" data-id="{{ $d->id }}" data-nik="{{ $d->nik}}" data-periode="{{ $d->periode }}">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="margin:0;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-checkbox">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                         <path d="M9 11l3 3l8 -8" />
@@ -257,7 +228,7 @@ use App\Helpers\DateHelper;
                                         @endforeach
                                     </tbody>
                                 </table>
-                                {{ $izinapproval->links('vendor.pagination.bootstrap-5')}}
+                                {{ $cutiapproval->links('vendor.pagination.bootstrap-5')}}
                             </div>
                         </div>
                     </div>
@@ -266,17 +237,19 @@ use App\Helpers\DateHelper;
         </div>
     </div>
 </div>
-<div class="modal modal-blur fade" id="modal-izinapproval" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal modal-blur fade" id="modal-cutiapproval" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Approval Izin</h5>
+                <h5 class="modal-title">Approval Pengajuan Cuti</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/approval/approveizin" method="POST">
+                <form action="/approval/approvecuti" method="POST">
                     @csrf
-                    <input type="hidden" id="id_izin_form" name="id_izin_form">
+                    <input type="hidden" id="id_cuti_form" name="id_cuti_form">
+                    <input type="hidden" id="nik_cuti_form" name="nik_cuti_form">
+                    <input type="hidden" id="periode_cuti_form" name="periode_cuti_form">
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
@@ -306,19 +279,6 @@ use App\Helpers\DateHelper;
         </div>
     </div>
 </div>
-<div class="modal modal-blur fade" id="modal-document" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Photo Document</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center">
-                <img style="width: 80%;">
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
 @push('myscript')
 <script>
@@ -338,31 +298,18 @@ use App\Helpers\DateHelper;
         $(document).on('click', '.btnApprove', function(e) {
             e.preventDefault();
             var id = $(this).data("id");
-            $('#id_izin_form').val(id);
-            $('#modal-izinapproval').modal("show");
-        });
-
-        $(document).on('click', '.btnDocument', function(e) {
-            e.preventDefault();
-            var photoUrl = $(this).data("photo-url");
-            $('#modal-document img').attr('src', photoUrl);
-            $('#modal-document').modal("show");
-        });
-
-
-        $(document).on('click', '.btnNoDoc', function(e) {
-            e.preventDefault();
-            Swal.fire({
-                title: "No File",
-                text: "No Document Found",
-                icon: "error"
-            });
+            var nik =  $(this).data("nik");
+            var periode =  $(this).data("periode");
+            $('#id_cuti_form').val(id);
+            $('#nik_cuti_form').val(nik);
+            $('#periode_cuti_form').val(periode);
+            $('#modal-cutiapproval').modal("show");
         });
 
         // Submit button click event
         document.getElementById('submitBtn').addEventListener('click', function(e) {
             e.preventDefault(); // Prevent default form submission
-            $('#modal-izinapproval').modal("hide");
+            $('#modal-cutiapproval').modal("hide");
             // Show confirmation dialog
             Swal.fire({
                 title: 'Apakah Yakin ?',
@@ -375,9 +322,9 @@ use App\Helpers\DateHelper;
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Submit the form when confirmed
-                    $('#modal-izinapproval form').submit();
+                    $('#modal-cutiapproval form').submit();
                 } else {
-                    $('#modal-izinapproval').modal("show");
+                    $('#modal-cutiapproval').modal("show");
                 }
             });
         });
@@ -397,14 +344,14 @@ use App\Helpers\DateHelper;
                 if (result.isConfirmed) {
                     $.ajax({
                         type: 'POST',
-                        url: '/approval/batalapprove/' + id,
+                        url: '/approval/batalapprovecuti/' + id,
                         data: {
                             _token: "{{ csrf_token() }}",
                         },
                         success: function(response) {
                             if (response.success) {
                                 Swal.fire(
-                                    'Deleted!',
+                                    'Success!',
                                     'Approval has been cancelled.',
                                     'success'
                                 ).then(() => {

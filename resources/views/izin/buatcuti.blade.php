@@ -47,7 +47,7 @@
                 <input type="number" id="sisa_cuti_setelah" name="sisa_cuti_setelah" class="form-control" placeholder="Sisa Setelah Permohonan" disabled>
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-info btn-block" id="nextButton">Cek Sisa Cuti</button>
+                <button type="button" class="btn btn-info btn-block" id="sisaButton">Cek Sisa Cuti</button>
             </div>
             <div class="form-group">
                 <button type="button" class="btn btn-primary btn-block" id="nextButton">Next</button>
@@ -61,7 +61,7 @@
         <form method="POST" action="/presensi/storecuti" id="formcutiPage2" enctype="multipart/form-data">
             @csrf
             <input type="hidden" id="hidden_periode" name="periode">
-            <input type="hidden" id="hidden_sisa_cuti" name="sisa_Cuti">
+            <input type="hidden" id="hidden_sisa_cuti" name="sisa_cuti">
             <input type="hidden" id="hidden_tgl_cuti" name="tgl_cuti">
             <input type="hidden" id="hidden_tgl_cuti_sampai" name="tgl_cuti_sampai">
             <input type="hidden" id="hidden_jml_hari" name="jml_hari">
@@ -77,6 +77,7 @@
             </div>
 
             <div class="form-group">
+                <button type="button" class="btn btn-primary btn-block" id="backButton">Back</button>
                 <button type="submit" class="btn btn-primary btn-block">Submit</button>
             </div>
         </form>
@@ -108,10 +109,64 @@
             } else {
                 $("#jml_hari").val(0);
             }
+            calculateSisaCutiSetelah();
+        }
+
+        function calculateYear() {
+            var tgl_cuti = $("#tgl_cuti").val();
+            if (tgl_cuti) {
+                var date = new Date(tgl_cuti);
+                var year = date.getFullYear();
+                var month = date.getMonth() + 1; // Months are zero-based
+                var periode = (month >= 7) ? year : year - 1;
+                $("#periode").val(periode);
+            }
+        }
+
+        function calculateSisaCutiSetelah() {
+            var sisa_cuti = parseFloat($("#sisa_cuti").val());
+            var jml_hari = parseFloat($("#jml_hari").val());
+            if (!isNaN(sisa_cuti) && !isNaN(jml_hari)) {
+                var sisa_cuti_setelah = sisa_cuti - jml_hari;
+                $("#sisa_cuti_setelah").val(sisa_cuti_setelah);
+            }
         }
 
         $("#tgl_cuti, #tgl_cuti_sampai").change(function() {
             calculateDays();
+            calculateYear();
+        });
+
+        $("#sisaButton").click(function() {
+            var periode = $("#periode").val();
+            if (!periode) {
+                Swal.fire({
+                    title: 'Oops!',
+                    text: 'Periode Harus Diisi',
+                    icon: 'warning',
+                });
+                return;
+            }
+
+            $.ajax({
+                url: '/presensi/cek-sisa-cuti',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    periode: periode
+                },
+                success: function(response) {
+                    $("#sisa_cuti").val(response.sisa_cuti);
+                    calculateSisaCutiSetelah();
+                },
+                error: function() {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Gagal mengambil sisa cuti',
+                        icon: 'error',
+                    });
+                }
+            });
         });
 
         $("#nextButton").click(function() {
@@ -122,7 +177,7 @@
             var jml_hari = $("#jml_hari").val();
             var sisa_cuti_setelah = $("#sisa_cuti_setelah").val();
 
-            if (tgl_izin == "") {
+            if (tgl_cuti == "") {
                 Swal.fire({
                     title: 'Oops!',
                     text: 'Tanggal Harus Diisi',
@@ -135,7 +190,7 @@
 
                 // Populate hidden inputs for the second form
                 $("#hidden_periode").val(periode);
-                $("#hidden_sisa_cuti").val(sisa_Cuti);
+                $("#hidden_sisa_cuti").val(sisa_cuti);
                 $("#hidden_tgl_cuti").val(tgl_cuti);
                 $("#hidden_tgl_cuti_sampai").val(tgl_cuti_sampai);
                 $("#hidden_jml_hari").val(jml_hari);
@@ -143,14 +198,20 @@
             }
         });
 
+        $("#backButton").click(function() {
+            // Hide Page 2 and Show Page 1
+            $("#page2").hide();
+            $("#page1").show();
+        });
+
         $("#formcutiPage2").submit(function(event) {
             var kar_ganti = $("#kar_ganti").val();
-            var note = $("#keterangan").val();
+            var note = $("#note").val();
 
-            if (keterangan == "") {
+            if (note == "") {
                 Swal.fire({
                     title: 'Oops!',
-                    text: 'Keterangan Harus Diisi',
+                    text: 'Note Harus Diisi',
                     icon: 'warning',
                 });
                 event.preventDefault(); // Prevent form submission

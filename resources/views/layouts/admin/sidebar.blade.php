@@ -179,7 +179,7 @@
                                     Department
                                 </a>
                                 <a class="dropdown-item" href="/cabang">
-                                    Kantor Cabang
+                                    Site
                                 </a>
                                 <a class="dropdown-item" href="/cuti">
                                     Cuti
@@ -208,13 +208,13 @@
                                 <a class="dropdown-item" href="/approval/izinapproval">
                                     Approval Izin
                                 </a>
-                                <a class="dropdown-item" href="/approval/izinapproval">
+                                <a class="dropdown-item" href="/approval/cutiapproval">
                                     Approval Cuti
                                 </a>
                                 <a class="dropdown-item" href="/approval/izinapprovalhrd">
                                     Approval Izin HR
                                 </a>
-                                <a class="dropdown-item" href="/approval/izinapproval">
+                                <a class="dropdown-item" href="/approval/cutiapprovalhrd">
                                     Approval Cuti HR
                                 </a>
                             </div>

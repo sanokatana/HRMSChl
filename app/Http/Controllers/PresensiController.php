@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cuti;
 use App\Models\Karyawan;
 use App\Models\Pengajuancuti;
 use App\Models\Pengajuanizin;
@@ -122,6 +123,36 @@ class PresensiController extends Controller
         return view('presensi.editprofile', compact('karyawan'));
     }
 
+    public function getSisaCutiProfile(Request $request)
+    {
+        $nik = Auth::guard('karyawan')->user()->nik;
+        $currentDate = now(); // Get the current date
+        $currYear = $currentDate->year;
+
+        // Determine the cuti year based on the date range July 1st to June 30th
+        if ($currentDate->month < 7) {
+            $cutiYear = $currYear - 1;
+        } else {
+            $cutiYear = $currYear;
+        }
+
+        // Fetch the remaining leave (sisa_cuti) for the determined year from the cuti table
+        $sisaCuti = DB::table('cuti')
+            ->where('nik', $nik)
+            ->where('tahun', $cutiYear)
+            ->value('sisa_cuti');
+
+        // If no record is found, assume zero remaining leave
+        if (is_null($sisaCuti)) {
+            $sisaCuti = 0;
+        }
+
+        return response()->json([
+            'sisa_cuti' => $sisaCuti,
+            'cutiYear' => $cutiYear
+        ]);
+        }
+
     public function updateprofile(Request $request)
     {
         $nik = Auth::guard('karyawan')->user()->nik;
@@ -208,6 +239,21 @@ class PresensiController extends Controller
 
         return view('izin.getizin', compact('historiizin'));
     }
+    public function getizincuti(Request $request)
+    {
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+        $nik = Auth::guard('karyawan')->user()->nik;
+
+        $historicuti = DB::table('pengajuan_cuti')
+            ->whereRaw('MONTH(tgl_cuti)="' . $bulan . '"')
+            ->whereRaw('YEAR(tgl_cuti)="' . $tahun . '"')
+            ->where('nik', $nik)
+            ->orderBy('tgl_cuti')
+            ->get();
+
+        return view('izin.getizincuti', compact('historicuti'));
+    }
 
     public function buatizin()
     {
@@ -265,17 +311,23 @@ class PresensiController extends Controller
     public function storecuti(Request $request)
     {
         $nik = Auth::guard('karyawan')->user()->nik;
+        $periode = $request->periode;
+        $sisa_cuti = $request->sisa_cuti;
         $tgl_cuti = $request->tgl_cuti;
         $tgl_cuti_sampai = $request->tgl_cuti_sampai;
         $jml_hari = $request->jml_hari;
+        $sisa_cuti_setelah = $request->sisa_cuti_setelah;
         $kar_ganti = $request->kar_ganti;
         $note = $request->note;
 
         $data = [
             'nik' => $nik,
+            'periode' => $periode,
+            'sisa_cuti' => $sisa_cuti,
             'tgl_cuti' => $tgl_cuti,
             'tgl_cuti_sampai' => $tgl_cuti_sampai,
             'jml_hari' => $jml_hari,
+            'sisa_cuti_setelah' => $sisa_cuti_setelah,
             'kar_ganti' => $kar_ganti,
             'note' => $note,
         ];
@@ -283,9 +335,24 @@ class PresensiController extends Controller
         $simpan = Pengajuancuti::create($data);
 
         if ($simpan) {
-            return redirect('/presensi/izin')->with(['success' => 'Data Berhasil Di Simpan']);
+            return redirect('/presensi/izin')->with(['success' => 'Pengajuan Cuti Berhasil Di Simpan']);
         } else {
-            return redirect('/presensi/izin')->with(['error' => 'Data Gagal Di Simpan']);
+            return redirect('/presensi/izin')->with(['error' => 'Pengajuan Cuti Gagal Di Simpan']);
+        }
+    }
+    public function getSisaCuti(Request $request)
+    {
+        $nik = Auth::guard('karyawan')->user()->nik;
+        $periode = $request->periode;
+
+        $cuti = Cuti::where('nik', $nik)
+                    ->where('tahun', $periode)
+                    ->first();
+
+        if ($cuti) {
+            return response()->json(['sisa_cuti' => $cuti->sisa_cuti]);
+        } else {
+            return response()->json(['sisa_cuti' => 0]);
         }
     }
     public function monitoring()

@@ -38,6 +38,13 @@ class DashboardController extends Controller
             ->orderBy('tgl_izin')
             ->get();
 
+        $historicuti = DB::table('pengajuan_cuti')
+            ->whereRaw('MONTH(tgl_cuti)="' . $bulanini . '"')
+            ->whereRaw('YEAR(tgl_cuti)="' . $tahunini . '"')
+            ->where('nik', $nik)
+            ->orderBy('tgl_cuti')
+            ->get();
+
         $rekapizin = DB::table('pengajuan_izin')
         ->selectRaw('SUM(IF(status != "s",1,0)) as jmlizin, SUM(IF(status="s",1,0)) as jmlsakit')
         ->where('nik', $nik)
@@ -45,8 +52,15 @@ class DashboardController extends Controller
         ->whereRaw('YEAR(tgl_izin)="'.$tahunini.'"')
         ->first();
 
+        $rekapcuti = DB::table('pengajuan_cuti')
+        ->selectRaw('count(id) as jmlcuti')
+        ->where('nik', $nik)
+        ->whereRaw('MONTH(tgl_cuti)="'.$bulanini.'"')
+        ->whereRaw('YEAR(tgl_cuti)="'.$tahunini.'"')
+        ->first();
+
         $namabulan = ["","Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-        return view('dashboard.dashboard', compact('presensihariini','historibulanini', 'namabulan', 'bulanini', 'tahunini', 'namaUser', 'rekappresensi','historiizin', 'rekapizin'));
+        return view('dashboard.dashboard', compact('presensihariini','historibulanini', 'namabulan', 'bulanini', 'tahunini', 'namaUser', 'rekappresensi','historiizin', 'historicuti', 'rekapizin', 'rekapcuti'));
     }
 
     public function dashboardadmin(){

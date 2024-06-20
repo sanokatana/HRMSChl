@@ -12,7 +12,7 @@ use App\Helpers\DateHelper;
                     Approval
                 </div>
                 <h2 class="page-title">
-                    Approval Izin
+                    Approval Izin HR
                 </h2>
                 <br>
             </div>
