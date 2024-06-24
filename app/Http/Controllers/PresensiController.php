@@ -126,32 +126,22 @@ class PresensiController extends Controller
     public function getSisaCutiProfile(Request $request)
     {
         $nik = Auth::guard('karyawan')->user()->nik;
-        $currentDate = now(); // Get the current date
-        $currYear = $currentDate->year;
-
-        // Determine the cuti year based on the date range July 1st to June 30th
-        if ($currentDate->month < 7) {
-            $cutiYear = $currYear - 1;
-        } else {
-            $cutiYear = $currYear;
-        }
-
-        // Fetch the remaining leave (sisa_cuti) for the determined year from the cuti table
-        $sisaCuti = DB::table('cuti')
+        $cuti = DB::table('cuti')
             ->where('nik', $nik)
-            ->where('tahun', $cutiYear)
-            ->value('sisa_cuti');
+            ->where('status', 1)
+            ->first();
 
-        // If no record is found, assume zero remaining leave
-        if (is_null($sisaCuti)) {
-            $sisaCuti = 0;
-        }
+        $periode = $cuti ? $cuti->tahun : '';
+        $cutiGet = Cuti::where('nik', $nik)
+            ->where('tahun', $periode)
+            ->first();
 
-        return response()->json([
-            'sisa_cuti' => $sisaCuti,
-            'cutiYear' => $cutiYear
-        ]);
+        if ($cutiGet) {
+            return response()->json(['sisa_cuti' => $cutiGet->sisa_cuti, 'cutiYear' => $periode]);
+        } else {
+            return response()->json(['sisa_cuti' => 0]);
         }
+    }
 
     public function updateprofile(Request $request)
     {
@@ -252,7 +242,7 @@ class PresensiController extends Controller
             ->orderBy('tgl_cuti')
             ->get();
 
-        return view('izin.getizincuti', compact('historicuti' , 'tahun', 'bulan'));
+        return view('izin.getizincuti', compact('historicuti', 'tahun', 'bulan'));
     }
 
     public function buatizin()
@@ -296,8 +286,8 @@ class PresensiController extends Controller
             if ($request->hasFile('foto')) {
                 $folderPath = "public/uploads/pengajuan_izin/";
                 $request->file('foto')->storeAs($folderPath, $foto);
-                return redirect('/presensi/izin')->with(['success' => 'Data Berhasil Di Simpan']);
             }
+            return redirect('/presensi/izin')->with(['success' => 'Data Berhasil Di Simpan']);
         } else {
             return redirect('/presensi/izin')->with(['error' => 'Data Gagal Di Simpan']);
         }
@@ -305,8 +295,31 @@ class PresensiController extends Controller
 
     public function buatcuti()
     {
-        return view('izin.buatcuti');
+        $nik = auth()->user()->nik;
+        $currentEmployee = DB::table('karyawan')->where('nik', $nik)->first();
+        $kode_dept = $currentEmployee->kode_dept;
+        $employees = DB::table('karyawan')
+        ->where('kode_dept', $kode_dept)
+        ->where('nik', '!=', $nik)
+        ->get();
+
+        $cuti = DB::table('cuti')
+            ->where('nik', $nik)
+            ->where('status', 1)
+            ->first();
+
+        $periode = $cuti ? $cuti->tahun : '';
+        $periode_awal = $cuti ? $cuti->periode_awal : '';
+        $periode_akhir = $cuti ? $cuti->periode_akhir : '';
+        $cutiGet = Cuti::where('nik', $nik)
+            ->where('tahun', $periode)
+            ->first();
+
+
+
+        return view('izin.buatcuti', compact('periode', 'periode_awal', 'periode_akhir','employees', 'cutiGet'));
     }
+
 
     public function storecuti(Request $request)
     {
@@ -332,22 +345,55 @@ class PresensiController extends Controller
             'note' => $note,
         ];
 
-        $simpan = Pengajuancuti::create($data);
+        // Start a transaction
+        DB::beginTransaction();
 
-        if ($simpan) {
-            return redirect('/presensi/izin')->with(['success' => 'Pengajuan Cuti Berhasil Di Simpan']);
-        } else {
-            return redirect('/presensi/izin')->with(['error' => 'Pengajuan Cuti Gagal Di Simpan']);
+        try {
+            // Save the leave application
+            $simpan = Pengajuancuti::create($data);
+
+            if ($simpan) {
+                // Update the sisa_cuti in the cuti table
+                $cuti = DB::table('cuti')
+                    ->where('nik', $nik)
+                    ->where('tahun', $periode)
+                    ->first();
+
+                if ($cuti) {
+                    $new_sisa_cuti = $cuti->sisa_cuti - $jml_hari;
+
+                    DB::table('cuti')
+                        ->where('nik', $nik)
+                        ->where('tahun', $periode)
+                        ->update(['sisa_cuti' => $new_sisa_cuti]);
+                }
+
+                // Commit the transaction
+                DB::commit();
+
+                return redirect('/presensi/izin')->with(['success' => 'Pengajuan Cuti Berhasil Di Simpan']);
+            } else {
+                // Rollback the transaction
+                DB::rollBack();
+
+                return redirect('/presensi/izin')->with(['error' => 'Pengajuan Cuti Gagal Di Simpan']);
+            }
+        } catch (\Exception $e) {
+            // Rollback the transaction
+            DB::rollBack();
+
+            return redirect('/presensi/izin')->with(['error' => 'Terjadi kesalahan: ' . $e->getMessage()]);
         }
     }
+
     public function getSisaCuti(Request $request)
     {
         $nik = Auth::guard('karyawan')->user()->nik;
         $periode = $request->periode;
 
         $cuti = Cuti::where('nik', $nik)
-                    ->where('tahun', $periode)
-                    ->first();
+            ->where('tahun', $periode)
+            ->first();
 
         if ($cuti) {
             return response()->json(['sisa_cuti' => $cuti->sisa_cuti]);
@@ -379,5 +425,4 @@ class PresensiController extends Controller
         $presensi = DB::table('presensi')->where('id', $id)->first();
         return view('presensi.showmap', compact('presensi'));
     }
-
 }

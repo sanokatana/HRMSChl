@@ -1845,6 +1845,16 @@ a.badge-dark {
   margin-right: 16px;
 }
 
+.circular-image {
+    min-width: 36px;
+    max-width: 36px;
+    width: 36px;  /* Adjust width to match .icon-box */
+    height: 36px;  /* Adjust height to match .icon-box */
+    border-radius: 400px;  /* Make the image circular */
+    object-fit: cover;  /* Ensure the image covers the entire element without distortion */
+    margin-right: 16px;  /* Adjust margin to match .icon-box */
+  }
+
 .image-listview > li .item .icon-box.bg-primary,
 .image-listview > li .item .icon-box.bg-secondary,
 .image-listview > li .item .icon-box.bg-success,

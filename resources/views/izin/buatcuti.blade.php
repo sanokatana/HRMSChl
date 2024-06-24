@@ -29,10 +29,10 @@
         <form id="formizin">
             @csrf
             <div class="form-group">
-                <input type="text" id="periode" name="periode" class="form-control" placeholder="Periode">
+                <input type="text" id="periode" name="periode" class="form-control" placeholder="Periode" value="{{ $periode }}">
             </div>
             <div class="form-group">
-                <input type="number" id="sisa_cuti" name="sisa_cuti" class="form-control" placeholder="Sisa Cuti" disabled>
+                <input type="number" id="sisa_cuti" name="sisa_cuti" class="form-control" placeholder="Sisa Cuti" disabled value="{{ $cutiGet->sisa_cuti}}">
             </div>
             <div class="form-group">
                 <input type="text" id="tgl_cuti" name="tgl_cuti" class="datepicker form-control" placeholder="Tanggal Pengajuan Cuti">
@@ -45,9 +45,6 @@
             </div>
             <div class="form-group">
                 <input type="number" id="sisa_cuti_setelah" name="sisa_cuti_setelah" class="form-control" placeholder="Sisa Setelah Permohonan" disabled>
-            </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-info btn-block" id="sisaButton">Cek Sisa Cuti</button>
             </div>
             <div class="form-group">
                 <button type="button" class="btn btn-primary btn-block" id="nextButton">Next</button>
@@ -69,10 +66,14 @@
 
             <div class="form-group">
                 <label for="kar_ganti" class="col-form-label">Karyawan Yang Akan Menggantikan</label>
-                <textarea name="kar_ganti" id="kar_ganti" rows="1" class="form-control"></textarea>
+                <select name="kar_ganti" id="kar_ganti" class="form-control">
+                    @foreach ($employees as $employee)
+                        <option value="{{ $employee->nama_lengkap }}">{{ $employee->nama_lengkap }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="form-group">
-                <label for="note" class="col-form-label">Note</label>
+                <label for="note" class="col-form-label">Note (Optional)</label>
                 <textarea name="note" id="note" rows="4" class="form-control"></textarea>
             </div>
 
@@ -112,17 +113,6 @@
             calculateSisaCutiSetelah();
         }
 
-        function calculateYear() {
-            var tgl_cuti = $("#tgl_cuti").val();
-            if (tgl_cuti) {
-                var date = new Date(tgl_cuti);
-                var year = date.getFullYear();
-                var month = date.getMonth() + 1; // Months are zero-based
-                var periode = (month >= 7) ? year : year - 1;
-                $("#periode").val(periode);
-            }
-        }
-
         function calculateSisaCutiSetelah() {
             var sisa_cuti = parseFloat($("#sisa_cuti").val());
             var jml_hari = parseFloat($("#jml_hari").val());
@@ -134,7 +124,6 @@
 
         $("#tgl_cuti, #tgl_cuti_sampai").change(function() {
             calculateDays();
-            calculateYear();
         });
 
         $("#sisaButton").click(function() {
@@ -208,10 +197,10 @@
             var kar_ganti = $("#kar_ganti").val();
             var note = $("#note").val();
 
-            if (note == "") {
+            if (kar_ganti == "") {
                 Swal.fire({
                     title: 'Oops!',
-                    text: 'Note Harus Diisi',
+                    text: 'Karyawan Ganti Harus Diisi',
                     icon: 'warning',
                 });
                 event.preventDefault(); // Prevent form submission
@@ -222,3 +211,4 @@
     });
 </script>
 @endpush
+

@@ -245,9 +245,17 @@ use App\Helpers\DateHelper;
                     @endphp
                     <li>
                         <div class="item">
+                            @if ($d != null && $d->foto_in != null)
+                            @php
+                            $path = Storage::url('/uploads/absensi/'.$d->foto_in);
+                            @endphp
+                            <img src="{{ url($path) }}" alt="" class="imaged w48 circular-image">
+                            @else
                             <div class="icon-box bg-info">
                                 <ion-icon name="finger-print-outline"></ion-icon>
                             </div>
+                            @endif
+
                             <div class="in">
                                 <div class="jam-row">
                                     <div><b>{{ DateHelper::formatIndonesianDate($d->tgl_presensi) }}</b></div>

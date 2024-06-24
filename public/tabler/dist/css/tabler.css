@@ -16934,7 +16934,7 @@ Navbar vertical
 }
 @media (min-width: 992px) {
   .navbar-vertical.navbar-expand-lg {
-    width: 15rem;
+    width: 14rem;
     position: fixed;
     top: 0;
     left: 0;
@@ -16944,6 +16944,9 @@ Navbar vertical
     transition: transform 0.3s;
     overflow-y: scroll;
     padding: 0;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    box-shadow: 10px 0 30px -2px #000;
   }
 }
 @media (min-width: 992px) and (prefers-reduced-motion: reduce) {
@@ -17044,11 +17047,12 @@ Navbar vertical
     right: auto;
     top: 0;
     bottom: 0;
+
   }
 }
 @media (min-width: 1200px) {
   .navbar-vertical.navbar-expand-xl {
-    width: 15rem;
+    width: 14rem;
     position: fixed;
     top: 0;
     left: 0;
@@ -17058,6 +17062,7 @@ Navbar vertical
     transition: transform 0.3s;
     overflow-y: scroll;
     padding: 0;
+
   }
 }
 @media (min-width: 1200px) and (prefers-reduced-motion: reduce) {

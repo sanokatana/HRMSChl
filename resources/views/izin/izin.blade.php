@@ -113,6 +113,10 @@
             <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
             <p style="margin-bottom: 0px;">Izin Cuti</p>
         </a>
+        <a href="/presensi/buatcutikhusus" class="dropdown-item bg-primary">
+            <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
+            <p style="margin-bottom: 0px;">Cuti Khusus</p>
+        </a>
     </div>
 </div>
 @endsection
