@@ -27,10 +27,14 @@ $izinFormattedDateAkhir = DateHelper::formatIndonesianDate($d->tgl_cuti_sampai);
                     @if ($d->tgl_cuti_sampai)
                     <b>{{ $izinFormattedDateAkhir }}</b><br>
                     @endif
-                    <b style="color: red;">Cuti</b><br>
+                    <b style="color: red;">{{ $d->jenis }}</b><br>
+                    @if ($d->tipe_cuti)
+                    <b>{{ $d->tipe_cuti }}</b><br>
+                    @endif
                     <b class="text-info">{{ $d->note }}</b>
                 </div>
-                <div class="status-row">
+
+                <div class="status-row" style="text-align: right">
                     <div class="mb-1">
                         @if ($d->status_approved == 0)
                         <span class="badge bg-warning">Waiting Approval</span>

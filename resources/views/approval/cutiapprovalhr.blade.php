@@ -166,15 +166,15 @@ use App\Helpers\DateHelper;
                                             <th>Nama Karyawan</th>
                                             <th>Jabatan</th>
                                             <th>Mulai Kerja</th>
+                                            <th>Tanggal Izin</th>
+                                            <th>Sampai Tanggal</th>
                                             <th>Periode</th>
                                             <th>Sisa Cuti</th>
                                             <th>Sisa Cuti Master</th>
-                                            <th>Tanggal Izin</th>
-                                            <th>Sampai Tanggal</th>
                                             <th>Jumlah Hari</th>
-                                            <th>Kar Pengganti</th>
                                             <th>Sisa Setelah</th>
                                             <th>Sisa Setelah Real</th>
+                                            <th>Kar Pengganti</th>
                                             <th>Note</th>
                                             <th>Status Manager <br> Status HRD </th>
                                             <th>Aksi</th>
@@ -188,9 +188,6 @@ use App\Helpers\DateHelper;
                                             <td>{{ $d->nama_lengkap }}</td>
                                             <td>{{ $d->jabatan }}</td>
                                             <td>{{ DateHelper::formatIndonesianDate($d->tgl_masuk) }}</td>
-                                            <td>{{ $d->periode }}</td>
-                                            <td>{{ $d->sisa_cuti }}</td>
-                                            <td>{{ $d->sisa_cuti_real}}</td>
                                             <td>@if ($d->tgl_cuti)
                                                 {{ DateHelper::formatIndonesianDate($d->tgl_cuti) }}
                                                 @endif
@@ -199,12 +196,15 @@ use App\Helpers\DateHelper;
                                                 {{ DateHelper::formatIndonesianDate($d->tgl_cuti_sampai) }}
                                                 @endif
                                             </td>
+                                            <td>{{ $d->periode }}</td>
+                                            <td>{{ $d->sisa_cuti }}</td>
+                                            <td><span class="badge bg-warning" style="color: white; width:30px">{{ $d->sisa_cuti_real}}</span></td>
                                             <td>{{ $d->jml_hari }} </td>
-                                            <td>{{ $d->kar_ganti}} </td>
                                             <td>{{ $d->sisa_cuti_setelah}} </td>
                                             <td>
-                                                <span class="badge bg-info" style="color: white; width:30px">{{ $d->sisa_cuti_real - $d->jml_hari}}</span>
+                                                <span class="badge bg-warning" style="color: white; width:30px">{{ $d->sisa_cuti_real - $d->jml_hari}}</span>
                                             </td>
+                                            <td>{{ $d->kar_ganti}} </td>
                                             <td>{{ $d->note }}</td>
                                             <td>
                                                 @if ($d->status_approved == 1)
@@ -247,8 +247,8 @@ use App\Helpers\DateHelper;
                                         @endforeach
                                     </tbody>
                                 </table>
-                                {{ $cutiapproval->links('vendor.pagination.bootstrap-5')}}
                             </div>
+                            {{ $cutiapproval->links('vendor.pagination.bootstrap-5')}}
                         </div>
                     </div>
                 </div>

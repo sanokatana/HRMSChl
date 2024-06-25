@@ -155,13 +155,14 @@ use App\Helpers\DateHelper;
                                             <th>NIK.</th>
                                             <th>Nama Karyawan</th>
                                             <th>Jabatan</th>
-                                            <th>Mulai Kerja</th>
                                             <th>Periode</th>
                                             <th>Tanggal Izin</th>
                                             <th>Sampai Tanggal</th>
                                             <th>Jumlah Hari</th>
                                             <th>Kar Pengganti</th>
                                             <th>Note</th>
+                                            <th>Jenis Cuti</th>
+                                            <th>Tipe Cuti</th>
                                             <th>Status Manager <br> Status HRD </th>
                                             <th>Aksi</th>
                                         </tr>
@@ -173,7 +174,6 @@ use App\Helpers\DateHelper;
                                             <td>{{ $d->nik }} </td>
                                             <td>{{ $d->nama_lengkap }}</td>
                                             <td>{{ $d->jabatan }}</td>
-                                            <td>{{ DateHelper::formatIndonesianDate($d->tgl_masuk) }}</td>
                                             <td>{{ $d->periode }}</td>
                                             <td>@if ($d->tgl_cuti)
                                                 {{ DateHelper::formatIndonesianDate($d->tgl_cuti) }}
@@ -186,6 +186,8 @@ use App\Helpers\DateHelper;
                                             <td>{{ $d->jml_hari }} </td>
                                             <td>{{ $d->kar_ganti}} </td>
                                             <td>{{ $d->note }}</td>
+                                            <td>{{ $d->jenis }}</td>
+                                            <td>{{ $d->tipe_cuti }}</td>
                                             <td>
                                                 @if ($d->status_approved == 1)
                                                 <span class="badge bg-success" style="color: white; width:90px">Approved</span>
@@ -228,8 +230,8 @@ use App\Helpers\DateHelper;
                                         @endforeach
                                     </tbody>
                                 </table>
-                                {{ $cutiapproval->links('vendor.pagination.bootstrap-5')}}
                             </div>
+                            {{ $cutiapproval->links('vendor.pagination.bootstrap-5')}}
                         </div>
                     </div>
                 </div>

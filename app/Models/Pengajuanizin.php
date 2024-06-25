@@ -22,6 +22,7 @@ class Pengajuanizin extends Model
         'keterangan',
         'tgl_create',
         'foto',
+        'jenis',
     ];
 
     // Disable timestamps

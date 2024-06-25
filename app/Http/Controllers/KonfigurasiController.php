@@ -53,4 +53,51 @@ class KonfigurasiController extends Controller
             return Redirect::back()->with(['warning'=>'Data Gagal Di Update']);
         }
     }
+
+    public function tipecuti(){
+        $tipecuti = DB::table('tipe_cuti')
+        ->get();
+        return view("konfigurasi.tipecuti", compact('tipecuti'));
+    }
+
+    public function tipecutistore(Request $request){
+        $tipe_cuti = $request->tipe_cuti;
+        $jumlah_hari = $request->jumlah_hari;
+        $data = [
+            'tipe_cuti' => $tipe_cuti,
+            'jumlah_hari' => $jumlah_hari,
+        ];
+
+        $simpan = DB::table('tipe_cuti')
+        ->insert($data);
+        if($simpan){
+            return Redirect::back()->with(['success'=>'Tipe Cuti Berhasil Di Simpan']);
+        }else {
+            return Redirect::back()->with(['warning'=>'Lokasi Gagal Di Simpan']);
+        }
+    }
+    public function tipecutiedit(Request $request){
+        $id_tipe_cuti = $request->id_tipe_cuti;
+        $tipecuti = DB::table('tipe_cuti')->where('id_tipe_cuti', $id_tipe_cuti)->first();
+        return view('konfigurasi.tipecutiedit', compact('tipecuti'));
+    }
+
+    public function tipecutiupdate($id_tipe_cuti, Request $request){
+        $id_tipe_cuti = $request->id_tipe_cuti;
+        $tipe_cuti = $request->tipe_cuti;
+        $jumlah_hari = $request->jumlah_hari;
+        $data = [
+            'id_tipe_cuti'=>$id_tipe_cuti,
+            'tipe_cuti' => $tipe_cuti,
+            'jumlah_hari' => $jumlah_hari,
+        ];
+
+        $update = DB::table('tipe_cuti')->where('id_tipe_cuti',$id_tipe_cuti)->update($data);
+
+        if($update){
+            return Redirect::back()->with(['success'=>'Data Berhasil Di Update']);
+        }else {
+            return Redirect::back()->with(['warning'=>'Data Gagal Di Update']);
+        }
+    }
 }

@@ -157,7 +157,7 @@ use App\Helpers\DateHelper;
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-12 table-responsive">
                                 <table class="table table-vcenter card-table table-striped">
                                     <thead>
                                         <tr style="text-align: center;">
@@ -265,8 +265,8 @@ use App\Helpers\DateHelper;
                                         @endforeach
                                     </tbody>
                                 </table>
-                                {{ $izinapproval->links('vendor.pagination.bootstrap-5')}}
                             </div>
+                            {{ $izinapproval->links('vendor.pagination.bootstrap-5')}}
                         </div>
                     </div>
                 </div>

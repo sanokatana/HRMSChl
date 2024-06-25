@@ -236,14 +236,17 @@ class PresensiController extends Controller
         $nik = Auth::guard('karyawan')->user()->nik;
 
         $historicuti = DB::table('pengajuan_cuti')
-            ->whereRaw('MONTH(tgl_cuti)="' . $bulan . '"')
-            ->whereRaw('YEAR(tgl_cuti)="' . $tahun . '"')
-            ->where('nik', $nik)
-            ->orderBy('tgl_cuti')
+            ->leftJoin('tipe_cuti', 'pengajuan_cuti.tipe', '=', 'tipe_cuti.id_tipe_cuti')
+            ->whereRaw('MONTH(pengajuan_cuti.tgl_cuti) = ?', [$bulan])
+            ->whereRaw('YEAR(pengajuan_cuti.tgl_cuti) = ?', [$tahun])
+            ->where('pengajuan_cuti.nik', $nik)
+            ->select('pengajuan_cuti.*', 'tipe_cuti.tipe_cuti')
+            ->orderBy('pengajuan_cuti.tgl_cuti')
             ->get();
 
         return view('izin.getizincuti', compact('historicuti', 'tahun', 'bulan'));
     }
+
 
     public function buatizin()
     {
@@ -293,114 +296,6 @@ class PresensiController extends Controller
         }
     }
 
-    public function buatcuti()
-    {
-        $nik = auth()->user()->nik;
-        $currentEmployee = DB::table('karyawan')->where('nik', $nik)->first();
-        $kode_dept = $currentEmployee->kode_dept;
-        $employees = DB::table('karyawan')
-        ->where('kode_dept', $kode_dept)
-        ->where('nik', '!=', $nik)
-        ->get();
-
-        $cuti = DB::table('cuti')
-            ->where('nik', $nik)
-            ->where('status', 1)
-            ->first();
-
-        $periode = $cuti ? $cuti->tahun : '';
-        $periode_awal = $cuti ? $cuti->periode_awal : '';
-        $periode_akhir = $cuti ? $cuti->periode_akhir : '';
-        $cutiGet = Cuti::where('nik', $nik)
-            ->where('tahun', $periode)
-            ->first();
-
-
-
-        return view('izin.buatcuti', compact('periode', 'periode_awal', 'periode_akhir','employees', 'cutiGet'));
-    }
-
-
-    public function storecuti(Request $request)
-    {
-        $nik = Auth::guard('karyawan')->user()->nik;
-        $periode = $request->periode;
-        $sisa_cuti = $request->sisa_cuti;
-        $tgl_cuti = $request->tgl_cuti;
-        $tgl_cuti_sampai = $request->tgl_cuti_sampai;
-        $jml_hari = $request->jml_hari;
-        $sisa_cuti_setelah = $request->sisa_cuti_setelah;
-        $kar_ganti = $request->kar_ganti;
-        $note = $request->note;
-
-        $data = [
-            'nik' => $nik,
-            'periode' => $periode,
-            'sisa_cuti' => $sisa_cuti,
-            'tgl_cuti' => $tgl_cuti,
-            'tgl_cuti_sampai' => $tgl_cuti_sampai,
-            'jml_hari' => $jml_hari,
-            'sisa_cuti_setelah' => $sisa_cuti_setelah,
-            'kar_ganti' => $kar_ganti,
-            'note' => $note,
-        ];
-
-        // Start a transaction
-        DB::beginTransaction();
-
-        try {
-            // Save the leave application
-            $simpan = Pengajuancuti::create($data);
-
-            if ($simpan) {
-                // Update the sisa_cuti in the cuti table
-                $cuti = DB::table('cuti')
-                    ->where('nik', $nik)
-                    ->where('tahun', $periode)
-                    ->first();
-
-                if ($cuti) {
-                    $new_sisa_cuti = $cuti->sisa_cuti - $jml_hari;
-
-                    DB::table('cuti')
-                        ->where('nik', $nik)
-                        ->where('tahun', $periode)
-                        ->update(['sisa_cuti' => $new_sisa_cuti]);
-                }
-
-                // Commit the transaction
-                DB::commit();
-
-                return redirect('/presensi/izin')->with(['success' => 'Pengajuan Cuti Berhasil Di Simpan']);
-            } else {
-                // Rollback the transaction
-                DB::rollBack();
-
-                return redirect('/presensi/izin')->with(['error' => 'Pengajuan Cuti Gagal Di Simpan']);
-            }
-        } catch (\Exception $e) {
-            // Rollback the transaction
-            DB::rollBack();
-
-            return redirect('/presensi/izin')->with(['error' => 'Terjadi kesalahan: ' . $e->getMessage()]);
-        }
-    }
-
-    public function getSisaCuti(Request $request)
-    {
-        $nik = Auth::guard('karyawan')->user()->nik;
-        $periode = $request->periode;
-
-        $cuti = Cuti::where('nik', $nik)
-            ->where('tahun', $periode)
-            ->first();
-
-        if ($cuti) {
-            return response()->json(['sisa_cuti' => $cuti->sisa_cuti]);
-        } else {
-            return response()->json(['sisa_cuti' => 0]);
-        }
-    }
     public function monitoring()
     {
         return view('presensi.monitoring');

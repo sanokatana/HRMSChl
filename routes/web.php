@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KonfigurasiController;
+use App\Http\Controllers\PengajuanCutiController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -63,9 +64,14 @@ Route::middleware(['auth:karyawan'])->group(function(){
     Route::post('/presensi/storeizin', [PresensiController::class,'storeizin']);
 
     //Cuti
-    Route::get('/presensi/buatcuti', [PresensiController::class,'buatcuti']);
-    Route::post('/presensi/storecuti', [PresensiController::class,'storecuti']);
-    Route::post('/presensi/cek-sisa-cuti', [PresensiController::class,'getSisaCuti']);
+    Route::get('/presensi/buatcuti', [PengajuanCutiController::class,'buatcuti']);
+    Route::post('/presensi/storecuti', [PengajuanCutiController::class,'storecuti']);
+    Route::post('/presensi/cek-sisa-cuti', [PengajuanCutiController::class,'getSisaCuti']);
+
+    //Cuti Khusus
+    Route::get('/presensi/buatcutikhusus', [PengajuanCutiController::class,'buatcutikhusus']);
+    Route::post('/presensi/storecutikhusus', [PengajuanCutiController::class, 'storecutikhusus'])->name('storecutikhusus');
+
 });
 
 Route::middleware(['auth:user'])->group(function (){
@@ -132,6 +138,13 @@ Route::middleware(['auth:user'])->group(function (){
     Route::post('/konfigurasi/lokasikantor/edit', [KonfigurasiController::class,'edit']);
     Route::post('/konfigurasi/lokasikantor/{nama_kantor}/update', [KonfigurasiController::class,'update']);
     Route::post('/konfigurasi/lokasikantor/{nama_kantor}/delete', [KonfigurasiController::class,'delete']);
+
+    //Konfigurasi Tipe Cuti
+    Route::get('/konfigurasi/tipecuti', [KonfigurasiController::class,'tipecuti']);
+    Route::post('/konfigurasi/tipecuti/store', [KonfigurasiController::class,'tipecutistore']);
+    Route::post('/konfigurasi/tipecuti/edit', [KonfigurasiController::class,'tipecutiedit']);
+    Route::post('/konfigurasi/tipecuti/{id_tipe_cuti}/update', [KonfigurasiController::class,'tipecutiupdate']);
+    Route::post('/konfigurasi/tipecuti/{id_tipe_cuti}/delete', [KonfigurasiController::class,'tipecutidelete']);
 
     //Cabang
     Route::get('/cabang', [CabangController::class,'index']);

@@ -306,6 +306,9 @@
                     <div class="dropdown-menu">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
+                                <a class="dropdown-item" href="/konfigurasi/tipecuti">
+                                    Tipe Cuti
+                                </a>
                                 <a class="dropdown-item" href="/konfigurasi/lokasikantor">
                                     Lokasi Kantor
                                 </a>
@@ -314,9 +317,6 @@
                                 </a>
                                 <a class="dropdown-item" href="/cabang">
                                     Jam Kerja
-                                </a>
-                                <a class="dropdown-item" href="/cabang">
-                                    Jam Kerja Department
                                 </a>
                             </div>
                         </div>

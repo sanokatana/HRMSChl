@@ -25,7 +25,7 @@ $izinFormattedDateAkhir = DateHelper::formatIndonesianDate($d->tgl_izin_akhir);
                     <b style="color: red;">{{ DateHelper::getStatusText($d->status) }}</b><br>
                     <b class="text-info">{{ $d->keterangan }}</b>
                 </div>
-                <div class="status-row">
+                <div class="status-row" style="text-align: right">
                     <div class="mb-1">
                         @if ($d->status_approved == 0)
                         <span class="badge bg-warning">Waiting Approval</span>

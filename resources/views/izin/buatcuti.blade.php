@@ -3,11 +3,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
 <style>
     .datepicker-modal {
-        max-height: 430px !important;
+        max-height: 450px !important;
     }
 
     .datepicker-date-display {
         background-color: #4989EF !important;
+    }
+    .btn {
+     border-radius: 200px
     }
 </style>
 <!-- App Header -->

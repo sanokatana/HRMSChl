@@ -294,8 +294,8 @@ use App\Helpers\DateHelper;
                             <div class="in">
                                 <div>
                                     <b>{{ $izinFormattedDate }}</b><br>
-                                    <b class="text-muted">Sampai</b><br>
                                     @if ($d->tgl_izin_akhir)
+                                    <b class="text-muted">Sampai</b><br>
                                     <b>{{ $izinFormattedDateAkhir }}</b><br>
                                     @endif
                                     <b style="color: red;">{{ DateHelper::getStatusText($d->status) }}</b><br>
@@ -344,26 +344,30 @@ use App\Helpers\DateHelper;
                                     @if ($d->tgl_cuti_sampai)
                                     <b>{{ $izinFormattedDateAkhir }}</b><br>
                                     @endif
-                                    <b style="color: red;">Cuti</b><br>
+                                    <b style="color: red;">{{ $d->jenis }}</b><br>
+                                    @if ($d->tipe_cuti)
+                                    <b>{{ $d->tipe_cuti }}</b><br>
+                                    @endif
                                     <b class="text-info">{{ $d->note }}</b>
                                 </div>
-                                <div class="status-row">
+
+                                <div class="status-row" style="text-align: right">
                                     <div class="mb-1">
                                         @if ($d->status_approved == 0)
                                         <span class="badge bg-warning">Waiting Approval</span>
                                         @elseif ($d->status_approved == 1)
-                                        <span class="badge bg-success">Cuti Approved</span>
+                                        <span class="badge bg-success">Form Approved</span>
                                         @else
-                                        <span class="badge bg-danger">Cuti Declined</span>
+                                        <span class="badge bg-danger">Form Declined</span>
                                         @endif
                                     </div>
                                     <div>
                                         @if ($d->status_approved_hrd == 0)
                                         <span class="badge bg-warning">Waiting Approval</span>
                                         @elseif ($d->status_approved_hrd == 1)
-                                        <span class="badge bg-success">Cuti Approved</span>
+                                        <span class="badge bg-success">Form Approved</span>
                                         @else
-                                        <span class="badge bg-danger">Cuti Declined</span>
+                                        <span class="badge bg-danger">Form Declined</span>
                                         @endif
                                     </div>
                                 </div>

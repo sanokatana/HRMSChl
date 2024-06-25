@@ -38,11 +38,13 @@ class DashboardController extends Controller
             ->orderBy('tgl_izin')
             ->get();
 
-        $historicuti = DB::table('pengajuan_cuti')
-            ->whereRaw('MONTH(tgl_cuti)="' . $bulanini . '"')
-            ->whereRaw('YEAR(tgl_cuti)="' . $tahunini . '"')
-            ->where('nik', $nik)
-            ->orderBy('tgl_cuti')
+            $historicuti = DB::table('pengajuan_cuti')
+            ->leftJoin('tipe_cuti', 'pengajuan_cuti.tipe', '=', 'tipe_cuti.id_tipe_cuti')
+            ->whereRaw('MONTH(pengajuan_cuti.tgl_cuti) = ?', [$bulanini])
+            ->whereRaw('YEAR(pengajuan_cuti.tgl_cuti) = ?', [$tahunini])
+            ->where('pengajuan_cuti.nik', $nik)
+            ->select('pengajuan_cuti.*', 'tipe_cuti.tipe_cuti')
+            ->orderBy('pengajuan_cuti.tgl_cuti')
             ->get();
 
         $rekapizin = DB::table('pengajuan_izin')

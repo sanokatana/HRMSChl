@@ -254,8 +254,8 @@ use App\Helpers\DateHelper;
                                         @endforeach
                                     </tbody>
                                 </table>
-                                {{ $izinapproval->links('vendor.pagination.bootstrap-5')}}
                             </div>
+                            {{ $izinapproval->links('vendor.pagination.bootstrap-5')}}
                         </div>
                     </div>
                 </div>

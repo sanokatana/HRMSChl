@@ -22,6 +22,8 @@ class Pengajuancuti extends Model
         'sisa_cuti_setelah',
         'kar_ganti',
         'note',
+        'jenis',
+        'tipe',
     ];
 
     // Disable timestamps
