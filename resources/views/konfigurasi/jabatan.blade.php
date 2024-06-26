@@ -217,7 +217,7 @@
             e.preventDefault();
             Swal.fire({
                 title: "Apakah Yakin?",
-                text: "Data Department Akan Ke Delete!",
+                text: "Data Jabatan Akan Ke Delete!",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
@@ -230,27 +230,27 @@
             });
         });
 
-        $('#formCuti').submit(function() {
-            var tipe_cuti = $('#tipe_cuti').val();
-            var jml_hari = $('#jml_hari').val();
-            if (tipe_cuti == "") {
+        $('#formJabatan').submit(function() {
+            var nama_jabatan = $('#nama_jabatan').val();
+            var kode_dept = $('#kode_dept').val();
+            if (nama_jabatan == "") {
                 Swal.fire({
                     title: 'Warning!',
-                    text: 'Tipe Cuti Harus Diisi',
+                    text: 'Nama Jabatan Harus Diisi',
                     icon: 'warning',
                     confirmButtonText: 'Ok'
                 }).then(() => {
-                    $('#tipe_cuti').focus();
+                    $('#nama_jabatan').focus();
                 });
                 return false;
-            } else if (jml_hari == "") {
+            } else if (kode_dept == "") {
                 Swal.fire({
                     title: 'Warning!',
-                    text: 'Jumalh Hari Cuti Harus Diisi',
+                    text: 'Department Harus Diisi',
                     icon: 'warning',
                     confirmButtonText: 'Ok'
                 }).then(() => {
-                    $('#jml_hari').focus();
+                    $('#kode_dept').focus();
                 });
                 return false;
             }

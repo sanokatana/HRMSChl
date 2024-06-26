@@ -220,7 +220,7 @@
             e.preventDefault();
             Swal.fire({
                 title: "Apakah Yakin?",
-                text: "Data Department Akan Ke Delete!",
+                text: "Data Tipe Cuti Akan Ke Delete!",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
