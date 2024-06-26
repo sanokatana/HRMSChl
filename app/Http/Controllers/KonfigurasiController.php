@@ -100,4 +100,79 @@ class KonfigurasiController extends Controller
             return Redirect::back()->with(['warning'=>'Data Gagal Di Update']);
         }
     }
+
+    public function tipecutidelete($id_tipe_cuti)
+    {
+        $delete = DB::table('tipe_cuti')->where('id_tipe_cuti', $id_tipe_cuti)->delete();
+        if ($delete) {
+            return Redirect::back()->with(['success' => 'Data Berhasil Di Hapus']);
+        } else {
+            return Redirect::back()->with(['warning' => 'Data Gagal Di Hapus']);
+        }
+    }
+
+    // Jabatan
+
+    public function jabatan(){
+        $jabatan = DB::table('jabatan')
+            ->select('jabatan.*', 'department.nama_dept')
+            ->join('department', 'jabatan.kode_dept', '=', 'department.kode_dept')
+            ->get();
+        $department = DB::table('department')->get();
+        return view("konfigurasi.jabatan", compact('jabatan','department'));
+    }
+
+    public function jabatanstore(Request $request){
+        $nama_jabatan = $request->nama_jabatan;
+        $kode_dept = $request->kode_dept;
+        $data = [
+            'nama_jabatan' => $nama_jabatan,
+            'kode_dept' => $kode_dept,
+        ];
+
+        $simpan = DB::table('jabatan')
+        ->insert($data);
+        if($simpan){
+            return Redirect::back()->with(['success'=>'Jabatan Berhasil Di Simpan']);
+        }else {
+            return Redirect::back()->with(['warning'=>'Jabatan Gagal Di Simpan']);
+        }
+    }
+    public function jabatanedit(Request $request){
+        $id = $request->id;
+        $jabatan = DB::table('jabatan')->where('id', $id)->first();
+        $department = DB::table('department')->get();
+        return view('konfigurasi.jabedit', compact('jabatan','department'));
+    }
+
+    public function jabatanupdate($id, Request $request){
+        $id = $request->id;
+        $nama_jabatan = $request->nama_jabatan;
+        $kode_dept = $request->kode_dept;
+        $data = [
+            'id'=>$id,
+            'nama_jabatan' => $nama_jabatan,
+            'kode_dept' => $kode_dept,
+        ];
+
+        $update = DB::table('jabatan')->where('id',$id)->update($data);
+
+        if($update){
+            return Redirect::back()->with(['success'=>'Data Berhasil Di Update']);
+        }else {
+            return Redirect::back()->with(['warning'=>'Data Gagal Di Update']);
+        }
+    }
+
+    public function jabatandelete($id)
+    {
+        $delete = DB::table('jabatan')->where('id', $id)->delete();
+        if ($delete) {
+            return Redirect::back()->with(['success' => 'Data Berhasil Di Hapus']);
+        } else {
+            return Redirect::back()->with(['warning' => 'Data Gagal Di Hapus']);
+        }
+    }
+
+
 }

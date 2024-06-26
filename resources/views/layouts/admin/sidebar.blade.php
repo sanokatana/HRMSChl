@@ -1,3 +1,4 @@
+
 <aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
     @php
     $user = Auth::guard('user')->user();
@@ -8,6 +9,7 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <h1 class="navbar-brand navbar-brand-autodark">
             <a href="/">
                 <img src="{{ asset('assets/img/login/logo-pic.png')}}" width="70" height="60" alt="Tabler" class="">
@@ -309,6 +311,9 @@
                                 <a class="dropdown-item" href="/konfigurasi/tipecuti">
                                     Tipe Cuti
                                 </a>
+                                <a class="dropdown-item" href="/konfigurasi/jabatan">
+                                    Jabatan
+                                </a>
                                 <a class="dropdown-item" href="/konfigurasi/lokasikantor">
                                     Lokasi Kantor
                                 </a>
@@ -327,4 +332,6 @@
         </div>
     </div>
 </aside>
+
+
 

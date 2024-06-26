@@ -98,6 +98,9 @@ Route::middleware(['auth:user'])->group(function (){
     Route::get('/cuti/{id}/edit', [CutiController::class, 'edit']);
     Route::post('/cuti/{id}/update', [CutiController::class,'update']);
     Route::post('/cuti/{id}/delete', [CutiController::class,'delete']);
+    Route::get('/cek-cuti-karyawan', [CutiController::class, 'cekCutiKaryawan'])->name('cek.cuti.karyawan');
+    Route::get('/cuti/getEmployeeByNik', [CutiController::class, 'getEmployeeByNik']);
+    Route::get('/cuti/getEmployeeName', [CutiController::class, 'getEmployeeName'])->name('getEmployeeName');
 
     //Department
     Route::get('/department', [DepartmentController::class,'index']);
@@ -145,6 +148,13 @@ Route::middleware(['auth:user'])->group(function (){
     Route::post('/konfigurasi/tipecuti/edit', [KonfigurasiController::class,'tipecutiedit']);
     Route::post('/konfigurasi/tipecuti/{id_tipe_cuti}/update', [KonfigurasiController::class,'tipecutiupdate']);
     Route::post('/konfigurasi/tipecuti/{id_tipe_cuti}/delete', [KonfigurasiController::class,'tipecutidelete']);
+
+    //Konfigurasi Jabatan
+    Route::get('/konfigurasi/jabatan', [KonfigurasiController::class,'jabatan']);
+    Route::post('/konfigurasi/jabatan/store', [KonfigurasiController::class,'jabatanstore']);
+    Route::post('/konfigurasi/jabatan/edit', [KonfigurasiController::class,'jabatanedit']);
+    Route::post('/konfigurasi/jabatan/{id_tipe_cuti}/update', [KonfigurasiController::class,'jabatanupdate']);
+    Route::post('/konfigurasi/jabatan/{id_tipe_cuti}/delete', [KonfigurasiController::class,'jabatandelete']);
 
     //Cabang
     Route::get('/cabang', [CabangController::class,'index']);

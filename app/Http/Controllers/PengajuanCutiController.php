@@ -129,8 +129,16 @@ class PengajuanCutiController extends Controller
     public function buatcutikhusus()
     {
         $tipecuti = DB::table('tipe_cuti')->get();
+        $nik = auth()->user()->nik;
+        $currentEmployee = DB::table('karyawan')->where('nik', $nik)->first();
+        $cuti = DB::table('cuti')
+            ->where('nik', $nik)
+            ->where('status', 1)
+            ->first();
 
-        return view('izin.buatcutikhusus', compact('tipecuti'));
+        $periode = $cuti ? $cuti->tahun : '';
+
+        return view('izin.buatcutikhusus', compact('tipecuti', 'periode'));
     }
 
 

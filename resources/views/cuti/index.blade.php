@@ -55,28 +55,33 @@
                                     </svg>
                                     Add Data
                                 </a>
+                                <a href="{{ route('cek.cuti.karyawan') }}" class="btn btn-primary" id="btnCekCuti">
+                                    Cek Cuti Karyawan
+                                </a>
                             </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col-12">
                                 <form action="/cuti" method="GET">
                                     <div class="row">
-                                        <div class="col-3">
+                                    <div class="col-4">
                                             <div class="form-group">
-                                                <input type="text" name="nama_lengkap" id="nama_lengkap" class="form-control" placeholder="Nama User" value="{{ Request('nama_lengkap')}}">
+                                                <input type="text" name="nama_kar" id="nama_kar" class="form-control" placeholder="Nama Karyawan" autocomplete="off" value="{{ Request('nama_kar')}}">
                                             </div>
                                         </div>
-                                        <div class="col-3">
+                                        <div class="col-4">
                                             <div class="form-group">
-                                                <input type="text" name="nik_req" id="nik_req" class="form-control" placeholder="NIK" value="{{ Request('nik_req')}}">
+                                                <input type="text" name="nik_req" id="nik_req" class="form-control" placeholder="NIK" autocomplete="off" value="{{ Request('nik_req')}}">
                                             </div>
                                         </div>
-                                        <div class="col-3">
+                                        <div class="col-4">
                                             <div class="form-group">
-                                                <input type="text" name="tahun_req" id="tahun_req" class="form-control" placeholder="Tahun" value="{{ Request('tahun_req')}}">
+                                                <input type="text" name="tahun_req" id="tahun_req" class="form-control" placeholder="Tahun" autocomplete="off" value="{{ Request('tahun_req')}}">
                                             </div>
                                         </div>
-                                        <div class="col-3">
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-4">
                                             <div class="form-group mb-3">
                                                 <select name="kode_dept" id="kode_dept" class="form-select">
                                                     <option value="">Department</option>
@@ -86,7 +91,16 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-12">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <select name="status" id="status" class="form-select">
+                                                    <option value="pilih" {{ request('status') === 'pilih' ? 'selected' : '' }}>Pilih Status</option>
+                                                    <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Non Aktif</option>
+                                                    <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Aktif</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
                                             <div class="form-group">
                                                 <button class="btn btn-primary w-100">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-search">
@@ -113,7 +127,10 @@
                                             <th>Department</th>
                                             <th>Tanggal Masuk</th>
                                             <th>Periode Cuti</th>
+                                            <th>Periode Awal</th>
+                                            <th>Periode Akhir</th>
                                             <th>Sisa Cuti</th>
+                                            <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -126,7 +143,14 @@
                                             <td>{{ $d->nama_dept}}</td>
                                             <td>{{ $d->tgl_masuk}}</td>
                                             <td>{{ $d->tahun}}</td>
+                                            <td>{{ $d->periode_awal}}</td>
+                                            <td>{{ $d->periode_akhir}}</td>
                                             <td>{{ $d->sisa_cuti}}</td>
+                                            <td>@if ($d->status == 0)
+                                                <span class="badge bg-danger" style="color: white">Non Aktif</span>
+                                                @else
+                                                <span class="badge bg-success" style="color: white">Aktif</span>
+                                                @endif
                                             <td>
                                                 <div class="form-group">
                                                     <a href="#" class="edit btn btn-info btn-sm" id="{{ $d->id }}">
@@ -168,7 +192,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Data User</h5>
+                <h5 class="modal-title">Tambah Data Cuti</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -188,11 +212,28 @@
                                         <path d="M7 16l10 0" />
                                     </svg>
                                 </span>
-                                <input type="text" value="" class="form-control" name="nik" id="nik" placeholder="10101">
+                                <input type="text" value="" class="form-control" name="nik" id="nik" placeholder="10101" autocomplete="off">
                             </div>
                         </div>
                         <div class="col-12">
-                            <div class="form-label">Tahun</div>
+                            <div class="form-label">Nama Karyawan</div>
+                            <div class="input-icon mb-3">
+                                <span class="input-icon-addon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-check">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                                        <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />
+                                        <path d="M15 19l2 2l4 -4" />
+                                    </svg>
+                                </span>
+                                <input type="text" class="form-control" name="nama_lengkap" id="nama_lengkap" placeholder="Type or select employee name" autocomplete="off">
+                            </div>
+                            <div id="employeeList" class="dropdown-menu" style="display:none; margin-top: -12px; left: 55px;">
+                                <!-- Dropdown items will be populated by JavaScript -->
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-label">Periode Cuti</div>
                             <div class="input-icon mb-3">
                                 <span class="input-icon-addon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-stats">
@@ -205,7 +246,41 @@
                                         <path d="M3 11h16" />
                                     </svg>
                                 </span>
-                                <input type="number" value="" class="form-control" name="tahun" id="tahun" placeholder="2024">
+                                <input type="number" value="" class="form-control" name="tahun" id="tahun" placeholder="Periode" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-label">Periode Awal</div>
+                            <div class="input-icon mb-3">
+                                <span class="input-icon-addon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-stats">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+                                        <path d="M18 14v4h4" />
+                                        <path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                                        <path d="M15 3v4" />
+                                        <path d="M7 3v4" />
+                                        <path d="M3 11h16" />
+                                    </svg>
+                                </span>
+                                <input type="date" value="" class="form-control" name="periode_awal" id="periode_awal" placeholder="Tanggal" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-label">Periode Akhir</div>
+                            <div class="input-icon mb-3">
+                                <span class="input-icon-addon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-stats">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+                                        <path d="M18 14v4h4" />
+                                        <path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                                        <path d="M15 3v4" />
+                                        <path d="M7 3v4" />
+                                        <path d="M3 11h16" />
+                                    </svg>
+                                </span>
+                                <input type="date" value="" class="form-control" name="periode_akhir" id="periode_akhir" placeholder="Tanggal" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -214,9 +289,14 @@
                             <div class="form-label">Sisa Cuti</div>
                             <div class="input-icon mb-3">
                                 <span class="input-icon-addon">
-                                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-number-123"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 10l2 -2v8" /><path d="M9 8h3a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 0 -1 1v2a1 1 0 0 0 1 1h3" /><path d="M17 8h2.5a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1 -1.5 1.5h-1.5h1.5a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1 -1.5 1.5h-2.5" /></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-number-123">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M3 10l2 -2v8" />
+                                        <path d="M9 8h3a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 0 -1 1v2a1 1 0 0 0 1 1h3" />
+                                        <path d="M17 8h2.5a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1 -1.5 1.5h-1.5h1.5a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1 -1.5 1.5h-2.5" />
+                                    </svg>
                                 </span>
-                                <input type="number" value="" class="form-control" name="sisa_cuti" id="sisa_cuti" placeholder="Sisa Cuti">
+                                <input type="number" value="" class="form-control" name="sisa_cuti" id="sisa_cuti" placeholder="Sisa Cuti" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -264,17 +344,82 @@
             $('#modal-inputcuti').modal("show");
         });
 
-        $('.edit').click(function() {
-        var id = $(this).attr('id');
-        $.ajax({
-            type: 'GET',
-            url: '/cuti/' + id + '/edit', // Ensure this route returns the form HTML
-            success: function(response) {
-                $('#loadeditform').html(response);
-                $('#modal-editcuti').modal("show");
+        $('#nik').on('blur', function() {
+            var nik = $(this).val();
+            if(nik !== "") {
+                $.ajax({
+                    url: '/cuti/getEmployeeByNik',
+                    type: 'GET',
+                    data: {nik: nik},
+                    success: function(response) {
+                        if(response) {
+                            $('#nama_lengkap').val(response.nama_lengkap);
+                        } else {
+                            $('#nama_lengkap').val('');
+                        }
+                    }
+                });
             }
         });
-    });
+
+        $('#nama_lengkap').on('input', function() {
+            var nama_lengkap = $(this).val().trim();
+
+            if (nama_lengkap.length >= 2) { // Adjust minimum length as needed
+                $.ajax({
+                    url: '/cuti/getEmployeeName',
+                    type: 'GET',
+                    data: {nama_lengkap: nama_lengkap},
+                    success: function(response) {
+                        var dropdownMenu = $('#employeeList');
+                        dropdownMenu.empty();
+
+                        if (response.length > 0) {
+                            response.forEach(function(employee) {
+                                dropdownMenu.append('<a class="dropdown-item" href="#" data-nik="' + employee.nik + '">' + employee.nama_lengkap + '</a>');
+                            });
+
+                            dropdownMenu.show();
+                        } else {
+                            dropdownMenu.hide();
+                        }
+                    }
+                });
+            } else {
+                $('#employeeList').hide();
+            }
+        });
+
+        // Handle dropdown item click
+        $(document).on('click', '#employeeList .dropdown-item', function(e) {
+            e.preventDefault();
+            var selectedName = $(this).text();
+            var selectedNIK = $(this).data('nik');
+
+            $('#nama_lengkap').val(selectedName);
+            $('#nik').val(selectedNIK); // Assuming you want to set employee ID to another field like 'nik'
+
+            $('#employeeList').hide();
+        });
+
+        // Hide dropdown on click outside
+        $(document).click(function(e) {
+            if (!$(e.target).closest('#employeeList').length && !$(e.target).closest('#nama_lengkap').length) {
+                $('#employeeList').hide();
+            }
+        });
+
+        $('.edit').click(function() {
+            var id = $(this).attr('id');
+            $.ajax({
+                type: 'GET',
+                url: '/cuti/' + id + '/edit', // Ensure this route returns the form HTML
+                success: function(response) {
+                    $('#loadeditform').html(response);
+                    $('#modal-editcuti').modal("show");
+                }
+            });
+        });
 
         $(".delete-confirm").click(function(e) {
             var form = $(this).closest('form');

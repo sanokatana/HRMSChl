@@ -103,7 +103,8 @@ class ApprovalController extends Controller
         $query = Pengajuancuti::query();
         $query->join('karyawan', 'pengajuan_cuti.nik', '=', 'karyawan.nik');
         $query->join('department', 'karyawan.kode_dept', '=', 'department.kode_dept');
-        $query->select('pengajuan_cuti.*', 'karyawan.nama_lengkap', 'karyawan.jabatan', 'department.nama_dept', 'karyawan.tgl_masuk');
+        $query->leftJoin('tipe_cuti', 'pengajuan_cuti.tipe', '=', 'tipe_cuti.id_tipe_cuti');
+        $query->select('pengajuan_cuti.*', 'karyawan.nama_lengkap', 'karyawan.jabatan', 'department.nama_dept', 'karyawan.tgl_masuk','tipe_cuti.tipe_cuti');
 
         if (!empty($request->dari) && !empty($request->sampai)) {
             $query->whereBetween('tgl_Cuti', [$request->dari, $request->sampai]);
@@ -404,6 +405,8 @@ class ApprovalController extends Controller
     public function approvecuti(Request $request)
     {
         $id = $request->id_cuti_form;
+        $nik = $request->nik_cuti_form;
+        $periode = $request->periode_cuti_form;
         $status_approved = $request->status_approved;
         $currentDate = Carbon::now();
 
@@ -415,6 +418,32 @@ class ApprovalController extends Controller
             ]);
 
         if ($update) {
+
+            $leaveApplication = DB::table('pengajuan_cuti')->where('id', $id)->first();
+
+            if ($leaveApplication->status_approved == 2) {
+                // Get the cuti record for this user and period
+                $cutiRecord = DB::table('cuti')
+                    ->where('nik', $nik)
+                    ->where('tahun', $periode)
+                    ->first();
+
+                // Calculate the new sisa_cuti
+                $newSisaCuti = $cutiRecord->sisa_cuti + $leaveApplication->jml_hari;
+
+                // Update the cuti record
+                DB::table('cuti')
+                    ->where('nik', $nik)
+                    ->where('tahun', $periode)
+                    ->update(['sisa_cuti' => $newSisaCuti]);
+
+                DB::table('pengajuan_cuti')
+                    ->where('id', $id)
+                    ->update([
+                        'status_approved_hrd' => $status_approved,
+                        'tgl_status_approved_hrd' => $currentDate
+                    ]);
+            }
             return redirect('/approval/cutiapproval')->with(['success' => 'Pengajuan Cuti Berhasil Di Update']);
         } else {
             return redirect('/approval/cutiapproval')->with(['error' => 'Pengajuan Cuti Gagal Di Update']);
@@ -422,18 +451,51 @@ class ApprovalController extends Controller
     }
     public function batalapprovecuti($id)
     {
-        // Update status_approved to Pending and tgl_status_approved to null
-        $update = DB::table('pengajuan_cuti')
+        $leaveApplication = DB::table('pengajuan_cuti')->where('id', $id)->first();
+
+        if (!$leaveApplication) {
+            return response()->json(['success' => false, 'message' => 'Pengajuan Cuti tidak ditemukan']);
+        }
+
+        if ($leaveApplication->status_approved== 1) {
+
+            // Update status_approved to Pending and tgl_status_approved to null
+            DB::table('pengajuan_cuti')
             ->where('id', $id)
             ->update([
                 'status_approved' => 0,
                 'tgl_status_approved' => null,
             ]);
+            return response()->json(['success' => true, 'message' => 'Pengajuan Cuti berhasil dibatalkan']);
+        } else if ($leaveApplication->status_approved == 2){
+            // Fetch current sisa_cuti
+            DB::table('pengajuan_cuti')
+            ->where('id', $id)
+            ->update([
+                'status_approved' => 0,
+                'tgl_status_approved' => null,
+                'status_approved_hrd' => 0,
+                'tgl_status_approved_hrd' => null,
+            ]);
 
-        if ($update) {
+            $cutiRecord = DB::table('cuti')
+                ->where('nik', $leaveApplication->nik)
+                ->where('tahun', $leaveApplication->periode)
+                ->first();
+
+            if ($cutiRecord) {
+                // Calculate new sisa_cuti by adding back jml_hari
+                $newSisaCuti = $cutiRecord->sisa_cuti - $leaveApplication->jml_hari;
+
+                // Update sisa_cuti in cuti table
+                DB::table('cuti')
+                    ->where('nik', $leaveApplication->nik)
+                    ->where('tahun', $leaveApplication->periode)
+                    ->update(['sisa_cuti' => $newSisaCuti]);
+            }
             return response()->json(['success' => true, 'message' => 'Pengajuan Cuti berhasil dibatalkan']);
         } else {
-            return response()->json(['success' => false, 'message' => 'Pengajuan Cuti gagal dibatalkan']);
+        return response()->json(['success' => false, 'message' => 'Pengajuan Cuti gagal dibatalkan']);
         }
     }
 }

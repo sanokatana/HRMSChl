@@ -41,17 +41,20 @@
                 </select>
             </div>
             <div class="form-group">
-                <input type="text" id="tgl_cuti" name="tgl_cuti" class="datepicker form-control" placeholder="Tanggal Pengajuan Cuti Khusus" disabled>
+                <input type="text" id="tgl_cuti" name="tgl_cuti" class="datepicker form-control" placeholder="Tanggal Pengajuan Cuti Khusus" disabled autocomplete="off">
             </div>
             <div class="form-group">
-                <input type="text" id="tgl_cuti_sampai" name="tgl_cuti_sampai" class="datepicker form-control" placeholder="Sampai Tanggal" disabled>
+                <input type="text" id="tgl_cuti_sampai" name="tgl_cuti_sampai" class="datepicker form-control" placeholder="Sampai Tanggal" disabled autocomplete="off">
             </div>
             <div class="form-group">
-                <input type="number" id="jml_hari" name="jml_hari" class="form-control" placeholder="Berapa Hari" disabled>
+                <input type="number" id="jml_hari" name="jml_hari" class="form-control" placeholder="Berapa Hari" disabled autocomplete="off">
+            </div>
+            <div class="form-group">
+                <input type="text" id="periode" name="periode" class="form-control" placeholder="Periode" value="{{ $periode }}" disabled>
             </div>
             <div class="form-group">
                 <label for="note" class="col-form-label">Note</label>
-                <textarea name="note" id="note" rows="4" class="form-control"></textarea>
+                <textarea name="note" id="note" rows="4" class="form-control" autocomplete="off"></textarea>
             </div>
             <button type="submit" class="btn btn-primary btn-block">Submit</button>
         </form>

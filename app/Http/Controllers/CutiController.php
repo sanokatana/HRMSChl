@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cuti;
+use App\Models\Karyawan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,10 +22,11 @@ class CutiController extends Controller
         $query->join('department', 'karyawan.kode_dept', '=', 'department.kode_dept');
         // Order by NIK
         $query->orderBy('nik', 'asc');
+        $query->orderBy('tahun', 'desc');
 
         // Filter by Nama if provided
-        if (!empty($request->nama_lengkap)) {
-            $query->where('karyawan.nama_lengkap', 'like', '%' . $request->nama_lengkap . '%');
+        if (!empty($request->nama_kar)) {
+            $query->where('karyawan.nama_lengkap', 'like', '%' . $request->nama_kar . '%');
         }
 
         if (!empty($request->kode_dept)) {
@@ -38,10 +40,19 @@ class CutiController extends Controller
         if (!empty($request->tahun_req)) {
             $query->where('cuti.tahun', 'like', '%' . $request->tahun_req . '%');
         }
+        if ($request->has('status')) {
+            if ($request->status === '0' || $request->status === '1' || $request->status === '2') {
+                $query->where('status', $request->status);
+            }
+        } else {
+            // Default to '0' (Pending) if no status_approved_hrd is provided
+            $query->where('status', 1);
+        }
 
         // Paginate the results
         $cuti = $query->paginate(10);
         $department = DB::table('department')->get();
+
         // Return the view with the results
         return view("cuti.index", compact('cuti', 'department'));
     }
@@ -104,10 +115,6 @@ class CutiController extends Controller
             return Redirect::back()->with('danger', 'Data Gagal Di Update: ' . $e->getMessage());
         }
     }
-
-
-
-
     public function delete($id)
     {
         $delete = DB::table('cuti')->where('id', $id)->delete();
@@ -117,4 +124,64 @@ class CutiController extends Controller
             return Redirect::back()->with(['warning' => 'Data Gagal Di Hapus']);
         }
     }
+
+    public function cekCutiKaryawan()
+    {
+        $today = Carbon::today();
+
+        // Get records where periode_akhir is past today's date
+        $cutiRecords = DB::table('cuti')
+            ->where('periode_akhir', '<', $today)
+            ->where('status', 1) // Assuming only active records need to be checked
+            ->get();
+
+        foreach ($cutiRecords as $record) {
+            // Calculate new period values
+            $newPeriode = $record->tahun + 1;
+            $newPeriodeAwal = Carbon::parse($record->periode_akhir)->addDay()->format('Y-m-d');
+            $newPeriodeAkhir = Carbon::parse($record->periode_akhir)->addYear()->format('Y-m-d');
+            if($record->sisa_cuti >=0){
+                $newSisaCuti = 12;
+            } else {
+                $newSisaCuti = 12 + $record->sisa_cuti;
+            }
+
+            // Insert a new record
+            DB::table('cuti')->insert([
+                'nik' => $record->nik,
+                'tahun' => $newPeriode,
+                'periode_awal' => $newPeriodeAwal,
+                'periode_akhir' => $newPeriodeAkhir,
+                'sisa_cuti' => $newSisaCuti,
+                'status' => 1,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            // Update the old record's status
+            DB::table('cuti')
+                ->where('id', $record->id)
+                ->update(['status' => 0]);
+        }
+
+        return redirect()->back()->with('success', 'Cuti karyawan has been updated successfully.');
+    }
+
+    public function getEmployeeByNik(Request $request)
+    {
+        $nik = $request->nik;
+        $employee = DB::table('karyawan')->where('nik', $nik)->first();
+
+        return response()->json($employee);
+    }
+
+    public function getEmployeeName(Request $request)
+    {
+        $searchTerm = $request->nama_lengkap;
+        $employee = DB::table('karyawan')->where('nama_lengkap', 'like', '%'.$searchTerm.'%')->get(['nik', 'nama_lengkap']);
+        return response()->json($employee);
+    }
+
+
+
 }

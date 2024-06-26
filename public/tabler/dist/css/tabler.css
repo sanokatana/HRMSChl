@@ -4755,6 +4755,7 @@ body[data-bs-theme=dark] .navbar[data-bs-theme=light] {
   border: var(--tblr-card-border-width) solid var(--tblr-card-border-color);
   border-radius: var(--tblr-card-border-radius);
   box-shadow: var(--tblr-card-box-shadow);
+  border-radius: 15px;
 }
 .card > hr, .card > .hr {
   margin-right: 0;
@@ -16946,7 +16947,7 @@ Navbar vertical
     padding: 0;
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px;
-    box-shadow: 10px 0 30px -2px #000;
+    box-shadow: 10px 0 30px -2px #646464;
   }
 }
 @media (min-width: 992px) and (prefers-reduced-motion: reduce) {
@@ -16965,6 +16966,9 @@ Navbar vertical
   }
   .navbar-vertical.navbar-expand-lg .navbar-collapse {
     align-items: stretch;
+  }
+  .navbar-vertical.navbar-expand-lg.collapsed {
+    width: 4rem;
   }
   .navbar-vertical.navbar-expand-lg .navbar-nav {
     flex-direction: column;
@@ -17444,6 +17448,7 @@ Navbar vertical
 }
 .page-body ~ .page-body-card {
   margin-top: 0;
+
 }
 
 .page-cover {
@@ -20501,6 +20506,7 @@ a.card-title:hover {
 
 .card-body {
   position: relative;
+
 }
 .card-body > :last-child {
   margin-bottom: 0;

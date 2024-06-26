@@ -38,7 +38,7 @@ class DashboardController extends Controller
             ->orderBy('tgl_izin')
             ->get();
 
-            $historicuti = DB::table('pengajuan_cuti')
+        $historicuti = DB::table('pengajuan_cuti')
             ->leftJoin('tipe_cuti', 'pengajuan_cuti.tipe', '=', 'tipe_cuti.id_tipe_cuti')
             ->whereRaw('MONTH(pengajuan_cuti.tgl_cuti) = ?', [$bulanini])
             ->whereRaw('YEAR(pengajuan_cuti.tgl_cuti) = ?', [$tahunini])

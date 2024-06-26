@@ -176,6 +176,8 @@ use App\Helpers\DateHelper;
                                             <th>Sisa Setelah Real</th>
                                             <th>Kar Pengganti</th>
                                             <th>Note</th>
+                                            <th>Jenis Cuti</th>
+                                            <th>Tipe Cuti</th>
                                             <th>Status Manager <br> Status HRD </th>
                                             <th>Aksi</th>
                                         </tr>
@@ -198,14 +200,23 @@ use App\Helpers\DateHelper;
                                             </td>
                                             <td>{{ $d->periode }}</td>
                                             <td>{{ $d->sisa_cuti }}</td>
-                                            <td><span class="badge bg-warning" style="color: white; width:30px">{{ $d->sisa_cuti_real}}</span></td>
+                                            <td>@if (!is_null($d->sisa_cuti))
+                                                <span class="badge bg-warning" style="color: white; width:30px">{{ $d->sisa_cuti_real}}</span>
+                                                @endif
+                                            </td>
                                             <td>{{ $d->jml_hari }} </td>
                                             <td>{{ $d->sisa_cuti_setelah}} </td>
                                             <td>
-                                                <span class="badge bg-warning" style="color: white; width:30px">{{ $d->sisa_cuti_real - $d->jml_hari}}</span>
+                                                @if (!is_null($d->sisa_cuti_setelah))
+                                                    <span class="badge bg-warning" style="color: white; width: 30px;">
+                                                        {{ $d->sisa_cuti_real - $d->jml_hari }}
+                                                    </span>
+                                                @endif
                                             </td>
                                             <td>{{ $d->kar_ganti}} </td>
                                             <td>{{ $d->note }}</td>
+                                            <td>{{ $d->jenis }}</td>
+                                            <td>{{ $d->tipe_cuti }}</td>
                                             <td>
                                                 @if ($d->status_approved == 1)
                                                 <span class="badge bg-success" style="color: white; width:90px">Approved</span>
