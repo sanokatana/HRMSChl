@@ -155,7 +155,7 @@
                 </li>
                 @if($userLevel !== 'Manager' && $userLevel !== 'Officer')
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle {{request()->is(['karyawan','department','data/user','cuti']) ? 'show' : ''}}" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="{{request()->is(['karyawan','department']) ? 'true' : 'false'}}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-database">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -168,19 +168,19 @@
                             Master Data
                         </span>
                     </a>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu {{request()->is(['karyawan', 'department','data/user','cuti']) ? 'show' : ''}}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="/karyawan">
+                                <a class="dropdown-item {{request()->is(['karyawan']) ? 'active' : ''}}" href="/karyawan">
                                     Karyawan
                                 </a>
-                                <a class="dropdown-item" href="/data/user">
+                                <a class="dropdown-item {{request()->is(['data/user']) ? 'active' : ''}}" href="/data/user">
                                     User
                                 </a>
-                                <a class="dropdown-item" href="/department">
+                                <a class="dropdown-item {{request()->is(['department']) ? 'active' : ''}}" href="/department">
                                     Department
                                 </a>
-                                <a class="dropdown-item" href="/cuti">
+                                <a class="dropdown-item {{request()->is(['cuti']) ? 'active' : ''}}" href="/cuti">
                                     Cuti
                                 </a>
                             </div>
@@ -189,7 +189,7 @@
                 </li>
                 @endif
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle {{request()->is(['approval/izinapproval','approval/cutiapproval','approval/izinapprovalhrd','approval/cutiapprovalhrd']) ? 'show' : ''}}" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="{{request()->is(['approval/izinapproval','approval/cutiapproval','approval/izinapprovalhrd','approval/cutiapprovalhrd']) ? 'true' : 'false'}}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-settings">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -201,19 +201,19 @@
                             Approval
                         </span>
                     </a>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu {{request()->is(['approval/izinapproval', 'approval/cutiapproval','approval/izinapprovalhrd','approval/cutiapprovalhrd']) ? 'show' : ''}}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="/approval/izinapproval">
+                                <a class="dropdown-item {{request()->is(['approval/izinapproval']) ? 'active' : ''}}" href="/approval/izinapproval">
                                     Approval Izin
                                 </a>
-                                <a class="dropdown-item" href="/approval/cutiapproval">
+                                <a class="dropdown-item {{request()->is(['approval/cutiapproval']) ? 'active' : ''}}" href="/approval/cutiapproval">
                                     Approval Cuti
                                 </a>
-                                <a class="dropdown-item" href="/approval/izinapprovalhrd">
+                                <a class="dropdown-item {{request()->is(['approval/izinapprovalhrd']) ? 'active' : ''}}" href="/approval/izinapprovalhrd">
                                     Approval Izin HR
                                 </a>
-                                <a class="dropdown-item" href="/approval/cutiapprovalhrd">
+                                <a class="dropdown-item {{request()->is(['approval/cutiapprovalhrd']) ? 'active' : ''}}" href="/approval/cutiapprovalhrd">
                                     Approval Cuti HR
                                 </a>
                             </div>
@@ -222,7 +222,7 @@
                 </li>
                 @if($userLevel !== 'Manager' && $userLevel !== 'Officer')
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle {{request()->is(['presensi/monitoring']) ? 'show' : ''}}" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="{{request()->is(['presensi/monitoring']) ? 'true' : 'false'}}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-screen-share">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -238,10 +238,10 @@
                             Attendance
                         </span>
                     </a>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu {{request()->is(['presensi/monitoring']) ? 'show' : ''}}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
-                                <a class="dropdown-item" href="/presensi/monitoring">
+                                <a class="dropdown-item {{request()->is(['presensi/monitoring']) ? 'active' : ''}}" href="/presensi/monitoring">
                                     Monitoring Presensi
                                 </a>
                             </div>
