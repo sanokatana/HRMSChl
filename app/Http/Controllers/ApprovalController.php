@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Karyawan;
-use App\Models\Pengajuancuti;
+use App\Models\PengajuanCuti;
 use App\Models\Pengajuanizin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -100,7 +100,7 @@ class ApprovalController extends Controller
 
     public function cutiapprovalhrd(Request $request)
     {
-        $query = Pengajuancuti::query();
+        $query = PengajuanCuti::query();
         $query->join('karyawan', 'pengajuan_cuti.nik', '=', 'karyawan.nik');
         $query->join('department', 'karyawan.kode_dept', '=', 'department.kode_dept');
         $query->leftJoin('tipe_cuti', 'pengajuan_cuti.tipe', '=', 'tipe_cuti.id_tipe_cuti');
@@ -346,7 +346,7 @@ class ApprovalController extends Controller
         $employeeNiks = Karyawan::where('nik_atasan', $nik)->pluck('nik');
 
         // Begin query on pengajuan_izin table
-        $query = Pengajuancuti::query();
+        $query = PengajuanCuti::query();
         $query->join('karyawan', 'pengajuan_cuti.nik', '=', 'karyawan.nik')
             ->join('department', 'karyawan.kode_dept', '=', 'department.kode_dept')
             ->leftJoin('tipe_cuti', 'pengajuan_cuti.tipe', '=', 'tipe_cuti.id_tipe_cuti')

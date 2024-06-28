@@ -222,7 +222,7 @@
                 </li>
                 @if($userLevel !== 'Manager' && $userLevel !== 'Officer')
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {{request()->is(['presensi/monitoring']) ? 'show' : ''}}" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="{{request()->is(['presensi/monitoring']) ? 'true' : 'false'}}">
+                    <a class="nav-link dropdown-toggle {{request()->is(['presensi/monitoring','attendance/table']) ? 'show' : ''}}" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="{{request()->is(['presensi/monitoring']) ? 'true' : 'false'}}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-screen-share">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -238,11 +238,14 @@
                             Attendance
                         </span>
                     </a>
-                    <div class="dropdown-menu {{request()->is(['presensi/monitoring']) ? 'show' : ''}}">
+                    <div class="dropdown-menu {{request()->is(['presensi/monitoring','attendance/table']) ? 'show' : ''}}">
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
                                 <a class="dropdown-item {{request()->is(['presensi/monitoring']) ? 'active' : ''}}" href="/presensi/monitoring">
-                                    Monitoring Presensi
+                                    Day Monitoring
+                                </a>
+                                <a class="dropdown-item {{request()->is(['attendance/table']) ? 'active' : ''}}" href="/attendance/table">
+                                    Attendance Table
                                 </a>
                             </div>
                         </div>
@@ -313,6 +316,9 @@
                                 </a>
                                 <a class="dropdown-item" href="/konfigurasi/jabatan">
                                     Jabatan
+                                </a>
+                                <a class="dropdown-item" href="/konfigurasi/libur-nasional">
+                                    Libur Nasional
                                 </a>
                                 <a class="dropdown-item" href="/konfigurasi/lokasikantor">
                                     Lokasi Kantor

@@ -174,5 +174,60 @@ class KonfigurasiController extends Controller
         }
     }
 
+    //Libur Nasional
 
+    public function libur(){
+        $libur = DB::table('libur_nasional')
+            ->get();
+        return view("konfigurasi.libur", compact('libur'));
+    }
+
+    public function liburstore(Request $request){
+        $tgl_libur = $request->tgl_libur;
+        $nama_libur = $request->nama_libur;
+        $data = [
+            'tgl_libur' => $tgl_libur,
+            'nama_libur' => $nama_libur,
+        ];
+
+        $simpan = DB::table('libur_nasional')
+        ->insert($data);
+        if($simpan){
+            return Redirect::back()->with(['success'=>'Libur Nasional Berhasil Di Simpan']);
+        }else {
+            return Redirect::back()->with(['warning'=>'Libur Nasional Gagal Di Simpan']);
+        }
+    }
+    public function liburedit(Request $request){
+        $tgl_libur = $request->tgl_libur;
+        $libur = DB::table('libur_nasional')->where('tgl_libur', $tgl_libur)->first();
+        return view('konfigurasi.liburedit', compact('libur'));
+    }
+
+    public function liburupdate($tgl_libur, Request $request){
+        $tgl_libur = $request->tgl_libur;
+        $nama_libur = $request->nama_libur;
+        $data = [
+            'tgl_libur'=>$tgl_libur,
+            'nama_libur' => $nama_libur,
+        ];
+
+        $update = DB::table('libur_nasional')->where('tgl_libur',$tgl_libur)->update($data);
+
+        if($update){
+            return Redirect::back()->with(['success'=>'Libur Nasional Berhasil Di Update']);
+        }else {
+            return Redirect::back()->with(['warning'=>'Libur Nasional Gagal Di Update']);
+        }
+    }
+
+    public function liburdelete($tgl_libur)
+    {
+        $delete = DB::table('libur_nasional')->where('tgl_libur', $tgl_libur)->delete();
+        if ($delete) {
+            return Redirect::back()->with(['success' => 'Libur Nasional Berhasil Di Hapus']);
+        } else {
+            return Redirect::back()->with(['warning' => 'Libur Nasional Gagal Di Hapus']);
+        }
+    }
 }

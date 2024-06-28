@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApprovalController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\CutiController;
@@ -156,10 +157,21 @@ Route::middleware(['auth:user'])->group(function (){
     Route::post('/konfigurasi/jabatan/{id_tipe_cuti}/update', [KonfigurasiController::class,'jabatanupdate']);
     Route::post('/konfigurasi/jabatan/{id_tipe_cuti}/delete', [KonfigurasiController::class,'jabatandelete']);
 
+    //Konfigurasi Libur Nasional
+    Route::get('/konfigurasi/libur-nasional', [KonfigurasiController::class,'libur']);
+    Route::post('/konfigurasi/libur-nasional/store', [KonfigurasiController::class,'liburstore']);
+    Route::post('/konfigurasi/libur-nasional/edit', [KonfigurasiController::class,'liburedit']);
+    Route::post('/konfigurasi/libur-nasional/{tgl_libur}/update', [KonfigurasiController::class,'liburupdate']);
+    Route::post('/konfigurasi/libur-nasional/{tgl_libur}/delete', [KonfigurasiController::class,'liburdelete']);
+
     //Cabang
     Route::get('/cabang', [CabangController::class,'index']);
     Route::post('/cabang/store', [CabangController::class,'store']);
     Route::post('/cabang/edit', [CabangController::class,'edit']);
     Route::post('/cabang/update', [CabangController::class,'update']);
     Route::post('/cabang/{kode_cabang}/delete', [CabangController::class,'delete']);
+
+    //Attendance
+    Route::get('/attendance/table',[AttendanceController::class,'index']);
+
 });

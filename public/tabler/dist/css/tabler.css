@@ -23614,6 +23614,21 @@ a.step-item:hover {
     background: transparent;
   }
 }
+.weekend {
+    background-color: purple !important;
+    color: white !important;
+}
+
+.late {
+    background-color: yellow !important;
+    color: black !important;
+}
+
+.dark-yellow {
+    background-color: #FFD700 !important; /* Dark yellow color */
+    color: black !important; /* Black text */
+}
+
 
 .table-responsive .table, .table-responsive .markdown > table {
   margin-bottom: 0;

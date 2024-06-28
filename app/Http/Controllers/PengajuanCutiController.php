@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cuti;
-use App\Models\Pengajuancuti;
+use App\Models\PengajuanCuti;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -70,7 +70,7 @@ class PengajuanCutiController extends Controller
 
         try {
             // Save the leave application
-            $simpan = Pengajuancuti::create($data);
+            $simpan = PengajuanCuti::create($data);
 
             if ($simpan) {
                 // Update the sisa_cuti in the cuti table
@@ -167,7 +167,7 @@ class PengajuanCutiController extends Controller
 
         try {
             // Save the leave application
-            $simpan = Pengajuancuti::create($data);
+            $simpan = PengajuanCuti::create($data);
 
             if ($simpan) {
                 // Commit the transaction
