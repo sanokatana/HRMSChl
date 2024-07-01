@@ -24,7 +24,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-12 responsive">
+                            <div class="col-12 table-responsive">
                                 <table class="table table-hover">
                                     <thead>
                                         <tr style="text-align:center;">

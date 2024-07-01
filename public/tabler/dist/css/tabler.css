@@ -23624,6 +23624,11 @@ a.step-item:hover {
     color: black !important;
 }
 
+.cuti {
+    background-color: black !important;
+    color: white !important;
+}
+
 .dark-yellow {
     background-color: #FFD700 !important; /* Dark yellow color */
     color: black !important; /* Black text */

@@ -36,7 +36,20 @@ class AttendanceController extends Controller
                 return Carbon::parse($date)->format('Y-m-d');
             });
 
-        // Process presensi data to format for display
+        // Get all approved leave data for the current month
+        $cuti = DB::table('pengajuan_cuti')
+            ->select('nik', 'tgl_cuti', 'tgl_cuti_sampai')
+            ->where('status_approved', 1)
+            ->where('status_approved_hrd', 1)
+            ->where(function ($query) use ($currentMonth, $currentYear) {
+                $query->whereMonth('tgl_cuti', $currentMonth)
+                      ->whereYear('tgl_cuti', $currentYear)
+                      ->orWhereMonth('tgl_cuti_sampai', $currentMonth)
+                      ->whereYear('tgl_cuti_sampai', $currentYear);
+            })
+            ->get();
+
+        // Process presensi and cuti data to format for display
         $attendanceData = [];
         foreach ($karyawan as $k) {
             $row = [
@@ -48,8 +61,9 @@ class AttendanceController extends Controller
                 $date = Carbon::create($currentYear, $currentMonth, $i);
                 $dateString = $date->toDateString();
                 $attendance = $presensi->where('nik', $k->nik)->where('tgl_presensi', $dateString)->first();
+                $isCuti = $this->checkCuti($cuti, $k->nik, $date);
 
-                $status = $this->getAttendanceStatus($date, $attendance);
+                $status = $this->getAttendanceStatus($date, $attendance, $isCuti);
 
                 // Check if the date is a national holiday
                 if ($liburNasional->contains($dateString)) {
@@ -77,8 +91,12 @@ class AttendanceController extends Controller
     }
 
     // Helper function to determine attendance status
-    private function getAttendanceStatus($date, $attendance)
+    private function getAttendanceStatus($date, $attendance, $isCuti)
     {
+        if ($isCuti) {
+            return 'C';
+        }
+
         if ($attendance) {
             $jam_in = Carbon::parse($attendance->jam_in);
             if ($date->dayOfWeek == Carbon::SATURDAY || $date->dayOfWeek == Carbon::SUNDAY) {
@@ -91,8 +109,20 @@ class AttendanceController extends Controller
         }
     }
 
+    // Helper function to determine if the date falls within a leave period
+    private function checkCuti($cuti, $nik, $date)
+    {
+        foreach ($cuti as $c) {
+            if ($c->nik == $nik && $date->between(Carbon::parse($c->tgl_cuti), Carbon::parse($c->tgl_cuti_sampai))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Helper function to determine CSS classes for attendance cell
-    private function getAttendanceClass($date, $status)
+    // Helper function to determine CSS classes for attendance cell
+private function getAttendanceClass($date, $status)
     {
         $classes = [];
         if ($date->dayOfWeek == Carbon::SATURDAY || $date->dayOfWeek == Carbon::SUNDAY) {
@@ -108,9 +138,12 @@ class AttendanceController extends Controller
                 $classes[] = 'late';
             } else if ($status == 'LN') {
                 $classes[] = 'dark-yellow';
+            } else if ($status == 'C') {
+                $classes[] = 'cuti';
             }
         }
 
         return implode(' ', $classes);
     }
+
 }
